@@ -1,0 +1,227 @@
+<mat-toolbar color="primary">
+	<mat-toolbar-row>
+		<span>Paciente</span>
+		<span class="spacer"></span>
+		<button mat-icon-button [matMenuTriggerFor]="menu">
+			<mat-icon aria-label="Opciones del paciente">more_vert</mat-icon>
+		</button>
+		<mat-menu #menu="matMenu">
+			<button mat-menu-item>Eliminar</button>
+		</mat-menu>
+	</mat-toolbar-row>
+</mat-toolbar>
+
+<mat-accordion [multi]="true">
+
+	<mat-expansion-panel [expanded]="true">
+
+		<mat-expansion-panel-header>
+			<mat-panel-title>
+				Información personal
+			</mat-panel-title>
+		</mat-expansion-panel-header>
+
+		<form method="post" #pacientForm="ngForm" [class.handset]="handset" [class.tablet]="tablet">
+
+			<mat-form-field>
+				<input matInput type="text" placeholder="Nombre/s" [formControl]="nameFormControl">
+				<mat-error *ngIf="nameFormControl.hasError('required')">
+					Por favor ingrese el/los nombre/s del paciente
+				</mat-error>
+			</mat-form-field>
+
+			<mat-form-field>
+				<input matInput type="text" placeholder="Apellido/s" [formControl]="lastnameFormControl">
+				<mat-error *ngIf="lastnameFormControl.hasError('required')">
+					Por favor ingrese el/los apellido/s del paciente
+				</mat-error>
+			</mat-form-field>
+
+			<mat-form-field>
+				<input matInput [matDatepicker]="picker" placeholder="Fecha de nacimiento" [formControl]="birthdayFormControl">
+				<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+				<mat-datepicker #picker calendarLabel="Fecha de nacimiento"></mat-datepicker>
+			</mat-form-field>
+
+			<mat-form-field>
+				<mat-select placeholder="Sexo" [formControl]="sexFormControl">
+					<mat-option *ngFor="let sex of sexes" [value]="sex.id">
+						{{sex.name}}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+
+			<div>
+
+				<mat-form-field>
+					<mat-select placeholder="Tipo de documento" [formControl]="documenttypeFormControl">
+						<mat-option [value]="1">D.N.I.</mat-option>
+					</mat-select>
+				</mat-form-field>
+
+				<mat-form-field>
+					<input matInput type="text" placeholder="Número de documento" [formControl]="documentnumberFormControl">
+					<mat-hint align="start">Ej: 33000999</mat-hint>
+				</mat-form-field>
+
+				<mat-form-field>
+					<input matInput type="tel" placeholder="Teléfono" [formControl]="telFormControl">
+					<mat-hint align="start">Ej: 3424567814</mat-hint>
+				</mat-form-field>
+
+			</div>
+
+			<div>
+
+				<mat-form-field>
+					<mat-select placeholder="País" [formControl]="countryFormControl">
+						<mat-option *ngFor="let country of countries" [value]="country.id">
+							{{country.name}}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+
+				<mat-form-field>
+					<mat-select placeholder="Provincia" [formControl]="stateFormControl">
+						<mat-option *ngFor="let state of states" [value]="state.id">
+							{{state.name}}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+
+				<mat-form-field>
+					<mat-select placeholder="Localidad" [formControl]="cityFormControl">
+						<mat-option *ngFor="let city of cities" [value]="city.id">
+							{{city.name}}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+
+				<mat-form-field>
+					<input matInput type="text" placeholder="Código postal" [formControl]="zipcodeFormControl" [readonly]="true">
+				</mat-form-field>
+
+			</div>
+
+			<div>
+
+				<mat-form-field>
+					<input matInput type="text" placeholder="Calle" [formControl]="streetFormControl">
+					<mat-hint align="start">Ej: Av. Domingo F. Sarmiento</mat-hint>
+				</mat-form-field>
+
+				<mat-form-field>
+					<input matInput type="number" placeholder="Número" [formControl]="numberFormControl">
+					<mat-hint align="start">Ej: 5692</mat-hint>
+				</mat-form-field>
+
+				<mat-form-field>
+					<input matInput type="text" placeholder="Piso" [formControl]="floorFormControl">
+					<mat-hint align="start">Ej: 1</mat-hint>
+				</mat-form-field>
+
+				<mat-form-field>
+					<input matInput type="text" placeholder="Departamento" [formControl]="unitFormControl">
+					<mat-hint align="start">Ej: D</mat-hint>
+				</mat-form-field>
+
+			</div>
+
+			<mat-form-field>
+				<mat-select placeholder="Obra Social" [formControl]="socialsecurityFormControl">
+					<mat-option *ngFor="let socialsecurity of socialsecurities" [value]="socialsecurity.id">
+						{{socialsecurity.name}}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+
+			<mat-form-field>
+				<input matInput type="text" placeholder="N° de afiliado" [formControl]="socialsecuritynumberFormControl">
+			</mat-form-field>
+
+			<div>
+
+				<mat-form-field>
+					<mat-select placeholder="Tipo de Nacimiento" [formControl]="birthtypeFormControl">
+						<mat-option *ngFor="let birthtype of birthtypes" [value]="birthtype.id">
+							{{birthtype.name}}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+
+				<mat-form-field>
+					<input matInput type="number" placeholder="Peso del recién nacido" [formControl]="weightFormControl">
+					<span matSuffix>g</span>
+					<mat-hint align="start">Ej: 3600</mat-hint>
+				</mat-form-field>
+
+				<mat-form-field>
+					<mat-select placeholder="Grupo sanguíneo" [formControl]="bloodtypeFormControl">
+						<mat-option *ngFor="let bloodtype of bloodtypes" [value]="bloodtype.id">
+							{{bloodtype.name}}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+
+				<mat-form-field>
+					<mat-select placeholder="Factor RH" [formControl]="rhfactorFormControl">
+						<mat-option [value]="1">+ (Positivo)</mat-option>
+						<mat-option [value]="2">- (Negativo)</mat-option>
+					</mat-select>
+				</mat-form-field>
+
+			</div>
+
+		</form>
+
+	</mat-expansion-panel>
+
+	<mat-expansion-panel [expanded]="true">
+
+		<mat-expansion-panel-header>
+			<mat-panel-title>
+				Antecedentes
+			</mat-panel-title>
+		</mat-expansion-panel-header>
+
+		<form method="post" #patologiesForm="ngForm" [class.handset]="handset" [class.tablet]="tablet">
+			<div>
+
+				<mat-form-field>
+					<input matInput type="number" min="0" step="1" max="10" placeholder="Test de Apgar" [formControl]="apgarFormControl">
+				</mat-form-field>
+
+				<mat-form-field>
+					<input matInput type="number" placeholder="Edad de gestación" [formControl]="gestationalageFormControl">
+					<span matSuffix>semanas</span>
+				</mat-form-field>
+
+				<mat-checkbox [formControl]="circularcordFormControl">Circular de cordón</mat-checkbox>
+				<mat-form-field>
+					<input matInput type="text" placeholder="Comentario" [formControl]="circularcordcommentFormControl">
+				</mat-form-field>
+
+			</div>
+
+			<div>
+
+				<mat-form-field>
+					<textarea matInput placeholder="Padre" [formControl]="fatherFormControl"></textarea>
+				</mat-form-field>
+				<mat-form-field>
+					<textarea matInput placeholder="Madre" [formControl]="motherFormControl"></textarea>
+				</mat-form-field>
+				<mat-form-field>
+					<textarea matInput placeholder="Hermanos" [formControl]="brothersFormControl"></textarea>
+				</mat-form-field>
+				<mat-form-field>
+					<textarea matInput placeholder="Otros" [formControl]="othersFormControl"></textarea>
+				</mat-form-field>
+
+			</div>
+
+		</form>
+
+	</mat-expansion-panel>
+
+</mat-accordion>

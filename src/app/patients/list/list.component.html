@@ -1,0 +1,28 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>Listado de pacientes</span>
+    <span class="spacer"></span>
+    <button mat-icon-button>
+			<mat-icon aria-label="Crear un nuevo paciente">add</mat-icon>
+		</button>
+  </mat-toolbar-row>
+</mat-toolbar>
+<mat-card class="main-card">
+	<mat-card-content>
+		<form method="post">
+			<mat-form-field class="full-width">
+				<input matInput type="text" placeholder="Buscar un paciente...">
+				<mat-hint align="start">Ingrese al menos 3 caracteres y espere</mat-hint>
+			</mat-form-field>
+		</form>
+		<mat-nav-list>
+		  <mat-list-item *ngFor="let patient of patients">
+		  	<a matLine routerLink="{{patient.id}}">{{ patient.name }}</a>
+		  	<p matLine class="mat-caption">{{ patient.age }}</p>
+			  <button mat-icon-button>
+					<mat-icon>history</mat-icon>
+				</button>
+		  </mat-list-item>
+		</mat-nav-list>
+	</mat-card-content>
+</mat-card>

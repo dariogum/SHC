@@ -1,0 +1,18 @@
+.spacer {
+	flex: 1 1 auto;
+}
+.main-card {
+	margin: 16px;
+}
+.mat-form-field {
+	margin: 6px 8px;
+	min-width: calc(25% - 16px);
+}
+
+.handset .mat-form-field {
+	min-width: calc(100% - 16px);	
+}
+
+.tablet .mat-form-field {
+	min-width: calc(50% - 16px);	
+}
