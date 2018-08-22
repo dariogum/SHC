@@ -2,7 +2,7 @@
   <mat-toolbar-row>
     <span>Listado de pacientes</span>
     <span class="spacer"></span>
-    <button mat-icon-button>
+    <button mat-icon-button (click)="openNewPatientDialog()">
 			<mat-icon aria-label="Crear un nuevo paciente">add</mat-icon>
 		</button>
   </mat-toolbar-row>
@@ -16,9 +16,9 @@
 			</mat-form-field>
 		</form>
 		<mat-nav-list>
-		  <mat-list-item *ngFor="let patient of patients">
-		  	<a matLine routerLink="{{patient.id}}">{{ patient.name }}</a>
-		  	<p matLine class="mat-caption">{{ patient.age }}</p>
+		  <mat-list-item *ngFor="let patient of patients | async">
+		  	<a matLine routerLink="{{patient.id}}">{{ patient.name }} {{ patient.lastname }}</a>
+		  	<p matLine class="mat-caption">Edad: {{ patient.birthday | age }}</p>
 			  <button mat-icon-button>
 					<mat-icon>history</mat-icon>
 				</button>

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { CITIES, COUNTRIES, STATES, SOCIALSECURITIES, SEXES, BIRTHTYPES, BLOODTYPES } from './../mock-patients';
+import { CITIES, COUNTRIES, STATES, SOCIALSECURITIES, GENDERS, BIRTHTYPES, BLOODTYPES, PATIENTS } from './../mock-data';
+import { Patient } from './../classes/patient';
 
 @Component({
 	selector: 'app-form',
@@ -9,6 +11,7 @@ import { CITIES, COUNTRIES, STATES, SOCIALSECURITIES, SEXES, BIRTHTYPES, BLOODTY
 	styleUrls: ['./form.component.css']
 })
 export class FormComponent implements OnInit {
+
 	handset = false;
 	tablet = false;
 
@@ -16,48 +19,13 @@ export class FormComponent implements OnInit {
 	countries = COUNTRIES;
 	states = STATES;
 	socialsecurities = SOCIALSECURITIES;
-	sexes = SEXES;
+	genders = GENDERS;
 	birthtypes = BIRTHTYPES;
 	bloodtypes = BLOODTYPES;
 
-	nameFormControl = new FormControl('', [Validators.required]);
-	lastnameFormControl = new FormControl('', [Validators.required]);
-	birthdayFormControl = new FormControl();
-	sexFormControl = new FormControl();
+	patient: Patient;
 
-	documenttypeFormControl = new FormControl();
-	documentnumberFormControl = new FormControl();
-
-	countryFormControl = new FormControl(1);
-	stateFormControl = new FormControl(20);
-	cityFormControl = new FormControl(1);
-	zipcodeFormControl = new FormControl();
-
-	streetFormControl = new FormControl();
-	numberFormControl = new FormControl();
-	floorFormControl = new FormControl();
-	unitFormControl = new FormControl();
-
-	telFormControl = new FormControl();
-	socialsecurityFormControl = new FormControl();
-	socialsecuritynumberFormControl = new FormControl();
-
-	birthtypeFormControl = new FormControl();
-	weightFormControl = new FormControl();
-	bloodtypeFormControl = new FormControl();
-	rhfactorFormControl = new FormControl();
-
-	apgarFormControl = new FormControl();
-	gestationalageFormControl = new FormControl();
-	circularcordFormControl = new FormControl();
-	circularcordcommentFormControl = new FormControl();
-
-	fatherFormControl = new FormControl();
-	motherFormControl = new FormControl();
-	brothersFormControl = new FormControl();
-	othersFormControl = new FormControl();
-
-	constructor(private breakpointObserver: BreakpointObserver) {}
+	constructor(private breakpointObserver: BreakpointObserver, private route: ActivatedRoute) { }
 
 	ngOnInit() {
 		this.breakpointObserver.observe([
@@ -83,6 +51,13 @@ export class FormComponent implements OnInit {
 						this.tablet = false;
 					}
 				});
+
+				this.getPacient();
+			}
+
+			getPacient(): void {
+				const id = +this.route.snapshot.paramMap.get('id');
+				this.patient = PATIENTS[id];
 			}
 
 		}

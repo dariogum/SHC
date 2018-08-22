@@ -1,38 +1,34 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { Observable, of } from 'rxjs';
+import { Patient } from './../classes/patient';
+import { PATIENTS } from './../mock-data';
+import { NewPatientDialogComponent } from './new-patient-dialog.component';
 
 @Component({
-  selector: 'app-list',
-  templateUrl: './list.component.html',
-  styleUrls: ['./list.component.css']
+	selector: 'app-list',
+	templateUrl: './list.component.html',
+	styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
 
-	patients = [
-	{
-		id: 1,
-		name: 'Lila',
-		age: '2 años y 5 meses'
-	},
-	{
-		id: 2,
-		name: 'Carol',
-		age: '2 años y 1 mes'
-	},
-	{
-		id: 3,
-		name: 'Pepe',
-		age: '3 años y 4 meses'
-	},
-	{
-		id: 4,
-		name: 'Jimmy',
-		age: '1 años y 9 meses'
-	},
-	];
+	patients: Observable<Patient[]>;
+	patient: Patient;
 
-  constructor() { }
+	constructor(public dialog: MatDialog) { }
 
-  ngOnInit() {
-  }
+	ngOnInit() {
+		this.patients = this.getPatients();
+	}
+
+	getPatients(): Observable<Patient[]> {
+		return of(PATIENTS);
+	}
+
+	openNewPatientDialog(): void {
+		const dialogRef = this.dialog.open(NewPatientDialogComponent, {
+			width: '240px'
+		});
+	}
 
 }
