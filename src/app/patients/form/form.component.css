@@ -16,3 +16,11 @@
 .tablet .mat-form-field {
 	min-width: calc(50% - 16px);	
 }
+
+.full-width {
+	min-width: calc(100% - 16px);
+}
+
+.visit-form-button {
+	margin-right: 8px;
+}

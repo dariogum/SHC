@@ -12,8 +12,8 @@ import { NewPatientDialogComponent } from './new-patient-dialog.component';
 })
 export class ListComponent implements OnInit {
 
-	patients: Observable<Patient[]>;
 	patient: Patient;
+	patients: Observable<Patient[]>;
 
 	constructor(public dialog: MatDialog) { }
 

@@ -6,6 +6,7 @@ import { SocialSecurity } from './classes/socialsecurity';
 import { BirthType } from './classes/birthtype';
 import { BloodType } from './classes/bloodtype';
 import { Patient } from './classes/patient';
+import { Visit } from './classes/visit';
 
 export const CITIES: City[] = [
   { id: 1, name: 'Reconquista', state: 1, zipcode: 'S3560' }
@@ -82,3 +83,12 @@ export const PATIENTS: Patient[] = [
     others: null
   }
 ];
+
+export const VISITS: Visit[] = [
+  {
+    id: 0, patient: PATIENTS[0], date: new Date(), weight: 83000, height: 180, perimeter: 25.1, diagnosis: 'Está loquillo'
+  },
+  {
+    id: 1, patient: PATIENTS[0], date: new Date(), weight: 82000, height: 180, perimeter: 25.1, diagnosis: 'Está loquillo mal'
+  }
+]

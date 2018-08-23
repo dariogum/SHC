@@ -5,6 +5,15 @@
     <button mat-icon-button (click)="openNewPatientDialog()">
 			<mat-icon aria-label="Crear un nuevo paciente">add</mat-icon>
 		</button>
+		<button mat-icon-button [matMenuTriggerFor]="menu">
+			<mat-icon aria-label="Opciones">more_vert</mat-icon>
+		</button>
+		<mat-menu #menu="matMenu">
+			<a href="./" mat-menu-item>
+				<mat-icon>exit_to_app</mat-icon>
+				<span>Cerrar sesión</span>
+			</a>
+		</mat-menu>
   </mat-toolbar-row>
 </mat-toolbar>
 <mat-card class="main-card">
@@ -17,11 +26,9 @@
 		</form>
 		<mat-nav-list>
 		  <mat-list-item *ngFor="let patient of patients | async">
+				<mat-icon matListIcon [color]="(patient.gender && patient.gender.id == 1) ? 'primary' : 'accent'">person</mat-icon>
 		  	<a matLine routerLink="{{patient.id}}">{{ patient.name }} {{ patient.lastname }}</a>
 		  	<p matLine class="mat-caption">Edad: {{ patient.birthday | age }}</p>
-			  <button mat-icon-button>
-					<mat-icon>history</mat-icon>
-				</button>
 		  </mat-list-item>
 		</mat-nav-list>
 	</mat-card-content>

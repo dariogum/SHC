@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class NewPatientDialogComponent {
 
-	patient = new Patient();
+	patient: Patient = new Patient();
 
   constructor(public dialogRef: MatDialogRef<NewPatientDialogComponent>, private router: Router) {}
 
