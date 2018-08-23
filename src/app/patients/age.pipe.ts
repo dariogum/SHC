@@ -17,3 +17,24 @@ export class AgePipe implements PipeTransform {
 	}
 
 }
+
+@Pipe({
+	name: 'ageUp'
+})
+export class AgeUpPipe implements PipeTransform {
+
+	transform(value: Date, birthday: Date): string {
+		let update = moment(value);
+		let birthdate = moment();
+		if(birthday !== undefined) {
+			birthdate = moment(birthday);
+		}
+		let years = update.diff(birthdate, 'years');
+		let months = update.subtract(years, 'years').diff(birthdate, 'months');
+		let days = update.subtract(months, 'months').diff(birthdate, 'days');
+		let html: string = years + " años " + months + " meses " + days + " días";
+
+		return html;
+	}
+
+}

@@ -14,11 +14,13 @@ import { ConfirmationPatientDialogComponent } from './confirmation-patient-dialo
 	selector: 'app-form',
 	templateUrl: './form.component.html',
 	styleUrls: ['./form.component.css']
+
 })
 export class FormComponent implements OnInit {
 
 	formClass = 'wide';
 	folded = false;
+	maxDate = new Date();
 
 	cities = CITIES;
 	countries = COUNTRIES;

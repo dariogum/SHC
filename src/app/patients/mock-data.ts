@@ -67,7 +67,7 @@ export const BLOODTYPES: BloodType[] = [
 
 export const PATIENTS: Patient[] = [
   {
-    id: 0, name: 'Darío', lastname: 'Uberti', birthday: new Date(1987, 10, 6), gender: GENDERS[0], docType: 1, doc: '33038935',
+    id: 0, name: 'Darío', lastname: 'Uberti', birthday: new Date(1987, 9, 6), gender: GENDERS[0], docType: 1, doc: '33038935',
     phone1: 3424669752, phone2: 3491421342, country: COUNTRIES[0], state: STATES[19], city: CITIES[0], street: 'Av. Gbdor. Freyre',
     number: 3169, floor: '2', apartment: 'A', socialSecurity1: SOCIALSECURITIES[0], socialSecurity1Number: '123456789',
     socialSecurity2: null, socialSecurity2Number: null, birthType: BIRTHTYPES[0], weightNewborn: 3500, bloodType: BLOODTYPES[1],
@@ -75,7 +75,7 @@ export const PATIENTS: Patient[] = [
     others: null
   },
   {
-    id: 1, name: 'Verónica', lastname: 'Pedicino', birthday: new Date(1988, 9, 19), gender: GENDERS[1], docType: 1, doc: '34051871',
+    id: 1, name: 'Verónica', lastname: 'Pedicino', birthday: new Date(1988, 8, 19), gender: GENDERS[1], docType: 1, doc: '34051871',
     phone1: 3424669752, phone2: 3491421342, country: COUNTRIES[0], state: STATES[19], city: CITIES[0], street: 'Av. Gbdor. Freyre',
     number: 3169, floor: '2', apartment: 'A', socialSecurity1: SOCIALSECURITIES[0], socialSecurity1Number: '123456789',
     socialSecurity2: null, socialSecurity2Number: null, birthType: BIRTHTYPES[0], weightNewborn: 3500, bloodType: BLOODTYPES[1],
@@ -86,9 +86,9 @@ export const PATIENTS: Patient[] = [
 
 export const VISITS: Visit[] = [
   {
-    id: 0, patient: PATIENTS[0], date: new Date(), weight: 83000, height: 180, perimeter: 25.1, diagnosis: 'Está loquillo'
+    id: 0, patient: PATIENTS[0], date: new Date(1989, 2, 3), weight: 83000, height: 180, perimeter: 25.1, diagnosis: 'Está loquillo'
   },
   {
-    id: 1, patient: PATIENTS[0], date: new Date(), weight: 82000, height: 180, perimeter: 25.1, diagnosis: 'Está loquillo mal'
+    id: 1, patient: PATIENTS[0], date: new Date(1991, 3, 15), weight: 82000, height: 180, perimeter: 25.1, diagnosis: 'Está loquillo mal'
   }
 ]

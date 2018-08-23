@@ -35,7 +35,7 @@
 					Información personal
 				</mat-panel-title>
 				<mat-panel-description>
-					{{patient.name}} {{patient.lastname}} - {{ patient.birthday | age }}
+					{{patient.name}} {{patient.lastname}} - {{ maxDate | ageUp:patient.birthday }}
 				</mat-panel-description>
 			</mat-expansion-panel-header>
 
@@ -50,9 +50,9 @@
 				</mat-form-field>
 
 				<mat-form-field>
-					<input matInput [matDatepicker]="picker" placeholder="Fecha de nacimiento" [(ngModel)]="patient.birthday" name="birthday">
+					<input matInput [matDatepicker]="picker" placeholder="Fecha de nacimiento" [max]="maxDate" [(ngModel)]="patient.birthday" name="birthday">
 					<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-					<mat-datepicker #picker calendarLabel="Fecha de nacimiento"></mat-datepicker>
+					<mat-datepicker touchUi #picker calendarLabel="Fecha de nacimiento"></mat-datepicker>
 				</mat-form-field>
 
 				<mat-form-field>
@@ -280,7 +280,7 @@
 			<mat-list>
 				<mat-list-item *ngFor="let visit of visits | async">
 					<mat-icon matListIcon color="accent">note</mat-icon>
-					<h3 matLine>{{visit.date | date:'short'}}</h3>
+					<h3 matLine>{{visit.date | date:'dd/MM/yyyy'}} - Edad: {{ visit.date | ageUp:patient.birthday}}</h3>
 					<p matLine>Peso: {{visit.weight}} g | Talla: {{visit.height}} cm | Perímetro craneal: {{visit.perimeter}} cm</p>
 					<p matLine>Diagnóstico: {{visit.diagnosis}}</p>
 					<button mat-icon-button color="primary" (click)="newVisit = visit">
@@ -301,9 +301,9 @@
 				<div>
 
 					<mat-form-field>
-						<input matInput [matDatepicker]="datepicker" placeholder="Fecha" [(ngModel)]="newVisit.date" name="date" required>
+						<input matInput [matDatepicker]="datepicker" placeholder="Fecha" [min]="patient.birthday" [max]="maxDate" [(ngModel)]="newVisit.date" name="date" required>
 						<mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
-						<mat-datepicker #datepicker calendarLabel="Fecha"></mat-datepicker>
+						<mat-datepicker touchUi #datepicker calendarLabel="Fecha"></mat-datepicker>
 					</mat-form-field>
 
 					<mat-form-field>

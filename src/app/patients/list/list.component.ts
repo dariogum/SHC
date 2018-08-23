@@ -14,6 +14,7 @@ export class ListComponent implements OnInit {
 
 	patient: Patient;
 	patients: Observable<Patient[]>;
+	today: Date = new Date();
 
 	constructor(public dialog: MatDialog) { }
 
