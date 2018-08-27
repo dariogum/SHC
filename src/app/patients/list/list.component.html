@@ -20,7 +20,7 @@
 	<mat-card-content>
 		<form method="post">
 			<mat-form-field class="full-width">
-				<input matInput type="text" placeholder="Buscar un paciente...">
+				<input matInput #searchInput type="text" placeholder="Buscar un paciente..." (keyup)="search(searchInput.value)">
 				<mat-hint align="start">Ingrese al menos 3 caracteres y espere</mat-hint>
 			</mat-form-field>
 		</form>

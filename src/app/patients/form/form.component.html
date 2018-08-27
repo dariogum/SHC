@@ -3,7 +3,7 @@
 		<a mat-icon-button routerLink="../">
 			<mat-icon aria-label="Listado de pacientes">arrow_back</mat-icon>
 		</a>
-		<span>Paciente</span>
+		<span>Historia Clínica {{patient.id}}</span>
 		<span class="spacer"></span>
 		<button mat-icon-button (click)="close()" *ngIf="!folded">
 			<mat-icon aria-label="Cerrar todos los paneles">unfold_less</mat-icon>
@@ -15,7 +15,7 @@
 			<mat-icon aria-label="Opciones del paciente">more_vert</mat-icon>
 		</button>
 		<mat-menu #menu="matMenu">
-			<button mat-menu-item (click)="openConfirmationPatientDialog(visit)">
+			<button mat-menu-item (click)="openConfirmationPatientDialog()">
 				<mat-icon>delete</mat-icon>
 				<span>Eliminar</span>
 			</button>
@@ -35,18 +35,18 @@
 					Información personal
 				</mat-panel-title>
 				<mat-panel-description>
-					{{patient.name}} {{patient.lastname}} - {{ maxDate | ageUp:patient.birthday }}
+					{{ maxDate | ageUp:patient.birthday }}
 				</mat-panel-description>
 			</mat-expansion-panel-header>
 
 			<form method="post" [class]="formClass">
 
 				<mat-form-field>
-					<input matInput type="text" placeholder="Nombre/s" required [(ngModel)]="patient.name" name="name">
+					<input matInput type="text" placeholder="Apellido/s" required [(ngModel)]="patient.lastname" name="lastname">
 				</mat-form-field>
 
 				<mat-form-field>
-					<input matInput type="text" placeholder="Apellido/s" required [(ngModel)]="patient.lastname" name="lastname">
+					<input matInput type="text" placeholder="Nombre/s" required [(ngModel)]="patient.name" name="name">
 				</mat-form-field>
 
 				<mat-form-field>
@@ -234,14 +234,13 @@
 					</mat-form-field>
 
 					<mat-form-field>
-						<input matInput type="number" placeholder="Edad de gestación" [(ngModel)]="patient.gestationalAge" name="gestationalAge">
+						<input matInput type="number" placeholder="Edad gestacional" [(ngModel)]="patient.gestationalAge" name="gestationalAge">
 						<span matSuffix>semanas</span>
 					</mat-form-field>
 
 					<mat-form-field>
 						<input matInput type="text" placeholder="Comentario" [(ngModel)]="patient.comments" name="comments">
 					</mat-form-field>
-					<mat-checkbox [(ngModel)]="patient.circularCord" name="circularCord">Circular de cordón</mat-checkbox>
 
 				</div>
 
@@ -277,12 +276,12 @@
 				</mat-panel-description>
 			</mat-expansion-panel-header>
 
-			<mat-list>
+			<mat-list dense>
 				<mat-list-item *ngFor="let visit of visits | async">
-					<mat-icon matListIcon color="accent">note</mat-icon>
 					<h3 matLine>{{visit.date | date:'dd/MM/yyyy'}} - Edad: {{ visit.date | ageUp:patient.birthday}}</h3>
-					<p matLine>Peso: {{visit.weight}} g | Talla: {{visit.height}} cm | Perímetro craneal: {{visit.perimeter}} cm</p>
+					<p matLine>Peso: {{visit.weight}} g | Talla: {{visit.height}} cm | Perímetro encefálico: {{visit.perimeter}} cm</p>
 					<p matLine>Diagnóstico: {{visit.diagnosis}}</p>
+					<p matLine>Tratamiento: {{visit.treatment}}</p>
 					<button mat-icon-button color="primary" (click)="newVisit = visit">
 						<mat-icon>edit</mat-icon>
 					</button>
@@ -291,6 +290,34 @@
 					</button>
 				</mat-list-item>
 			</mat-list>
+
+			<!--<mat-vertical-stepper [linear]="isLinear" #stepper>
+				<ng-template matStepperIcon="edit" let-index="index">
+					{{ index + 1 }}
+				</ng-template>
+				<mat-step *ngFor="let visit of visits | async; let i = index">
+					<ng-template matStepLabel>{{visit.date | date:'dd/MM/yyyy'}} - Edad: {{ visit.date | ageUp:patient.birthday}}</ng-template>
+						<p class="mat-caption"><strong>Peso:</strong> {{visit.weight}} gramos</p>
+						<p class="mat-caption"><strong>Talla:</strong> {{visit.height}} centímetros</p>
+						<p class="mat-caption"><strong>Perímetro encefálico:</strong> {{visit.perimeter}} centímetros</p>
+						<p class="mat-caption"><strong>Diagnóstico:</strong> {{visit.diagnosis}}</p>
+						<p class="mat-caption"><strong>Tratamiento:</strong> {{visit.treatment}}</p>
+					<div>
+						<button mat-icon-button color="primary" (click)="newVisit = visit">
+							<mat-icon>edit</mat-icon>
+						</button>
+						<button mat-icon-button color="warn" (click)="openConfirmationDialog(visit)">
+							<mat-icon>delete</mat-icon>
+						</button>
+						<button mat-icon-button matStepperPrevious *ngIf="i > 0">
+							<mat-icon>expand_less</mat-icon>
+						</button>
+						<button mat-icon-button matStepperNext *ngIf="i < ((visits | async)?.length - 1)">
+							<mat-icon>expand_more</mat-icon>
+						</button>
+					</div>
+				</mat-step>
+			</mat-vertical-stepper>-->
 
 			<mat-divider></mat-divider>
 
@@ -317,7 +344,7 @@
 					</mat-form-field>
 
 					<mat-form-field>
-						<input matInput type="number" step="0.1" min="0" placeholder="Perímetro craneal" [(ngModel)]="newVisit.perimeter" name="perimeter">
+						<input matInput type="number" step="0.1" min="0" placeholder="Perímetro encefálico" [(ngModel)]="newVisit.perimeter" name="perimeter">
 						<span matSuffix>cm</span>
 					</mat-form-field>
 
@@ -327,9 +354,26 @@
 					<textarea matInput placeholder="Diagnóstico" [(ngModel)]="newVisit.diagnosis" name="diagnosis" required></textarea>
 				</mat-form-field>
 
+				<mat-form-field class="full-width">
+					<textarea matInput placeholder="Tratamiento" [(ngModel)]="newVisit.treatment" name="treatment"></textarea>
+				</mat-form-field>
+
+				<mat-card class="files">
+					<mat-card-content>
+						<label class="files-container">
+							<mat-icon>camera_alt</mat-icon>
+							Presione aquí para añadir imágenes a la visita
+							<input type="file" accept="image/*" multiple (change)="onFilesChanged($event)" [(ngModel)]="newVisit.files" name="files">
+						</label>
+						<div class="image-container" *ngFor="let image of files">
+							<img [src]="image.url">
+						</div>
+					</mat-card-content>
+				</mat-card>
+
 				<div>
 					<button type="submit" mat-raised-button color="primary" class="visit-form-button" [disabled]="!visitForm.form.valid" *ngIf="newVisit.id === undefined">Guardar</button>
-					<button type="button" mat-raised-button color="accent" class="visit-form-button" (click)="resetNewVisit()">Limpiar</button>
+					<button type="button" mat-raised-button color="accent" class="visit-form-button" (click)="resetNewVisit()">Nueva visita</button>
 				</div>
 
 			</form>

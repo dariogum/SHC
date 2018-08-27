@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { Observable, of } from 'rxjs';
-import { Patient } from './../classes/patient';
+
+import { Observable, of, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+
+import { Patient } from './../../classes/patient';
 import { PATIENTS } from './../mock-data';
+import { PatientService } from './../patient.service';
+
 import { NewPatientDialogComponent } from './new-patient-dialog.component';
 
 @Component({
@@ -16,20 +21,33 @@ export class ListComponent implements OnInit {
 	patients: Observable<Patient[]>;
 	today: Date = new Date();
 
-	constructor(public dialog: MatDialog) { }
+	private searchTerms = new Subject<string>();
+
+	constructor(public dialog: MatDialog, private patientService: PatientService) { }
 
 	ngOnInit() {
-		this.patients = this.getPatients();
+		//this.getPatients();
+
+		this.patients = this.searchTerms.pipe(
+			debounceTime(300),
+			distinctUntilChanged(),
+			switchMap((term: string) => this.patientService.searchPatients(term)),
+		);
 	}
 
-	getPatients(): Observable<Patient[]> {
-		return of(PATIENTS);
+	getPatients(): void {
+		this.patientService.getPatients()
+			.subscribe(patients => this.patients = of(patients));
 	}
 
 	openNewPatientDialog(): void {
 		const dialogRef = this.dialog.open(NewPatientDialogComponent, {
 			width: '240px'
 		});
+	}
+
+	search(term: string) {
+		this.searchTerms.next(term);
 	}
 
 }

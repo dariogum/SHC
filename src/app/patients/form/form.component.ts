@@ -4,11 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatAccordion, MatDialog } from '@angular/material';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable, of } from 'rxjs';
-import { Patient } from './../classes/patient';
-import { Visit } from './../classes/visit';
+import { Patient } from './../../classes/patient';
+import { Visit } from './../../classes/visit';
 import { CITIES, COUNTRIES, STATES, SOCIALSECURITIES, GENDERS, BIRTHTYPES, BLOODTYPES, PATIENTS, VISITS } from './../mock-data';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
 import { ConfirmationPatientDialogComponent } from './confirmation-patient-dialog.component';
+import { PatientService } from './../patient.service';
 
 @Component({
 	selector: 'app-form',
@@ -33,38 +34,82 @@ export class FormComponent implements OnInit {
 	patient: Patient;
 	newVisit: Visit = new Visit();
 	visits: Observable<Visit[]>;
+	files: FileList;
 
 	@ViewChild(MatAccordion) accordion: MatAccordion;
 
-	constructor(private breakpointObserver: BreakpointObserver, private route: ActivatedRoute, private router: Router, public dialog: MatDialog) { }
-
-	ngOnInit() {
+	constructor(private breakpointObserver: BreakpointObserver, private route: ActivatedRoute,
+		private router: Router, public dialog: MatDialog, private patientService: PatientService) {
 		this.breakpointObserver.observe([
 			Breakpoints.HandsetPortrait
 		]).subscribe(result => {
 			if (result.matches) {
 				this.formClass = 'handset';
-			} else {
-				this.breakpointObserver.observe([
-					Breakpoints.TabletPortrait,
-					Breakpoints.HandsetLandscape,
-				]).subscribe(result => {
-					if (result.matches) {
-						this.formClass = 'tablet';
-					} else {
-						this.formClass = 'wide';
-					}
-				});
 			}
 		});
 
-		this.getPacient();
-		this.visits = this.getVisits();
+		this.breakpointObserver.observe([
+			Breakpoints.HandsetLandscape,
+			Breakpoints.TabletPortrait,
+		]).subscribe(result => {
+			if (result.matches) {
+				this.formClass = 'tablet';
+			}
+		});
+
+		this.breakpointObserver.observe([
+			Breakpoints.TabletLandscape,
+			Breakpoints.WebPortrait,
+			Breakpoints.WebLandscape,
+		]).subscribe(result => {
+			if (result.matches) {
+				this.formClass = 'wide';
+			}
+		});
 	}
 
-	getPacient(): void {
+	ngOnInit() {
+		this.getPatient();
+	}
+
+	getPatient(): void {
 		const id = +this.route.snapshot.paramMap.get('id');
 		this.patient = PATIENTS[id];
+		this.visits = this.getVisits();
+		/*
+		this.patientService.getPatient(id)
+			.subscribe(patient => this.patient = patient);
+		*/
+	}
+
+	updatePatient() {
+		this.patientService.updatePatient(this.patient)
+			.subscribe(() => console.log('patient updated'));
+	}
+
+	deletePatient() {
+		//this.patientService.deletePatient(this.patient.id).subscribe();
+		var index = PATIENTS.indexOf(this.patient);
+		if (index > -1) {
+			PATIENTS.splice(index, 1);
+		}
+		this.router.navigate(['patients']);
+	}
+
+	openConfirmationPatientDialog(): void {
+		const dialogRef = this.dialog.open(ConfirmationPatientDialogComponent, {
+			width: '240px'
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			if (result) {
+				this.deletePatient();
+			}
+		});
+	}
+
+	getVisits(): Observable<Visit[]> {
+		return of(VISITS);
 	}
 
 	close() {
@@ -75,10 +120,6 @@ export class FormComponent implements OnInit {
 	open() {
 		this.folded = false;
 		this.accordion.openAll();
-	}
-
-	getVisits(): Observable<Visit[]> {
-		return of(VISITS);
 	}
 
 	onVisitSubmit() {
@@ -95,8 +136,11 @@ export class FormComponent implements OnInit {
 	}
 
 	deleteVisit(visit) {
+		if(visit === this.newVisit) {
+			this.resetNewVisit();
+		}
 		var index = VISITS.indexOf(visit)
-		if(index > -1) {
+		if (index > -1) {
 			VISITS.splice(index, 1);
 		}
 	}
@@ -107,31 +151,25 @@ export class FormComponent implements OnInit {
 		});
 
 		dialogRef.afterClosed().subscribe(result => {
-			if(result) {
+			if (result) {
 				this.deleteVisit(visit);
 			}
 		});
 	}
 
-	deletePatient() {
-		var index = PATIENTS.indexOf(this.patient);
-		if(index > -1) {
-			PATIENTS.splice(index, 1);
-		}
-    this.router.navigate(['patients']);
-	}
+	onFilesChanged(event) {
+    this.files = event.target.files;
+    for (var i = this.files.length - 1; i >= 0; i--) {
+    	this.readImage(event, i);
+    }
+  }
 
-	openConfirmationPatientDialog(): void {
-		const dialogRef = this.dialog.open(ConfirmationPatientDialogComponent, {
-			width: '240px'
-		});
-
-		dialogRef.afterClosed().subscribe(result => {
-			if(result) {
-				this.deletePatient();
-			}
-		});
-	}
-
+  readImage(event, index) {
+	  var reader = new FileReader();
+	  reader.onload = (event: ProgressEvent) => {
+	    this.files[index]['url'] = (<FileReader>event.target).result;
+	  }
+	  reader.readAsDataURL(this.files[index]);
+  }
 
 }
