@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { Patient } from './../classes/patient';
 import { Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 
 const httpOptions = {
 	headers: new HttpHeaders({
@@ -15,7 +15,7 @@ const httpOptions = {
 })
 export class PatientService {
 
-	private apiUrl = 'api/patients';
+	private apiUrl = 'http://localhost:8080/v1/patients';
 
 	constructor(private http: HttpClient) { }
 
@@ -29,7 +29,8 @@ export class PatientService {
 
 	getPatient(id: number): Observable<Patient> {
 		const url = `${this.apiUrl}/${id}`;
-		return this.http.get<Patient>(url).pipe(
+		return this.http.get<any>(url).pipe(
+			map(response => response.data),
 			tap(patient => console.log(`fetched patient id=${id}`)),
 			catchError(this.handleError<Patient>(`getPatient id=${id}`))
 		);
@@ -63,9 +64,10 @@ export class PatientService {
 		if (!term.trim()) {
 			return of([]);
 		}
-		return this.http.get<Patient[]>(`${this.apiUrl}/?name=${term}`).pipe(
-			tap(_ => console.log(`found heroes matching "${term}"`)),
-			catchError(this.handleError<Patient[]>('searchHeroes', []))
+		return this.http.get<any>(`${this.apiUrl}?filter=name:${term},lastname:${term}`).pipe(
+			map(response => response.data),
+			tap(_ => console.log(`found patients matching "${term}"`)),
+			catchError(this.handleError<Patient[]>('searchpatients', []))
 		);
 	}
 

@@ -33,7 +33,6 @@ export class FormComponent implements OnInit {
 
 	patient: Patient;
 	newVisit: Visit = new Visit();
-	visits: Observable<Visit[]>;
 	files: FileList;
 
 	@ViewChild(MatAccordion) accordion: MatAccordion;
@@ -74,12 +73,8 @@ export class FormComponent implements OnInit {
 
 	getPatient(): void {
 		const id = +this.route.snapshot.paramMap.get('id');
-		this.patient = PATIENTS[id];
-		this.visits = this.getVisits();
-		/*
 		this.patientService.getPatient(id)
 			.subscribe(patient => this.patient = patient);
-		*/
 	}
 
 	updatePatient() {

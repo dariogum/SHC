@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 
 import { Observable, of, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
 
 import { Patient } from './../../classes/patient';
 import { PATIENTS } from './../mock-data';
