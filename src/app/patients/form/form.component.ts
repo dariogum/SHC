@@ -6,7 +6,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable, of } from 'rxjs';
 import { Patient } from './../../classes/patient';
 import { Visit } from './../../classes/visit';
-import { CITIES, COUNTRIES, STATES, SOCIALSECURITIES, GENDERS, BIRTHTYPES, BLOODTYPES, PATIENTS, VISITS } from './../mock-data';
+import { CITIES, COUNTRIES, STATES, SOCIALSECURITIES, GENDERS, BIRTHTYPES, BLOODTYPES } from './../mock-data';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
 import { ConfirmationPatientDialogComponent } from './confirmation-patient-dialog.component';
 import { PatientService } from './../patient.service';
@@ -84,10 +84,10 @@ export class FormComponent implements OnInit {
 
 	deletePatient() {
 		//this.patientService.deletePatient(this.patient.id).subscribe();
-		var index = PATIENTS.indexOf(this.patient);
+		/*var index = PATIENTS.indexOf(this.patient);
 		if (index > -1) {
 			PATIENTS.splice(index, 1);
-		}
+		}*/
 		this.router.navigate(['patients']);
 	}
 
@@ -103,10 +103,6 @@ export class FormComponent implements OnInit {
 		});
 	}
 
-	getVisits(): Observable<Visit[]> {
-		return of(VISITS);
-	}
-
 	close() {
 		this.folded = true;
 		this.accordion.closeAll();
@@ -119,9 +115,9 @@ export class FormComponent implements OnInit {
 
 	onVisitSubmit() {
 		if (this.newVisit.id === undefined) {
-			this.newVisit.id = VISITS.length;
+			/*this.newVisit.id = VISITS.length;
 			this.newVisit.patient = this.patient;
-			VISITS.push(this.newVisit);
+			VISITS.push(this.newVisit);*/
 			this.newVisit = new Visit();
 		}
 	}
@@ -134,10 +130,10 @@ export class FormComponent implements OnInit {
 		if(visit === this.newVisit) {
 			this.resetNewVisit();
 		}
-		var index = VISITS.indexOf(visit)
+		/*var index = VISITS.indexOf(visit)
 		if (index > -1) {
 			VISITS.splice(index, 1);
-		}
+		}*/
 	}
 
 	openConfirmationDialog(visit): void {

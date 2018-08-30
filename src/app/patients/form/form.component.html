@@ -35,28 +35,28 @@
 					Información personal
 				</mat-panel-title>
 				<mat-panel-description>
-					{{ maxDate | ageUp:patient.attributes.birthday }}
+					{{ maxDate | ageUp:patient.birthday }}
 				</mat-panel-description>
 			</mat-expansion-panel-header>
 
 			<form method="post" [class]="formClass">
 
 				<mat-form-field>
-					<input matInput type="text" placeholder="Apellido/s" required [(ngModel)]="patient.attributes.lastname" name="lastname" maxlength="256">
+					<input matInput type="text" placeholder="Apellido/s" required [(ngModel)]="patient.lastname" name="lastname" maxlength="256">
 				</mat-form-field>
 
 				<mat-form-field>
-					<input matInput type="text" placeholder="Nombre/s" required [(ngModel)]="patient.attributes.name" name="name" maxlength="256">
+					<input matInput type="text" placeholder="Nombre/s" required [(ngModel)]="patient.name" name="name" maxlength="256">
 				</mat-form-field>
 
 				<mat-form-field>
-					<input matInput [matDatepicker]="picker" placeholder="Fecha de nacimiento" [max]="maxDate" [(ngModel)]="patient.attributes.birthday" name="birthday">
+					<input matInput [matDatepicker]="picker" placeholder="Fecha de nacimiento" [max]="maxDate" [(ngModel)]="patient.birthday" name="birthday">
 					<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
 					<mat-datepicker touchUi #picker calendarLabel="Fecha de nacimiento"></mat-datepicker>
 				</mat-form-field>
 
 				<mat-form-field>
-					<mat-select placeholder="Sexo" [(ngModel)]="patient.attributes.gender" name="gender">
+					<mat-select placeholder="Sexo" [(ngModel)]="patient.gender" name="gender">
 						<mat-option *ngFor="let gender of genders" [value]="gender">
 							{{gender.name}}
 						</mat-option>
@@ -66,24 +66,24 @@
 				<div>
 
 					<mat-form-field>
-						<mat-select placeholder="Tipo de documento" [(ngModel)]="patient.attributes.docType" name="docType">
+						<mat-select placeholder="Tipo de documento" [(ngModel)]="patient.docType" name="docType">
 							<mat-option [value]="1">D.N.I.</mat-option>
 						</mat-select>
 					</mat-form-field>
 
 					<mat-form-field>
-						<input matInput type="text" placeholder="Número de documento" [(ngModel)]="patient.attributes.doc" name="doc" maxlength="256">
+						<input matInput type="text" placeholder="Número de documento" [(ngModel)]="patient.doc" name="doc" maxlength="256">
 						<mat-hint align="start">Ej: 33000999</mat-hint>
 					</mat-form-field>
 
 					<mat-form-field>
-						<input matInput type="tel" placeholder="Teléfono 1" [(ngModel)]="patient.attributes.phone1" name="phone1" maxlength="64">
+						<input matInput type="tel" placeholder="Teléfono 1" [(ngModel)]="patient.phone1" name="phone1" maxlength="64">
 						<mat-icon matSuffix>phone</mat-icon>
 						<mat-hint align="start">Ej: 3424567814</mat-hint>
 					</mat-form-field>
 
 					<mat-form-field>
-						<input matInput type="tel" placeholder="Teléfono 2" [(ngModel)]="patient.attributes.phone2" name="phone2" maxlength="64">
+						<input matInput type="tel" placeholder="Teléfono 2" [(ngModel)]="patient.phone2" name="phone2" maxlength="64">
 						<mat-icon matSuffix>phone</mat-icon>
 						<mat-hint align="start">Ej: 3424567814</mat-hint>
 					</mat-form-field>
@@ -93,7 +93,7 @@
 				<div>
 
 					<mat-form-field>
-						<mat-select placeholder="País" [(ngModel)]="patient.attributes.country" name="country">
+						<mat-select placeholder="País" [(ngModel)]="patient.country" name="country">
 							<mat-option *ngFor="let country of countries" [value]="country">
 								{{country.name}}
 							</mat-option>
@@ -101,7 +101,7 @@
 					</mat-form-field>
 
 					<mat-form-field>
-						<mat-select placeholder="Provincia" [(ngModel)]="patient.attributes.state" name="state">
+						<mat-select placeholder="Provincia" [(ngModel)]="patient.state" name="state">
 							<mat-option *ngFor="let state of states" [value]="state">
 								{{state.name}}
 							</mat-option>
@@ -109,7 +109,7 @@
 					</mat-form-field>
 
 					<mat-form-field>
-						<mat-select placeholder="Localidad" [(ngModel)]="patient.attributes.city" name="city">
+						<mat-select placeholder="Localidad" [(ngModel)]="patient.city" name="city">
 							<mat-option *ngFor="let city of cities" [value]="city">
 								{{city.name}}
 							</mat-option>
@@ -125,25 +125,25 @@
 				<div>
 
 					<mat-form-field>
-						<input matInput type="text" placeholder="Calle" [(ngModel)]="patient.attributes.street" name="street" maxlength="256">
+						<input matInput type="text" placeholder="Calle" [(ngModel)]="patient.street" name="street" maxlength="256">
 						<mat-icon matSuffix>edit_location</mat-icon>
 						<mat-hint align="start">Ej: Av. Domingo F. Sarmiento</mat-hint>
 					</mat-form-field>
 
 					<mat-form-field>
-						<input matInput type="number" placeholder="Número" [(ngModel)]="patient.attributes.number" name="number">
+						<input matInput type="number" placeholder="Número" [(ngModel)]="patient.number" name="number">
 						<mat-icon matSuffix>dialpad</mat-icon>
 						<mat-hint align="start">Ej: 5692</mat-hint>
 					</mat-form-field>
 
 					<mat-form-field>
-						<input matInput type="text" placeholder="Piso" [(ngModel)]="patient.attributes.floor" name="floor" maxlength="16">
+						<input matInput type="text" placeholder="Piso" [(ngModel)]="patient.floor" name="floor" maxlength="16">
 						<mat-icon matSuffix>location_city</mat-icon>
 						<mat-hint align="start">Ej: 1</mat-hint>
 					</mat-form-field>
 
 					<mat-form-field>
-						<input matInput type="text" placeholder="Departamento" [(ngModel)]="patient.attributes.apartment" name="apartment" maxlength="16">
+						<input matInput type="text" placeholder="Departamento" [(ngModel)]="patient.apartment" name="apartment" maxlength="16">
 						<mat-icon matSuffix>meeting_room</mat-icon>
 						<mat-hint align="start">Ej: D</mat-hint>
 					</mat-form-field>
@@ -153,7 +153,7 @@
 				<div class="social-security">
 
 					<mat-form-field>
-						<mat-select placeholder="Obra Social 1" [(ngModel)]="patient.attributes.socialSecurity1" name="socialSecurity1">
+						<mat-select placeholder="Obra Social 1" [(ngModel)]="patient.socialSecurity1" name="socialSecurity1">
 							<mat-option *ngFor="let socialsecurity of socialsecurities" [value]="socialsecurity">
 								{{socialsecurity.name}}
 							</mat-option>
@@ -161,11 +161,11 @@
 					</mat-form-field>
 
 					<mat-form-field>
-						<input matInput type="text" placeholder="N° de afiliado" [(ngModel)]="patient.attributes.socialSecurity1Number" name="socialSecurity1Number" maxlength="128">
+						<input matInput type="text" placeholder="N° de afiliado" [(ngModel)]="patient.socialSecurity1Number" name="socialSecurity1Number" maxlength="128">
 					</mat-form-field>
 
 					<mat-form-field>
-						<mat-select placeholder="Obra Social 2" [(ngModel)]="patient.attributes.socialSecurity2" name="socialSecurity2">
+						<mat-select placeholder="Obra Social 2" [(ngModel)]="patient.socialSecurity2" name="socialSecurity2">
 							<mat-option *ngFor="let socialsecurity of socialsecurities" [value]="socialsecurity">
 								{{socialsecurity.name}}
 							</mat-option>
@@ -173,7 +173,7 @@
 					</mat-form-field>
 
 					<mat-form-field>
-						<input matInput type="text" placeholder="N° de afiliado" [(ngModel)]="patient.attributes.socialSecurity2Number" name="socialSecurity2Number" maxlength="128">
+						<input matInput type="text" placeholder="N° de afiliado" [(ngModel)]="patient.socialSecurity2Number" name="socialSecurity2Number" maxlength="128">
 					</mat-form-field>
 
 				</div>
@@ -181,7 +181,7 @@
 				<div>
 
 					<mat-form-field>
-						<mat-select placeholder="Tipo de Nacimiento" [(ngModel)]="patient.attributes.birthType" name="birthType">
+						<mat-select placeholder="Tipo de Nacimiento" [(ngModel)]="patient.birthType" name="birthType">
 							<mat-option *ngFor="let birthtype of birthtypes" [value]="birthtype">
 								{{birthtype.name}}
 							</mat-option>
@@ -189,13 +189,13 @@
 					</mat-form-field>
 
 					<mat-form-field>
-						<input matInput type="number" step="1" min="0" placeholder="Peso del recién nacido" [(ngModel)]="patient.attributes.weightNewborn" name="weightNewborn">
+						<input matInput type="number" step="1" min="0" placeholder="Peso del recién nacido" [(ngModel)]="patient.weightNewborn" name="weightNewborn">
 						<span matSuffix>g</span>
 						<mat-hint align="start">Ej: 3600</mat-hint>
 					</mat-form-field>
 
 					<mat-form-field>
-						<mat-select placeholder="Grupo sanguíneo" [(ngModel)]="patient.attributes.bloodType" name="bloodType">
+						<mat-select placeholder="Grupo sanguíneo" [(ngModel)]="patient.bloodType" name="bloodType">
 							<mat-option *ngFor="let bloodtype of bloodtypes" [value]="bloodtype">
 								{{bloodtype.name}}
 							</mat-option>
@@ -203,7 +203,7 @@
 					</mat-form-field>
 
 					<mat-form-field>
-						<mat-select placeholder="Factor RH" [(ngModel)]="patient.attributes.rhFactor" name="rhFactor">
+						<mat-select placeholder="Factor RH" [(ngModel)]="patient.rhFactor" name="rhFactor">
 							<mat-option [value]="1">+ (Positivo)</mat-option>
 							<mat-option [value]="2">- (Negativo)</mat-option>
 						</mat-select>
@@ -230,16 +230,16 @@
 				<div>
 
 					<mat-form-field>
-						<input matInput type="number" min="0" step="1" max="10" placeholder="Test de Apgar" [(ngModel)]="patient.attributes.apgar" name="apgar">
+						<input matInput type="number" min="0" step="1" max="10" placeholder="Test de Apgar" [(ngModel)]="patient.apgar" name="apgar">
 					</mat-form-field>
 
 					<mat-form-field>
-						<input matInput type="number" min="0" step="1" placeholder="Edad gestacional" [(ngModel)]="patient.attributes.gestationalAge" name="gestationalAge">
+						<input matInput type="number" min="0" step="1" placeholder="Edad gestacional" [(ngModel)]="patient.gestationalAge" name="gestationalAge">
 						<span matSuffix>semanas</span>
 					</mat-form-field>
 
 					<mat-form-field>
-						<input matInput type="text" placeholder="Comentario" [(ngModel)]="patient.attributes.comments" name="comments">
+						<input matInput type="text" placeholder="Comentario" [(ngModel)]="patient.comments" name="comments">
 					</mat-form-field>
 
 				</div>
@@ -247,16 +247,16 @@
 				<div>
 
 					<mat-form-field>
-						<textarea matInput placeholder="Padre" [(ngModel)]="patient.attributes.father" name="father"></textarea>
+						<textarea matInput placeholder="Padre" [(ngModel)]="patient.father" name="father"></textarea>
 					</mat-form-field>
 					<mat-form-field>
-						<textarea matInput placeholder="Madre" [(ngModel)]="patient.attributes.mother" name="mother"></textarea>
+						<textarea matInput placeholder="Madre" [(ngModel)]="patient.mother" name="mother"></textarea>
 					</mat-form-field>
 					<mat-form-field>
-						<textarea matInput placeholder="Hermanos" [(ngModel)]="patient.attributes.brothers" name="brothers"></textarea>
+						<textarea matInput placeholder="Hermanos" [(ngModel)]="patient.brothers" name="brothers"></textarea>
 					</mat-form-field>
 					<mat-form-field>
-						<textarea matInput placeholder="Otros" [(ngModel)]="patient.attributes.others" name="others"></textarea>
+						<textarea matInput placeholder="Otros" [(ngModel)]="patient.others" name="others"></textarea>
 					</mat-form-field>
 
 				</div>
@@ -277,8 +277,8 @@
 			</mat-expansion-panel-header>
 
 			<mat-list dense>
-				<mat-list-item *ngFor="let visit of patient.relationships.visits">
-					<h3 matLine>{{visit.date | date:'dd/MM/yyyy'}} - Edad: {{ visit.date | ageUp:patient.attributes.birthday}}</h3>
+				<mat-list-item *ngFor="let visit of patient.visits">
+					<h3 matLine>{{visit.date | date:'dd/MM/yyyy'}} - Edad: {{ visit.date | ageUp:patient.birthday}}</h3>
 					<p matLine>Peso: {{visit.weight}} g | Talla: {{visit.height}} cm | Perímetro encefálico: {{visit.perimeter}} cm</p>
 					<p matLine>Diagnóstico: {{visit.diagnosis}}</p>
 					<p matLine>Tratamiento: {{visit.treatment}}</p>

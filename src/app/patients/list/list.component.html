@@ -21,14 +21,14 @@
 		<form method="post">
 			<mat-form-field class="full-width">
 				<input matInput #searchInput type="text" placeholder="Buscar un paciente por apellido y/o nombre..." (keyup)="search(searchInput.value)">
-				<mat-hint align="start">Ingrese al menos 1 caracter y espere</mat-hint>
+				<mat-hint align="start">Ingrese al menos 3 caracteres y espere</mat-hint>
 			</mat-form-field>
 		</form>
 		<mat-nav-list>
 		  <mat-list-item *ngFor="let patient of patients | async">
-				<mat-icon matListIcon [color]="(patient.attributes.gender && patient.attributes.gender.id == 1) ? 'primary' : 'accent'">person</mat-icon>
-		  	<a matLine routerLink="{{patient.id}}">{{ patient.attributes.name }} {{ patient.attributes.lastname }}</a>
-		  	<p matLine class="mat-caption">Edad: {{ today | ageUp:patient.attributes.birthday }}</p>
+				<mat-icon matListIcon [color]="(patient.gender && patient.gender.id == 1) ? 'primary' : 'accent'">person</mat-icon>
+		  	<a matLine routerLink="{{patient.id}}">{{ patient.name }} {{ patient.lastname }}</a>
+		  	<p matLine class="mat-caption">Edad: {{ today | ageUp:patient.birthday }}</p>
 		  </mat-list-item>
 		</mat-nav-list>
 	</mat-card-content>

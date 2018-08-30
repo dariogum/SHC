@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 
 import { Observable, of, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, map, filter } from 'rxjs/operators';
 
 import { Patient } from './../../classes/patient';
-import { PATIENTS } from './../mock-data';
 import { PatientService } from './../patient.service';
 
 import { NewPatientDialogComponent } from './new-patient-dialog.component';
@@ -30,6 +29,7 @@ export class ListComponent implements OnInit {
 
 		this.patients = this.searchTerms.pipe(
 			debounceTime(300),
+			filter(term => term.length > 2),
 			distinctUntilChanged(),
 			switchMap((term: string) => this.patientService.searchPatients(term)),
 		);

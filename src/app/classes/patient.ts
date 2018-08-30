@@ -5,6 +5,7 @@ import { City } from './city';
 import { SocialSecurity } from './socialsecurity';
 import { BirthType } from './birthtype';
 import { BloodType } from './bloodtype';
+import { Visit } from './visit';
 
 export class Patient {
   id: number;
@@ -38,4 +39,5 @@ export class Patient {
   mother: string;
   brothers: string;
   others: string;
+  visits: Visit[];
 }

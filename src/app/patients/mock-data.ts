@@ -64,31 +64,3 @@ export const BLOODTYPES: BloodType[] = [
   { id: 3, name: 'B' },
   { id: 4, name: 'AB' },
 ];
-
-export const PATIENTS: Patient[] = [
-  {
-    id: 0, lastname: 'Uberti', name: 'Darío', birthday: new Date(1987, 9, 6), gender: GENDERS[0], docType: 1, doc: '33038935',
-    phone1: 3424669752, phone2: 3491421342, country: COUNTRIES[0], state: STATES[19], city: CITIES[0], street: 'Av. Gbdor. Freyre',
-    number: 3169, floor: '2', apartment: 'A', socialSecurity1: SOCIALSECURITIES[0], socialSecurity1Number: '123456789',
-    socialSecurity2: null, socialSecurity2Number: null, birthType: BIRTHTYPES[0], weightNewborn: 3500, bloodType: BLOODTYPES[1],
-    rhFactor: 1, apgar: 10, gestationalAge: 39, comments: null, father: null, mother: null, brothers: null,
-    others: null
-  },
-  {
-    id: 1, lastname: 'Pedicino', name: 'Verónica', birthday: new Date(1988, 8, 19), gender: GENDERS[1], docType: 1, doc: '34051871',
-    phone1: 3424669752, phone2: 3491421342, country: COUNTRIES[0], state: STATES[19], city: CITIES[0], street: 'Av. Gbdor. Freyre',
-    number: 3169, floor: '2', apartment: 'A', socialSecurity1: SOCIALSECURITIES[0], socialSecurity1Number: '123456789',
-    socialSecurity2: null, socialSecurity2Number: null, birthType: BIRTHTYPES[0], weightNewborn: 3500, bloodType: BLOODTYPES[1],
-    rhFactor: 1, apgar: 10, gestationalAge: 39, comments: null, father: null, mother: null, brothers: null,
-    others: null
-  }
-];
-
-export const VISITS: Visit[] = [
-  {
-    id: 0, patient: PATIENTS[0], date: new Date(1989, 2, 3), weight: 83000, height: 180, perimeter: 25.1, diagnosis: 'Está loquillo', treatment: 'Electrochoques', files: null
-  },
-  {
-    id: 1, patient: PATIENTS[0], date: new Date(1991, 3, 15), weight: 82000, height: 180, perimeter: 25.1, diagnosis: 'Está loquillo mal', treatment: 'Pichicata', files: null
-  }
-]

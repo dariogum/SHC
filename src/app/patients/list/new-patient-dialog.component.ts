@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { Patient } from './../../classes/patient';
-import { PATIENTS } from './../mock-data';
 import { Router } from '@angular/router';
 import { PatientService } from './../patient.service';
 
@@ -16,8 +15,8 @@ export class NewPatientDialogComponent {
   constructor(public dialogRef: MatDialogRef<NewPatientDialogComponent>, private router: Router, private patientService: PatientService) {}
 
   onSubmit() {
-    this.patient.id = PATIENTS.length;
-    PATIENTS.push(this.patient);
+    /*this.patient.id = PATIENTS.length;
+    PATIENTS.push(this.patient);*/
     this.dialogRef.close();
     this.router.navigate(['patients/' + this.patient.id]);
   }
