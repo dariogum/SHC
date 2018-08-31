@@ -14,13 +14,6 @@ export class NewPatientDialogComponent {
 
   constructor(public dialogRef: MatDialogRef<NewPatientDialogComponent>, private router: Router, private patientService: PatientService) {}
 
-  onSubmit() {
-    /*this.patient.id = PATIENTS.length;
-    PATIENTS.push(this.patient);*/
-    this.dialogRef.close();
-    this.router.navigate(['patients/' + this.patient.id]);
-  }
-
   addPacient() {
     this.patientService.addPatient(this.patient)
       .subscribe(patient => {

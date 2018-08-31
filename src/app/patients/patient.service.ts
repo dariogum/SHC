@@ -15,7 +15,8 @@ import { GENDERS, COUNTRIES, STATES, CITIES, SOCIALSECURITIES, BIRTHTYPES, BLOOD
 
 const httpOptions = {
 	headers: new HttpHeaders({
-		'Content-Type': 'application/json'
+		'Content-Type': 'application/json',
+		'Access-Control-Allow-Origin': '*',
 	})
 };
 
@@ -30,7 +31,7 @@ export class PatientService {
 
 	findInJson(needle, haystack) {
 		for (var i = haystack.length - 1; i >= 0; i--) {
-			if(haystack[i].id === needle) {
+			if (haystack[i].id === needle) {
 				return haystack[i];
 			}
 		}
@@ -64,8 +65,10 @@ export class PatientService {
 		var bloodtype: BloodType = this.findInJson(data.attributes.bloodType, BLOODTYPES);
 		var visits: Visit[] = [];
 
-		for (var i = 0; i < data.relationships.visits.length; i++) {
-			visits[i] = this.parseVisit(data.relationships.visits[i].data);
+		if(data.relationships && data.relationships.visits) {
+			for (var i = 0; i < data.relationships.visits.length; i++) {
+				visits[i] = this.parseVisit(data.relationships.visits[i].data);
+			}
 		}
 
 		patient = {
@@ -116,50 +119,50 @@ export class PatientService {
 
 	getPatients(): Observable<Patient[]> {
 		return this.http.get<any>(this.apiUrl)
-		.pipe(
-			map(response => this.parsePatients(response.data)),
-			tap(patients => console.log('fetched patients')),
-			catchError(this.handleError('getPatients', []))
+			.pipe(
+				map(response => this.parsePatients(response.data)),
+				tap(patients => console.log('fetched patients')),
+				catchError(this.handleError<Patient[]>('getPatients', []))
 			);
 	}
 
 	getPatient(id: number): Observable<Patient> {
 		const url = `${this.apiUrl}/${id}`;
 		return this.http.get<any>(url)
-		.pipe(
-			map(response => this.parsePatient(response.data)),
-			tap(patient => console.log(`fetched patient id=${id}`)),
-			catchError(this.handleError<any>(`getPatient id=${id}`))
+			.pipe(
+				map(response => this.parsePatient(response.data)),
+				tap(patient => console.log(`fetched patient id=${id}`)),
+				catchError(this.handleError<Patient>(`getPatient id=${id}`))
 			);
 	}
 
-	searchPatients(term: string): Observable<any> {
+	searchPatients(term: string): Observable<Patient[]> {
 		if (!term.trim()) {
 			return of([]);
 		}
 		return this.http.get<any>(`${this.apiUrl}?filter=name:${term},lastname:${term}`)
-		.pipe(
-			map(response => this.parsePatients(response.data)),
-			tap(_ => console.log(`found patients matching "${term}"`)),
-			catchError(this.handleError<any>('searchpatients', []))
+			.pipe(
+				map(response => this.parsePatients(response.data)),
+				tap(_ => console.log(`found patients matching "${term}"`)),
+				catchError(this.handleError<Patient[]>('searchpatients', []))
 			);
 	}
 
-	addPatient(patient: Patient): Observable<any> {
+	addPatient(patient: Patient): Observable<Patient> {
 		return this.http.post<any>(this.apiUrl, patient, httpOptions)
-		.pipe(
-			map(response => response.data),
-			tap((patient: Patient) => console.log(`added hero w/ id=${patient.id}`)),
-			catchError(this.handleError<any>('addPatient'))
+			.pipe(
+				map(response => this.parsePatient(response.data)),
+				tap((patient: Patient) => console.log(`added hero w/ id=${patient.id}`)),
+				catchError(this.handleError<Patient>('addPatient'))
 			);
 	}
 
 	updatePatient(patient: Patient): Observable<any> {
 		return this.http.put<any>(this.apiUrl, patient, httpOptions)
-		.pipe(
-			map(response => response.data),
-			tap(_ => console.log(`updated hero id=${patient.id}`)),
-			catchError(this.handleError<any>('updatePatient'))
+			.pipe(
+				map(response => response.data),
+				tap(_ => console.log(`updated hero id=${patient.id}`)),
+				catchError(this.handleError<any>('updatePatient'))
 			);
 	}
 
@@ -168,10 +171,10 @@ export class PatientService {
 		const url = `${this.apiUrl}/${id}`;
 
 		return this.http.delete<any>(url, httpOptions)
-		.pipe(
-			map(response => response.data),
-			tap(_ => console.log(`deleted patient id=${id}`)),
-			catchError(this.handleError<any>('deletePatient'))
+			.pipe(
+				map(response => response.data),
+				tap(_ => console.log(`deleted patient id=${id}`)),
+				catchError(this.handleError<any>('deletePatient'))
 			);
 	}
 
