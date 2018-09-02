@@ -15,8 +15,7 @@ import { GENDERS, COUNTRIES, STATES, CITIES, SOCIALSECURITIES, BIRTHTYPES, BLOOD
 
 const httpOptions = {
 	headers: new HttpHeaders({
-		'Content-Type': 'application/json',
-		'Access-Control-Allow-Origin': '*',
+		'Content-Type': 'application/json'
 	})
 };
 
@@ -55,16 +54,40 @@ export class PatientService {
 
 	parsePatient(data): Patient {
 		var patient: Patient;
-		var gender: Gender = this.findInJson(data.attributes.gender, GENDERS);
-		var country: Country = this.findInJson(data.attributes.country, COUNTRIES);
-		var state: State = this.findInJson(data.attributes.country, STATES);
-		var city: City = this.findInJson(data.attributes.city, CITIES);
-		var socialSecurity1: SocialSecurity = this.findInJson(data.attributes.socialSecurity1, SOCIALSECURITIES);
-		var socialSecurity2: SocialSecurity = this.findInJson(data.attributes.socialSecurity2, SOCIALSECURITIES);
-		var birthtype: BirthType = this.findInJson(data.attributes.birthType, BIRTHTYPES);
-		var bloodtype: BloodType = this.findInJson(data.attributes.bloodType, BLOODTYPES);
+		var gender: Gender = null;
+		var country: Country = null;
+		var state: State = null;
+		var city: City = null;
+		var socialSecurity1: SocialSecurity = null;
+		var socialSecurity2: SocialSecurity = null;
+		var birthtype: BirthType = null;
+		var bloodtype: BloodType = null;
 		var visits: Visit[] = [];
 
+		if(data.attributes.gender) {
+			gender = this.findInJson(data.attributes.gender, GENDERS);
+		}
+		if(data.attributes.country) {
+			country = this.findInJson(data.attributes.country, COUNTRIES);
+		}
+		if(data.attributes.state) {
+			state = this.findInJson(data.attributes.country, STATES);
+		}
+		if(data.attributes.city) {
+			city = this.findInJson(data.attributes.city, CITIES);
+		}
+		if(data.attributes.socialSecurity1) {
+			socialSecurity1 = this.findInJson(data.attributes.socialSecurity1, SOCIALSECURITIES);
+		}
+		if(data.attributes.socialSecurity2) {
+			socialSecurity2 = this.findInJson(data.attributes.socialSecurity2, SOCIALSECURITIES);
+		}
+		if(data.attributes.birthtype) {
+			birthtype = this.findInJson(data.attributes.birthType, BIRTHTYPES);
+		}
+		if(data.attributes.bloodtype) {
+			bloodtype = this.findInJson(data.attributes.bloodType, BLOODTYPES);
+		}
 		if(data.relationships && data.relationships.visits) {
 			for (var i = 0; i < data.relationships.visits.length; i++) {
 				visits[i] = this.parseVisit(data.relationships.visits[i].data);
@@ -149,7 +172,16 @@ export class PatientService {
 	}
 
 	addPatient(patient: Patient): Observable<Patient> {
-		return this.http.post<any>(this.apiUrl, patient, httpOptions)
+	  let data = {
+	  	"data": {
+	  		"type": "patient",
+		    "attributes": {
+		      "lastname": patient.lastname,
+		      "name": patient.name
+		    }
+	  	}
+	  };
+		return this.http.post<any>(this.apiUrl, data, httpOptions)
 			.pipe(
 				map(response => this.parsePatient(response.data)),
 				tap((patient: Patient) => console.log(`added hero w/ id=${patient.id}`)),

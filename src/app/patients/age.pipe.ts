@@ -6,6 +6,10 @@ import * as moment from 'moment';
 export class AgePipe implements PipeTransform {
 
 	transform(value: Date): string {
+		if(!value) {
+			return 'Sin datos aún'
+		}
+
 		let today = moment();
 		let birthdate = moment(value);
 		let years = today.diff(birthdate, 'years');
@@ -24,6 +28,10 @@ export class AgePipe implements PipeTransform {
 export class AgeUpPipe implements PipeTransform {
 
 	transform(value: Date, birthday: Date): string {
+		if(!birthday) {
+			return 'Sin fecha de nacimiento aún'
+		}
+		
 		let update = moment(value);
 		let birthdate = moment();
 		if(birthday !== undefined) {
