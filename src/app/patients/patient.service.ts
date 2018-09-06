@@ -12,6 +12,7 @@ import { BirthType } from './../classes/birthtype';
 import { BloodType } from './../classes/bloodtype';
 import { Visit } from './../classes/visit';
 import { GENDERS, COUNTRIES, STATES, CITIES, SOCIALSECURITIES, BIRTHTYPES, BLOODTYPES } from './mock-data';
+import * as moment from 'moment';
 
 const httpOptions = {
 	headers: new HttpHeaders({
@@ -71,7 +72,7 @@ export class PatientService {
 			country = this.findInJson(data.attributes.country, COUNTRIES);
 		}
 		if(data.attributes.state) {
-			state = this.findInJson(data.attributes.country, STATES);
+			state = this.findInJson(data.attributes.state, STATES);
 		}
 		if(data.attributes.city) {
 			city = this.findInJson(data.attributes.city, CITIES);
@@ -82,10 +83,10 @@ export class PatientService {
 		if(data.attributes.socialSecurity2) {
 			socialSecurity2 = this.findInJson(data.attributes.socialSecurity2, SOCIALSECURITIES);
 		}
-		if(data.attributes.birthtype) {
+		if(data.attributes.birthType) {
 			birthtype = this.findInJson(data.attributes.birthType, BIRTHTYPES);
 		}
-		if(data.attributes.bloodtype) {
+		if(data.attributes.bloodType) {
 			bloodtype = this.findInJson(data.attributes.bloodType, BLOODTYPES);
 		}
 		if(data.relationships && data.relationships.visits) {
@@ -190,7 +191,61 @@ export class PatientService {
 	}
 
 	updatePatient(patient: Patient): Observable<any> {
-		return this.http.put<any>(this.apiUrl, patient, httpOptions)
+		const id = typeof patient === 'number' ? patient : patient.id;
+		const url = `${this.apiUrl}/${id}`;
+
+		var gender: Number = patient.gender === null ? null : patient.gender.id;
+		var country: Number = patient.country === null ? null : patient.country.id;
+		var state: Number = patient.state === null ? null : patient.state.id;
+		var city: Number = patient.city === null ? null : patient.city.id;
+		var socialSecurity1: Number = patient.socialSecurity1 === null ? null : patient.socialSecurity1.id;
+		var socialSecurity2: Number = patient.socialSecurity2 === null ? null : patient.socialSecurity2.id;
+		var birthtype: Number = patient.birthType === null ? null : patient.birthType.id;
+		var bloodtype: Number = patient.bloodType === null ? null : patient.bloodType.id;
+
+		var birthdate = moment(patient.birthday);
+		var birthday = birthdate.format("YYYY-MM-DD");
+
+		let data = {
+	  	"data": {
+	  		"type": "patient",
+		    "id": patient.id,
+		    "attributes": {
+					lastname: patient.lastname,
+					name: patient.name,
+					birthday: birthday,
+					gender: gender,
+					docType: patient.docType,
+					doc: patient.doc,
+					phone1: patient.phone1,
+					phone2: patient.phone2,
+					country: country,
+					state: state,
+					city: city,
+					street: patient.street,
+					number: patient.number,
+					floor: patient.floor,
+					apartment: patient.apartment,
+					socialSecurity1: socialSecurity1,
+					socialSecurity1Number: patient.socialSecurity1Number,
+					socialSecurity2: socialSecurity2,
+					socialSecurity2Number: patient.socialSecurity2Number,
+					birthType: birthtype,
+					weightNewborn: patient.weightNewborn,
+					bloodType: bloodtype,
+					rhFactor: patient.rhFactor,
+					apgar: patient.apgar,
+					gestationalAge: patient.gestationalAge,
+					comments: patient.comments,
+					father: patient.father,
+					mother: patient.mother,
+					brothers: patient.brothers,
+					others: patient.others
+		    }
+	  	}
+	  };
+
+		return this.http.patch<any>(url, data, httpOptions)
 			.pipe(
 				map(response => response.data),
 				tap(_ => console.log(`updated hero id=${patient.id}`)),

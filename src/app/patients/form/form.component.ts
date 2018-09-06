@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatAccordion, MatDialog } from '@angular/material';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -19,6 +19,7 @@ import { PatientService } from './../patient.service';
 })
 export class FormComponent implements OnInit {
 
+
 	formClass = 'wide';
 	folded = false;
 	maxDate = new Date();
@@ -36,6 +37,8 @@ export class FormComponent implements OnInit {
 	files: FileList;
 
 	@ViewChild(MatAccordion) accordion: MatAccordion;
+	@ViewChild('patientDataForm') public patientDataForm: NgForm;
+	@ViewChild('patientBackgroundForm') public patientBackgroundForm: NgForm;
 
 	constructor(private breakpointObserver: BreakpointObserver, private route: ActivatedRoute,
 		private router: Router, public dialog: MatDialog, private patientService: PatientService) {
@@ -77,9 +80,24 @@ export class FormComponent implements OnInit {
 			.subscribe(patient => this.patient = patient);
 	}
 
-	updatePatient() {
-		this.patientService.updatePatient(this.patient)
-			.subscribe(() => console.log('patient updated'));
+	updatePatient(event) {
+		let controlName: string;
+		if(event.value !== undefined && event.source) {
+			controlName = event.source.ngControl.name;
+		} else if(event.value !== undefined) {
+			controlName = event.targetElement.name;
+		} else {
+			controlName = event.target.name;
+		}
+		if(
+			(this.patientBackgroundForm.controls[controlName] && !this.patientBackgroundForm.controls[controlName].pristine)
+			||
+			(this.patientDataForm.controls[controlName] && !this.patientDataForm.controls[controlName].pristine)
+			)
+		{
+			this.patientService.updatePatient(this.patient)
+				.subscribe(() => console.log('patient updated'));
+		}
 	}
 
 	deletePatient() {
