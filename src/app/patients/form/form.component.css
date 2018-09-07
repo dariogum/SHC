@@ -83,3 +83,12 @@
 .handset .image-container {
 	max-width: calc(100% - 16px);
 }
+
+.mat-spinner {
+	margin: 32px auto 0;
+}
+
+.valign-bottom {
+  color: #ff4081;
+  vertical-align: bottom;
+}

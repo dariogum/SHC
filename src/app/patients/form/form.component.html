@@ -24,7 +24,7 @@
 </mat-toolbar>
 
 <div class="main-card">
-	<p *ngIf="!patient">No existe el paciente con el identificador dado</p>
+	<mat-spinner *ngIf="!patient" color="accent"></mat-spinner>
 
 	<mat-accordion [multi]="true" *ngIf="patient">
 
@@ -222,7 +222,7 @@
 					Antecedentes
 				</mat-panel-title>
 				<mat-panel-description>
-					{{patient.comments}}
+					<span *ngIf="patient.comments">Sí <i class="material-icons valign-bottom">warning</i></span>
 				</mat-panel-description>
 			</mat-expansion-panel-header>
 

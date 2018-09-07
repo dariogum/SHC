@@ -25,7 +25,8 @@ const httpOptions = {
 })
 export class PatientService {
 
-	private apiUrl = 'http://localhost:8080/v1/patients';
+	private apiPatientsUrl = 'http://localhost:8080/v1/patients';
+	private apiVisitsUrl = 'http://localhost:8080/v1/visits';
 
 	constructor(private http: HttpClient) { }
 
@@ -142,20 +143,20 @@ export class PatientService {
 	}
 
 	getPatients(): Observable<Patient[]> {
-		return this.http.get<any>(this.apiUrl)
+		return this.http.get<any>(this.apiPatientsUrl)
 			.pipe(
 				map(response => this.parsePatients(response.data)),
-				tap(patients => console.log('fetched patients')),
+				tap(),
 				catchError(this.handleError<Patient[]>('getPatients', []))
 			);
 	}
 
 	getPatient(id: number): Observable<Patient> {
-		const url = `${this.apiUrl}/${id}`;
+		const url = `${this.apiPatientsUrl}/${id}`;
 		return this.http.get<any>(url)
 			.pipe(
 				map(response => this.parsePatient(response.data)),
-				tap(patient => console.log(`fetched patient id=${id}`)),
+				tap(),
 				catchError(this.handleError<Patient>(`getPatient id=${id}`))
 			);
 	}
@@ -164,10 +165,10 @@ export class PatientService {
 		if (!term.trim()) {
 			return of([]);
 		}
-		return this.http.get<any>(`${this.apiUrl}?filter=name:${term},lastname:${term}`)
+		return this.http.get<any>(`${this.apiPatientsUrl}?filter=name:${term},lastname:${term}`)
 			.pipe(
 				map(response => this.parsePatients(response.data)),
-				tap(_ => console.log(`found patients matching "${term}"`)),
+				tap(),
 				catchError(this.handleError<Patient[]>('searchpatients', []))
 			);
 	}
@@ -182,17 +183,17 @@ export class PatientService {
 		    }
 	  	}
 	  };
-		return this.http.post<any>(this.apiUrl, data, httpOptions)
+		return this.http.post<any>(this.apiPatientsUrl, data, httpOptions)
 			.pipe(
 				map(response => this.parsePatient(response.data)),
-				tap((patient: Patient) => console.log(`added hero w/ id=${patient.id}`)),
+				tap(),
 				catchError(this.handleError<Patient>('addPatient'))
 			);
 	}
 
 	updatePatient(patient: Patient): Observable<any> {
 		const id = typeof patient === 'number' ? patient : patient.id;
-		const url = `${this.apiUrl}/${id}`;
+		const url = `${this.apiPatientsUrl}/${id}`;
 
 		var gender: Number = patient.gender === null ? null : patient.gender.id;
 		var country: Number = patient.country === null ? null : patient.country.id;
@@ -248,20 +249,89 @@ export class PatientService {
 		return this.http.patch<any>(url, data, httpOptions)
 			.pipe(
 				map(response => response.data),
-				tap(_ => console.log(`updated hero id=${patient.id}`)),
+				tap(),
 				catchError(this.handleError<any>('updatePatient'))
 			);
 	}
 
 	deletePatient(patient: Patient | number): Observable<any> {
 		const id = typeof patient === 'number' ? patient : patient.id;
-		const url = `${this.apiUrl}/${id}`;
+		const url = `${this.apiPatientsUrl}/${id}`;
 
 		return this.http.delete<any>(url, httpOptions)
 			.pipe(
 				map(response => response.data),
-				tap(_ => console.log(`deleted patient id=${id}`)),
+				tap(),
 				catchError(this.handleError<any>('deletePatient'))
+			);
+	}
+
+	addVisit(visit: Visit, patientId: Number): Observable<Visit> {
+		var visitdate = moment(visit.date);
+		var visitday = visitdate.format("YYYY-MM-DD");
+		
+	  let data = {
+	  	"data": {
+	  		"type": "visit",
+		    "attributes": {
+		    	"patient": patientId,
+		      "date": visitday,
+					"weight": visit.weight,
+					"height": visit.height,
+					"perimeter": visit.perimeter,
+					"diagnosis": visit.diagnosis,
+					"treatment": visit.treatment,
+		    }
+	  	}
+	  };
+		return this.http.post<any>(this.apiVisitsUrl, data, httpOptions)
+			.pipe(
+				map(response => this.parseVisit(response.data)),
+				tap(),
+				catchError(this.handleError<Visit>('addVisit'))
+			);
+	}
+
+	updateVisit(visit: Visit, patientId: Number): Observable<any> {
+		const id = typeof visit === 'number' ? visit : visit.id;
+		const url = `${this.apiVisitsUrl}/${id}`;
+
+		var visitdate = moment(visit.date);
+		var visitday = visitdate.format("YYYY-MM-DD");
+
+		let data = {
+	  	"data": {
+	  		"type": "patient",
+		    "id": visit.id,
+		    "attributes": {
+		    	"patient": patientId,
+					"date": visitday,
+					"weight": visit.weight,
+					"height": visit.height,
+					"perimeter": visit.perimeter,
+					"diagnosis": visit.diagnosis,
+					"treatment": visit.treatment,
+		    }
+	  	}
+	  };
+
+		return this.http.patch<any>(url, data, httpOptions)
+			.pipe(
+				map(response => response.data),
+				tap(),
+				catchError(this.handleError<any>('updateVisit'))
+			);
+	}
+
+	deleteVisit(visit: Visit | number): Observable<any> {
+		const id = typeof visit === 'number' ? visit : visit.id;
+		const url = `${this.apiVisitsUrl}/${id}`;
+
+		return this.http.delete<any>(url, httpOptions)
+			.pipe(
+				map(response => response.data),
+				tap(),
+				catchError(this.handleError<any>('deleteVisit'))
 			);
 	}
 

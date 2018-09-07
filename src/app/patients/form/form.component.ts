@@ -19,7 +19,6 @@ import { PatientService } from './../patient.service';
 })
 export class FormComponent implements OnInit {
 
-
 	formClass = 'wide';
 	folded = false;
 	maxDate = new Date();
@@ -89,23 +88,15 @@ export class FormComponent implements OnInit {
 		} else {
 			controlName = event.target.name;
 		}
-		if(
-			(this.patientBackgroundForm.controls[controlName] && !this.patientBackgroundForm.controls[controlName].pristine)
-			||
-			(this.patientDataForm.controls[controlName] && !this.patientDataForm.controls[controlName].pristine)
-			)
-		{
-			this.patientService.updatePatient(this.patient)
-				.subscribe(() => console.log('patient updated'));
+		let isBackgroundControl = this.patientBackgroundForm.controls[controlName] && !this.patientBackgroundForm.controls[controlName].pristine;
+		let isDataControl = this.patientDataForm.controls[controlName] && !this.patientDataForm.controls[controlName].pristine;
+		if(isBackgroundControl || isDataControl) {
+			this.patientService.updatePatient(this.patient).subscribe();
 		}
 	}
 
 	deletePatient() {
-		//this.patientService.deletePatient(this.patient.id).subscribe();
-		/*var index = PATIENTS.indexOf(this.patient);
-		if (index > -1) {
-			PATIENTS.splice(index, 1);
-		}*/
+		this.patientService.deletePatient(this.patient.id).subscribe();
 		this.router.navigate(['patients']);
 	}
 
@@ -133,10 +124,12 @@ export class FormComponent implements OnInit {
 
 	onVisitSubmit() {
 		if (this.newVisit.id === undefined) {
-			/*this.newVisit.id = VISITS.length;
-			this.newVisit.patient = this.patient;
-			VISITS.push(this.newVisit);*/
-			this.newVisit = new Visit();
+			this.patientService.addVisit(this.newVisit, this.patient.id)
+	      .subscribe(visit => {
+	        this.patient.visits.push(visit);
+					this.newVisit = new Visit();
+	      }
+	    );
 		}
 	}
 
@@ -145,13 +138,18 @@ export class FormComponent implements OnInit {
 	}
 
 	deleteVisit(visit) {
-		if(visit === this.newVisit) {
-			this.resetNewVisit();
-		}
-		/*var index = VISITS.indexOf(visit)
-		if (index > -1) {
-			VISITS.splice(index, 1);
-		}*/
+		this.patientService.deleteVisit(visit.id)
+		.subscribe(result => {
+			if(result) {
+				var index = this.patient.visits.indexOf(visit);
+				if (index > -1) {
+					this.patient.visits.splice(index, 1);
+				}
+				if(visit === this.newVisit) {
+					this.resetNewVisit();
+				}
+			}
+		});
 	}
 
 	openConfirmationDialog(visit): void {
