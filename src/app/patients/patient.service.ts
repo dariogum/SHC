@@ -146,7 +146,7 @@ export class PatientService {
 		return this.http.get<any>(this.apiPatientsUrl)
 			.pipe(
 				map(response => this.parsePatients(response.data)),
-				tap(),
+				//tap(),
 				catchError(this.handleError<Patient[]>('getPatients', []))
 			);
 	}
@@ -156,7 +156,7 @@ export class PatientService {
 		return this.http.get<any>(url)
 			.pipe(
 				map(response => this.parsePatient(response.data)),
-				tap(),
+				//tap(),
 				catchError(this.handleError<Patient>(`getPatient id=${id}`))
 			);
 	}
@@ -168,7 +168,7 @@ export class PatientService {
 		return this.http.get<any>(`${this.apiPatientsUrl}?filter=name:${term},lastname:${term}`)
 			.pipe(
 				map(response => this.parsePatients(response.data)),
-				tap(),
+				//tap(),
 				catchError(this.handleError<Patient[]>('searchpatients', []))
 			);
 	}
@@ -186,7 +186,7 @@ export class PatientService {
 		return this.http.post<any>(this.apiPatientsUrl, data, httpOptions)
 			.pipe(
 				map(response => this.parsePatient(response.data)),
-				tap(),
+				//tap(),
 				catchError(this.handleError<Patient>('addPatient'))
 			);
 	}
@@ -203,9 +203,12 @@ export class PatientService {
 		var socialSecurity2: Number = patient.socialSecurity2 === null ? null : patient.socialSecurity2.id;
 		var birthtype: Number = patient.birthType === null ? null : patient.birthType.id;
 		var bloodtype: Number = patient.bloodType === null ? null : patient.bloodType.id;
-
-		var birthdate = moment(patient.birthday);
-		var birthday = birthdate.format("YYYY-MM-DD");
+		var birthday = null;
+		
+		if(patient.birthday) {
+			var birthdate = moment(patient.birthday);
+			birthday = birthdate.format("YYYY-MM-DD");	
+		}
 
 		let data = {
 	  	"data": {
@@ -249,7 +252,7 @@ export class PatientService {
 		return this.http.patch<any>(url, data, httpOptions)
 			.pipe(
 				map(response => response.data),
-				tap(),
+				//tap(),
 				catchError(this.handleError<any>('updatePatient'))
 			);
 	}
@@ -261,7 +264,7 @@ export class PatientService {
 		return this.http.delete<any>(url, httpOptions)
 			.pipe(
 				map(response => response.data),
-				tap(),
+				//tap(),
 				catchError(this.handleError<any>('deletePatient'))
 			);
 	}
@@ -287,7 +290,7 @@ export class PatientService {
 		return this.http.post<any>(this.apiVisitsUrl, data, httpOptions)
 			.pipe(
 				map(response => this.parseVisit(response.data)),
-				tap(),
+				//tap(),
 				catchError(this.handleError<Visit>('addVisit'))
 			);
 	}
@@ -318,7 +321,7 @@ export class PatientService {
 		return this.http.patch<any>(url, data, httpOptions)
 			.pipe(
 				map(response => response.data),
-				tap(),
+				//tap(),
 				catchError(this.handleError<any>('updateVisit'))
 			);
 	}
@@ -329,8 +332,8 @@ export class PatientService {
 
 		return this.http.delete<any>(url, httpOptions)
 			.pipe(
-				map(response => response.data),
-				tap(),
+				//map(response => response),
+				//tap(),
 				catchError(this.handleError<any>('deleteVisit'))
 			);
 	}

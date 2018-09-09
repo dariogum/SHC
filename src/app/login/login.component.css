@@ -2,6 +2,9 @@
 	margin: 16px auto 0;
 	width: 336px;
 }
+.mat-form-field {
+	margin: 6px 8px;
+}
 .full-width {
 	width: 100%;
 }

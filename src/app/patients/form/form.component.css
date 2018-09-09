@@ -13,15 +13,19 @@
 }
 
 .handset .mat-form-field {
-	min-width: calc(100% - 16px);	
+	min-width: calc(100% - 16px) !important;
 }
 
 .tablet .mat-form-field {
-	min-width: calc(50% - 16px);	
+	min-width: calc(50% - 16px);
 }
 
 .full-width {
 	min-width: calc(100% - 16px) !important;
+}
+
+.half-width {
+	min-width: calc(50% - 16px) !important;
 }
 
 .mat-stepper-vertical p {

@@ -9,7 +9,8 @@ import { Patient } from './../classes/patient';
 import { Visit } from './../classes/visit';
 
 export const CITIES: City[] = [
-  { id: 1, name: 'Reconquista', state: 1, zipcode: 'S3560' }
+  { id: 1, name: 'Reconquista', state: 1, zipcode: 'S3560' },
+  { id: 2, name: 'Santa Fe', state: 1, zipcode: 'S3000' },
 ];
 
 export const COUNTRIES: Country[] = [

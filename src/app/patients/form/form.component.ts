@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, Validators, NgForm } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatAccordion, MatDialog } from '@angular/material';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -38,6 +38,7 @@ export class FormComponent implements OnInit {
 	@ViewChild(MatAccordion) accordion: MatAccordion;
 	@ViewChild('patientDataForm') public patientDataForm: NgForm;
 	@ViewChild('patientBackgroundForm') public patientBackgroundForm: NgForm;
+	@ViewChild('visitForm') public visitForm: NgForm;
 
 	constructor(private breakpointObserver: BreakpointObserver, private route: ActivatedRoute,
 		private router: Router, public dialog: MatDialog, private patientService: PatientService) {
@@ -135,6 +136,21 @@ export class FormComponent implements OnInit {
 
 	resetNewVisit() {
 		this.newVisit = new Visit();
+	}
+
+	updateVisit(event) {
+		let controlName: string;
+		if(event.value !== undefined && event.source) {
+			controlName = event.source.ngControl.name;
+		} else if(event.value !== undefined) {
+			controlName = event.targetElement.name;
+		} else {
+			controlName = event.target.name;
+		}
+		let isVisitControl = this.visitForm.controls[controlName] && !this.visitForm.controls[controlName].pristine;
+		if(isVisitControl) {
+			this.patientService.updateVisit(this.newVisit, this.patient.id).subscribe();
+		}
 	}
 
 	deleteVisit(visit) {
