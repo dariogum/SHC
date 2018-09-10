@@ -20,7 +20,11 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.router.navigate(['/patients']);
+    let user1 = this.user.email == 'dariogum@hotmail.com' && this.user.password == 'admin';
+    let user2 = this.user.email == 'ruben.pedicino@hotmail.com' && this.user.password == 'suegrocrack';
+    if(user1 || user2){
+      this.router.navigate(['/patients']);
+    }
   }
 
 }
