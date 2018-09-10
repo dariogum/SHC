@@ -13,6 +13,7 @@ import { BloodType } from './../classes/bloodtype';
 import { Visit } from './../classes/visit';
 import { GENDERS, COUNTRIES, STATES, CITIES, SOCIALSECURITIES, BIRTHTYPES, BLOODTYPES } from './mock-data';
 import * as moment from 'moment';
+import { environment } from './../../environments/environment';
 
 const httpOptions = {
 	headers: new HttpHeaders({
@@ -25,8 +26,8 @@ const httpOptions = {
 })
 export class PatientService {
 
-	private apiPatientsUrl = 'http://localhost:8080/v1/patients';
-	private apiVisitsUrl = 'http://localhost:8080/v1/visits';
+	private apiPatientsUrl = environment.url + '/v1/patients';
+	private apiVisitsUrl = environment.url + '/v1/visits';
 
 	constructor(private http: HttpClient) { }
 

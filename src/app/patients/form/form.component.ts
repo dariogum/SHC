@@ -139,17 +139,19 @@ export class FormComponent implements OnInit {
 	}
 
 	updateVisit(event) {
-		let controlName: string;
-		if(event.value !== undefined && event.source) {
-			controlName = event.source.ngControl.name;
-		} else if(event.value !== undefined) {
-			controlName = event.targetElement.name;
-		} else {
-			controlName = event.target.name;
-		}
-		let isVisitControl = this.visitForm.controls[controlName] && !this.visitForm.controls[controlName].pristine;
-		if(isVisitControl) {
-			this.patientService.updateVisit(this.newVisit, this.patient.id).subscribe();
+		if(this.newVisit.id){
+			let controlName: string;
+			if(event.value !== undefined && event.source) {
+				controlName = event.source.ngControl.name;
+			} else if(event.value !== undefined) {
+				controlName = event.targetElement.name;
+			} else {
+				controlName = event.target.name;
+			}
+			let isVisitControl = this.visitForm.controls[controlName] && !this.visitForm.controls[controlName].pristine;
+			if(isVisitControl) {
+				this.patientService.updateVisit(this.newVisit, this.patient.id).subscribe();
+			}
 		}
 	}
 
