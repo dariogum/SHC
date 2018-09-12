@@ -11,7 +11,8 @@ import { SocialSecurity } from './../classes/socialsecurity';
 import { BirthType } from './../classes/birthtype';
 import { BloodType } from './../classes/bloodtype';
 import { Visit } from './../classes/visit';
-import { GENDERS, COUNTRIES, STATES, CITIES, SOCIALSECURITIES, BIRTHTYPES, BLOODTYPES } from './mock-data';
+import { GENDERS, COUNTRIES, STATES, SOCIALSECURITIES, BIRTHTYPES, BLOODTYPES } from './mock-data';
+import { CITIES } from './mock-cities';
 import * as moment from 'moment';
 import { environment } from './../../environments/environment';
 
@@ -43,7 +44,7 @@ export class PatientService {
 	parseVisit(data): Visit {
 		var visit: Visit = {
 			id: data.id,
-			date: data.attributes.date,
+			date: moment(data.attributes.date).toDate(),
 			weight: data.attributes.weight,
 			height: data.attributes.height,
 			perimeter: data.attributes.perimeter,
@@ -101,7 +102,7 @@ export class PatientService {
 			id: data.id,
 			lastname: data.attributes.lastname,
 			name: data.attributes.name,
-			birthday: data.attributes.birthday,
+			birthday: moment(data.attributes.birthday).toDate(),
 			gender: gender,
 			docType: data.attributes.docType,
 			doc: data.attributes.doc,
@@ -144,7 +145,7 @@ export class PatientService {
 	}
 
 	getPatients(): Observable<Patient[]> {
-		return this.http.get<any>(this.apiPatientsUrl)
+		return this.http.get<any>(`${this.apiPatientsUrl}?sort=-id&page=first`)
 			.pipe(
 				map(response => this.parsePatients(response.data)),
 				//tap(),

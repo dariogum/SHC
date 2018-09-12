@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 
 import { Observable, of, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap, map, filter } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, map, filter, tap } from 'rxjs/operators';
 
 import { Patient } from './../../classes/patient';
 import { PatientService } from './../patient.service';
@@ -18,26 +18,28 @@ export class ListComponent implements OnInit {
 
 	patient: Patient;
 	patients: Observable<Patient[]>;
+	lastPatients: Observable<Patient[]> = null;
 	today: Date = new Date();
 
 	private searchTerms = new Subject<string>();
 
-	constructor(public dialog: MatDialog, private patientService: PatientService) { }
+	constructor(public dialog: MatDialog, private patientService: PatientService, public snackBar: MatSnackBar) { }
 
 	ngOnInit() {
-		//this.getPatients();
+		this.getPatients();
 
 		this.patients = this.searchTerms.pipe(
 			debounceTime(300),
 			filter(term => term.length > 2),
 			distinctUntilChanged(),
+			tap(_ => this.lastPatients = null),
 			switchMap((term: string) => this.patientService.searchPatients(term)),
 		);
 	}
 
 	getPatients(): void {
 		this.patientService.getPatients()
-			.subscribe(patients => this.patients = of(patients));
+			.subscribe(patients => this.lastPatients = of(patients));
 	}
 
 	openNewPatientDialog(): void {

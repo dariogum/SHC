@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { Patient } from './../../classes/patient';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { PatientService } from './../patient.service';
 
 @Component({
@@ -18,7 +18,10 @@ export class NewPatientDialogComponent {
     this.patientService.addPatient(this.patient)
       .subscribe(patient => {
         this.dialogRef.close();
-        this.router.navigate(['patients/' + patient.id]);
+        let navigationExtras: NavigationExtras = {
+          queryParams: { 'newPatient': true }
+        };
+        this.router.navigate(['patients/' + patient.id], navigationExtras);
       }
     );
   }

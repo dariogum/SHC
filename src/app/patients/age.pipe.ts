@@ -28,15 +28,12 @@ export class AgePipe implements PipeTransform {
 export class AgeUpPipe implements PipeTransform {
 
 	transform(value: Date, birthday: Date): string {
-		if(!birthday) {
+		if(isNaN(birthday.getTime())) {
 			return 'Sin fecha de nacimiento aún'
 		}
 		
 		let update = moment(value);
-		let birthdate = moment();
-		if(birthday !== undefined) {
-			birthdate = moment(birthday);
-		}
+		let birthdate = moment(birthday);
 		let years = update.diff(birthdate, 'years');
 		let months = update.subtract(years, 'years').diff(birthdate, 'months');
 		let days = update.subtract(months, 'months').diff(birthdate, 'days');
