@@ -1,17 +1,11 @@
 import { Gender } from './../classes/gender';
 import { Country } from './../classes/country';
 import { State } from './../classes/state';
-import { City } from './../classes/city';
 import { SocialSecurity } from './../classes/socialsecurity';
 import { BirthType } from './../classes/birthtype';
 import { BloodType } from './../classes/bloodtype';
 import { Patient } from './../classes/patient';
 import { Visit } from './../classes/visit';
-
-export const CITIES: City[] = [
-  { id: 1, name: 'Reconquista', state: 1, zipcode: 'S3560' },
-  { id: 2, name: 'Santa Fe', state: 1, zipcode: 'S3000' },
-];
 
 export const COUNTRIES: Country[] = [
   { id: 1, name: 'Argentina' }

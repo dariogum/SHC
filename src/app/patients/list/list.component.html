@@ -31,5 +31,12 @@
 		  	<p matLine class="mat-caption">Edad: {{ today | ageUp:patient.birthday }}</p>
 		  </mat-list-item>
 		</mat-nav-list>
+		<mat-nav-list *ngIf="lastPatients">
+		  <mat-list-item *ngFor="let patient of lastPatients | async">
+				<mat-icon matListIcon [color]="(patient.gender && patient.gender.id == 1) ? 'primary' : 'accent'">person</mat-icon>
+		  	<a matLine routerLink="{{patient.id}}">{{ patient.name }} {{ patient.lastname }}</a>
+		  	<p matLine class="mat-caption">Edad: {{ today | ageUp:patient.birthday }}</p>
+		  </mat-list-item>
+		</mat-nav-list>
 	</mat-card-content>
 </mat-card>

@@ -28,7 +28,7 @@
 
 	<mat-accordion [multi]="true" *ngIf="patient">
 
-		<mat-expansion-panel [expanded]="false">
+		<mat-expansion-panel [expanded]="newPatient">
 
 			<mat-expansion-panel-header>
 				<mat-panel-title>
@@ -101,7 +101,7 @@
 					</mat-form-field>
 
 					<mat-form-field>
-						<mat-select placeholder="Provincia" [(ngModel)]="patient.state" name="state" (selectionChange)="updatePatient($event)">
+						<mat-select placeholder="Provincia" [(ngModel)]="patient.state" name="state" (selectionChange)="updatePatient($event)" (selectionChange)="filterCities($event)">
 							<mat-option *ngFor="let state of states" [value]="state">
 								{{state.name}}
 							</mat-option>

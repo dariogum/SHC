@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatAccordion, MatDialog } from '@angular/material';
+import { MatAccordion, MatDialog, MatSnackBar } from '@angular/material';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable, of } from 'rxjs';
 import { Patient } from './../../classes/patient';
 import { Visit } from './../../classes/visit';
-import { CITIES, COUNTRIES, STATES, SOCIALSECURITIES, GENDERS, BIRTHTYPES, BLOODTYPES } from './../mock-data';
+import { COUNTRIES, STATES, SOCIALSECURITIES, GENDERS, BIRTHTYPES, BLOODTYPES } from './../mock-data';
+import { CITIES } from './../mock-cities';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
 import { ConfirmationPatientDialogComponent } from './confirmation-patient-dialog.component';
 import { PatientService } from './../patient.service';
@@ -21,6 +22,7 @@ export class FormComponent implements OnInit {
 
 	formClass = 'wide';
 	folded = false;
+	newPatient = false;
 	maxDate = new Date();
 
 	cities = CITIES;
@@ -41,7 +43,8 @@ export class FormComponent implements OnInit {
 	@ViewChild('visitForm') public visitForm: NgForm;
 
 	constructor(private breakpointObserver: BreakpointObserver, private route: ActivatedRoute,
-		private router: Router, public dialog: MatDialog, private patientService: PatientService) {
+		private router: Router, public dialog: MatDialog, private patientService: PatientService,
+		public snackBar: MatSnackBar) {
 		this.breakpointObserver.observe([
 			Breakpoints.HandsetPortrait
 		]).subscribe(result => {
@@ -77,28 +80,35 @@ export class FormComponent implements OnInit {
 	getPatient(): void {
 		const id = +this.route.snapshot.paramMap.get('id');
 		this.patientService.getPatient(id)
-			.subscribe(patient => this.patient = patient);
+			.subscribe(patient => {
+				this.patient = patient;
+				this.newPatient = (this.route.snapshot.queryParamMap.get('newPatient') === 'true');
+			});
 	}
 
 	updatePatient(event) {
 		let controlName: string;
-		if(event.value !== undefined && event.source) {
+		if (event.value !== undefined && event.source) {
 			controlName = event.source.ngControl.name;
-		} else if(event.value !== undefined) {
+		} else if (event.value !== undefined) {
 			controlName = event.targetElement.name;
 		} else {
 			controlName = event.target.name;
 		}
 		let isBackgroundControl = this.patientBackgroundForm.controls[controlName] && !this.patientBackgroundForm.controls[controlName].pristine;
 		let isDataControl = this.patientDataForm.controls[controlName] && !this.patientDataForm.controls[controlName].pristine;
-		if(isBackgroundControl || isDataControl) {
+		if (isBackgroundControl || isDataControl) {
 			this.patientService.updatePatient(this.patient).subscribe();
 		}
 	}
 
 	deletePatient() {
-		this.patientService.deletePatient(this.patient.id).subscribe();
-		this.router.navigate(['patients']);
+		this.patientService.deletePatient(this.patient.id).subscribe(confirmation => {
+			let snackBarRef = this.snackBar.open('Paciente eliminado correctamente', 'OK', {
+				duration: 2500,
+			});
+			this.router.navigate(['patients']);
+		});
 	}
 
 	openConfirmationPatientDialog(): void {
@@ -126,11 +136,14 @@ export class FormComponent implements OnInit {
 	onVisitSubmit() {
 		if (this.newVisit.id === undefined) {
 			this.patientService.addVisit(this.newVisit, this.patient.id)
-	      .subscribe(visit => {
-	        this.patient.visits.push(visit);
+				.subscribe(visit => {
+					this.patient.visits.push(visit);
 					this.newVisit = new Visit();
-	      }
-	    );
+					let snackBarRef = this.snackBar.open('La visita fue registrada correctamente', 'OK', {
+						duration: 2500,
+					});
+				}
+				);
 		}
 	}
 
@@ -139,17 +152,17 @@ export class FormComponent implements OnInit {
 	}
 
 	updateVisit(event) {
-		if(this.newVisit.id){
+		if (this.newVisit.id) {
 			let controlName: string;
-			if(event.value !== undefined && event.source) {
+			if (event.value !== undefined && event.source) {
 				controlName = event.source.ngControl.name;
-			} else if(event.value !== undefined) {
+			} else if (event.value !== undefined) {
 				controlName = event.targetElement.name;
 			} else {
 				controlName = event.target.name;
 			}
 			let isVisitControl = this.visitForm.controls[controlName] && !this.visitForm.controls[controlName].pristine;
-			if(isVisitControl) {
+			if (isVisitControl) {
 				this.patientService.updateVisit(this.newVisit, this.patient.id).subscribe();
 			}
 		}
@@ -157,17 +170,20 @@ export class FormComponent implements OnInit {
 
 	deleteVisit(visit) {
 		this.patientService.deleteVisit(visit.id)
-		.subscribe(result => {
-			if(result) {
-				var index = this.patient.visits.indexOf(visit);
-				if (index > -1) {
-					this.patient.visits.splice(index, 1);
+			.subscribe(result => {
+				if (result) {
+					let index = this.patient.visits.indexOf(visit);
+					if (index > -1) {
+						this.patient.visits.splice(index, 1);
+					}
+					if (visit === this.newVisit) {
+						this.resetNewVisit();
+					}
+					let snackBarRef = this.snackBar.open('La visita fue eliminada correctamente', 'OK', {
+						duration: 2500,
+					});
 				}
-				if(visit === this.newVisit) {
-					this.resetNewVisit();
-				}
-			}
-		});
+			});
 	}
 
 	openConfirmationDialog(visit): void {
@@ -183,18 +199,22 @@ export class FormComponent implements OnInit {
 	}
 
 	onFilesChanged(event) {
-    this.files = event.target.files;
-    for (var i = this.files.length - 1; i >= 0; i--) {
-    	this.readImage(event, i);
-    }
-  }
+		this.files = event.target.files;
+		for (var i = this.files.length - 1; i >= 0; i--) {
+			this.readImage(event, i);
+		}
+	}
 
-  readImage(event, index) {
-	  var reader = new FileReader();
-	  reader.onload = (event: ProgressEvent) => {
-	    this.files[index]['url'] = (<FileReader>event.target).result;
-	  }
-	  reader.readAsDataURL(this.files[index]);
-  }
+	readImage(event, index) {
+		let reader = new FileReader();
+		reader.onload = (event: ProgressEvent) => {
+			this.files[index]['url'] = (<FileReader>event.target).result;
+		}
+		reader.readAsDataURL(this.files[index]);
+	}
+
+	filterCities(event) {
+		this.cities = CITIES.filter(city => city.state === event.value.id);
+	}
 
 }

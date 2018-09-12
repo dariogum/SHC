@@ -5,7 +5,7 @@
 		</mat-card-header>
 		<mat-card-content>
 			<mat-form-field class="full-width">
-				<input matInput type="email" placeholder="Email" [(ngModel)]="user.email" name="email" required>
+				<input matInput type="email" placeholder="Email" [(ngModel)]="user.email" autocomplete="username email" name="email" required>
 				<mat-hint align="start"><strong>Por ejemplo: minombre@servidor.com</strong></mat-hint>
 			</mat-form-field>
 			<mat-form-field class="full-width">
