@@ -35,7 +35,7 @@ export class FormComponent implements OnInit {
 
 	patient: Patient;
 	newVisit: Visit = new Visit();
-	files: FileList;
+	files: FileList = null;
 
 	@ViewChild(MatAccordion) accordion: MatAccordion;
 	@ViewChild('patientDataForm') public patientDataForm: NgForm;
@@ -135,15 +135,16 @@ export class FormComponent implements OnInit {
 
 	onVisitSubmit() {
 		if (this.newVisit.id === undefined) {
-			this.patientService.addVisit(this.newVisit, this.patient.id)
-				.subscribe(visit => {
-					this.patient.visits.push(visit);
-					this.newVisit = new Visit();
-					let snackBarRef = this.snackBar.open('La visita fue registrada correctamente', 'OK', {
-						duration: 2500,
-					});
+			this.patientService.addVisit(this.newVisit, this.patient.id).subscribe(visit => {
+				if(this.files.length) {
+					this.onUpload();
 				}
-				);
+				this.patient.visits.push(visit);
+				this.newVisit = new Visit();
+				let snackBarRef = this.snackBar.open('La visita fue registrada correctamente', 'OK', {
+					duration: 2500,
+				});
+			});
 		}
 	}
 
@@ -198,13 +199,6 @@ export class FormComponent implements OnInit {
 		});
 	}
 
-	onFilesChanged(event) {
-		this.files = event.target.files;
-		for (var i = this.files.length - 1; i >= 0; i--) {
-			this.readImage(event, i);
-		}
-	}
-
 	readImage(event, index) {
 		let reader = new FileReader();
 		reader.onload = (event: ProgressEvent) => {
@@ -213,8 +207,30 @@ export class FormComponent implements OnInit {
 		reader.readAsDataURL(this.files[index]);
 	}
 
+	onFilesChanged(event) {
+		this.files = event.target.files;
+		for (var i = 0; i < this.files.length; i++) {
+			this.readImage(event, i);
+		}
+		if(this.newVisit.id) {
+			this.onUpload();
+		}
+	}
+
+	onUpload() {
+		if (this.files.length) {
+			this.patientService.uploadFiles(this.files, this.newVisit.id).subscribe(result => {
+				if (result) { }
+			});
+		}
+	}
+
 	filterCities(event) {
 		this.cities = CITIES.filter(city => city.state === event.value.id);
+	}
+
+	filterStates(event) {
+		this.states = STATES.filter(state => state.country === event.value.id);
 	}
 
 }

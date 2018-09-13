@@ -42,6 +42,17 @@ export class PatientService {
 	}
 
 	parseVisit(data): Visit {
+		var files = [];
+
+		if(data.relationships && data.relationships.files) {
+			for (var i = 0; i < data.relationships.files.length; i++) {
+				files[i] = {
+					id: data.relationships.files[i].id,
+					name: data.relationships.files[i].name
+				};
+			}
+		}
+
 		var visit: Visit = {
 			id: data.id,
 			date: moment(data.attributes.date).toDate(),
@@ -50,7 +61,7 @@ export class PatientService {
 			perimeter: data.attributes.perimeter,
 			diagnosis: data.attributes.diagnosis,
 			treatment: data.attributes.treatment,
-			files: null
+			files: files
 		};
 
 		return visit;
@@ -58,6 +69,7 @@ export class PatientService {
 
 	parsePatient(data): Patient {
 		var patient: Patient;
+		var birthday: Date = null;
 		var gender: Gender = null;
 		var country: Country = null;
 		var state: State = null;
@@ -68,31 +80,34 @@ export class PatientService {
 		var bloodtype: BloodType = null;
 		var visits: Visit[] = [];
 
-		if(data.attributes.gender) {
+		if(data.attributes.birthday){
+			birthday = moment(data.attributes.birthday).toDate()
+		}
+		if (data.attributes.gender) {
 			gender = this.findInJson(data.attributes.gender, GENDERS);
 		}
-		if(data.attributes.country) {
+		if (data.attributes.country) {
 			country = this.findInJson(data.attributes.country, COUNTRIES);
 		}
-		if(data.attributes.state) {
+		if (data.attributes.state) {
 			state = this.findInJson(data.attributes.state, STATES);
 		}
-		if(data.attributes.city) {
+		if (data.attributes.city) {
 			city = this.findInJson(data.attributes.city, CITIES);
 		}
-		if(data.attributes.socialSecurity1) {
+		if (data.attributes.socialSecurity1) {
 			socialSecurity1 = this.findInJson(data.attributes.socialSecurity1, SOCIALSECURITIES);
 		}
-		if(data.attributes.socialSecurity2) {
+		if (data.attributes.socialSecurity2) {
 			socialSecurity2 = this.findInJson(data.attributes.socialSecurity2, SOCIALSECURITIES);
 		}
-		if(data.attributes.birthType) {
+		if (data.attributes.birthType) {
 			birthtype = this.findInJson(data.attributes.birthType, BIRTHTYPES);
 		}
-		if(data.attributes.bloodType) {
+		if (data.attributes.bloodType) {
 			bloodtype = this.findInJson(data.attributes.bloodType, BLOODTYPES);
 		}
-		if(data.relationships && data.relationships.visits) {
+		if (data.relationships && data.relationships.visits) {
 			for (var i = 0; i < data.relationships.visits.length; i++) {
 				visits[i] = this.parseVisit(data.relationships.visits[i].data);
 			}
@@ -102,7 +117,7 @@ export class PatientService {
 			id: data.id,
 			lastname: data.attributes.lastname,
 			name: data.attributes.name,
-			birthday: moment(data.attributes.birthday).toDate(),
+			birthday: birthday,
 			gender: gender,
 			docType: data.attributes.docType,
 			doc: data.attributes.doc,
@@ -148,7 +163,6 @@ export class PatientService {
 		return this.http.get<any>(`${this.apiPatientsUrl}?sort=-id&page=first`)
 			.pipe(
 				map(response => this.parsePatients(response.data)),
-				//tap(),
 				catchError(this.handleError<Patient[]>('getPatients', []))
 			);
 	}
@@ -158,7 +172,6 @@ export class PatientService {
 		return this.http.get<any>(url)
 			.pipe(
 				map(response => this.parsePatient(response.data)),
-				//tap(),
 				catchError(this.handleError<Patient>(`getPatient id=${id}`))
 			);
 	}
@@ -170,25 +183,23 @@ export class PatientService {
 		return this.http.get<any>(`${this.apiPatientsUrl}?filter=name:${term},lastname:${term}`)
 			.pipe(
 				map(response => this.parsePatients(response.data)),
-				//tap(),
 				catchError(this.handleError<Patient[]>('searchpatients', []))
 			);
 	}
 
 	addPatient(patient: Patient): Observable<Patient> {
-	  let data = {
-	  	"data": {
-	  		"type": "patient",
-		    "attributes": {
-		      "lastname": patient.lastname,
-		      "name": patient.name
-		    }
-	  	}
-	  };
+		let data = {
+			"data": {
+				"type": "patient",
+				"attributes": {
+					"lastname": patient.lastname,
+					"name": patient.name
+				}
+			}
+		};
 		return this.http.post<any>(this.apiPatientsUrl, data, httpOptions)
 			.pipe(
 				map(response => this.parsePatient(response.data)),
-				//tap(),
 				catchError(this.handleError<Patient>('addPatient'))
 			);
 	}
@@ -206,17 +217,17 @@ export class PatientService {
 		var birthtype: Number = patient.birthType === null ? null : patient.birthType.id;
 		var bloodtype: Number = patient.bloodType === null ? null : patient.bloodType.id;
 		var birthday = null;
-		
-		if(patient.birthday) {
+
+		if (patient.birthday) {
 			var birthdate = moment(patient.birthday);
-			birthday = birthdate.format("YYYY-MM-DD");	
+			birthday = birthdate.format("YYYY-MM-DD");
 		}
 
 		let data = {
-	  	"data": {
-	  		"type": "patient",
-		    "id": patient.id,
-		    "attributes": {
+			"data": {
+				"type": "patient",
+				"id": patient.id,
+				"attributes": {
 					lastname: patient.lastname,
 					name: patient.name,
 					birthday: birthday,
@@ -247,14 +258,13 @@ export class PatientService {
 					mother: patient.mother,
 					brothers: patient.brothers,
 					others: patient.others
-		    }
-	  	}
-	  };
+				}
+			}
+		};
 
 		return this.http.patch<any>(url, data, httpOptions)
 			.pipe(
 				map(response => response.data),
-				//tap(),
 				catchError(this.handleError<any>('updatePatient'))
 			);
 	}
@@ -266,7 +276,6 @@ export class PatientService {
 		return this.http.delete<any>(url, httpOptions)
 			.pipe(
 				map(response => response.data),
-				//tap(),
 				catchError(this.handleError<any>('deletePatient'))
 			);
 	}
@@ -274,25 +283,24 @@ export class PatientService {
 	addVisit(visit: Visit, patientId: Number): Observable<Visit> {
 		var visitdate = moment(visit.date);
 		var visitday = visitdate.format("YYYY-MM-DD");
-		
-	  let data = {
-	  	"data": {
-	  		"type": "visit",
-		    "attributes": {
-		    	"patient": patientId,
-		      "date": visitday,
+
+		let data = {
+			"data": {
+				"type": "visit",
+				"attributes": {
+					"patient": patientId,
+					"date": visitday,
 					"weight": visit.weight,
 					"height": visit.height,
 					"perimeter": visit.perimeter,
 					"diagnosis": visit.diagnosis,
 					"treatment": visit.treatment,
-		    }
-	  	}
-	  };
+				}
+			}
+		};
 		return this.http.post<any>(this.apiVisitsUrl, data, httpOptions)
 			.pipe(
 				map(response => this.parseVisit(response.data)),
-				//tap(),
 				catchError(this.handleError<Visit>('addVisit'))
 			);
 	}
@@ -305,25 +313,24 @@ export class PatientService {
 		var visitday = visitdate.format("YYYY-MM-DD");
 
 		let data = {
-	  	"data": {
-	  		"type": "patient",
-		    "id": visit.id,
-		    "attributes": {
-		    	"patient": patientId,
+			"data": {
+				"type": "patient",
+				"id": visit.id,
+				"attributes": {
+					"patient": patientId,
 					"date": visitday,
 					"weight": visit.weight,
 					"height": visit.height,
 					"perimeter": visit.perimeter,
 					"diagnosis": visit.diagnosis,
 					"treatment": visit.treatment,
-		    }
-	  	}
-	  };
+				}
+			}
+		};
 
 		return this.http.patch<any>(url, data, httpOptions)
 			.pipe(
 				map(response => response.data),
-				//tap(),
 				catchError(this.handleError<any>('updateVisit'))
 			);
 	}
@@ -334,10 +341,25 @@ export class PatientService {
 
 		return this.http.delete<any>(url, httpOptions)
 			.pipe(
-				//map(response => response),
-				//tap(),
 				catchError(this.handleError<any>('deleteVisit'))
 			);
+	}
+
+	uploadFiles(files: FileList, visitId: number): any {
+		const url = `${this.apiVisitsUrl}/${visitId}/addFiles`;
+		const uploadData = new FormData();
+
+		for (var i = files.length - 1; i >= 0; i--) {
+			uploadData.append('visitFiles[' + i + ']', files[i], files[i].name);
+		}
+
+		return this.http.post<any>(url, uploadData, {
+			reportProgress: true,
+			observe: 'events'
+		}).pipe(
+			tap(response => console.log(response)),
+			catchError(this.handleError<any>('uploadFiles'))
+		);
 	}
 
 	private handleError<T>(operation = 'operation', result?: T) {

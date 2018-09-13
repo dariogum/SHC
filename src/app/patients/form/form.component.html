@@ -93,7 +93,7 @@
 				<div>
 
 					<mat-form-field>
-						<mat-select placeholder="País" [(ngModel)]="patient.country" name="country" (selectionChange)="updatePatient($event)">
+						<mat-select placeholder="País" [(ngModel)]="patient.country" name="country" (selectionChange)="updatePatient($event)" (selectionChange)="filterStates($event)">
 							<mat-option *ngFor="let country of countries" [value]="country">
 								{{country.name}}
 							</mat-option>
@@ -295,7 +295,7 @@
 
 			<p *ngIf="newVisit.id === undefined">Para registrar una nueva visita ingrese los datos de la visita y presione Guardar</p>
 			<p *ngIf="newVisit.id !== undefined">Para modificar los datos de la visita, sólo ingrese los datos y los cambios se guardarán automáticamente</p>
-			<form method="post" [class]="formClass" #visitForm="ngForm" (ngSubmit)="onVisitSubmit()">
+			<form method="post" [class]="formClass" #visitForm="ngForm" (ngSubmit)="onVisitSubmit()" enctype="multipart/form-data">
 
 				<div>
 
@@ -335,7 +335,7 @@
 						<label class="files-container">
 							<mat-icon>camera_alt</mat-icon>
 							Presione aquí para añadir imágenes a la visita
-							<input type="file" accept="image/*" multiple (change)="onFilesChanged($event)" [(ngModel)]="newVisit.files" name="files">
+							<input type="file" accept="image/*" multiple (change)="onFilesChanged($event)" name="files">
 						</label>
 						<div class="image-container" *ngFor="let image of files">
 							<img [src]="image.url">

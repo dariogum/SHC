@@ -28,7 +28,7 @@ export class AgePipe implements PipeTransform {
 export class AgeUpPipe implements PipeTransform {
 
 	transform(value: Date, birthday: Date): string {
-		if(isNaN(birthday.getTime())) {
+		if(!birthday || isNaN(birthday.getTime())) {
 			return 'Sin fecha de nacimiento aún'
 		}
 		
