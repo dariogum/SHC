@@ -3,7 +3,8 @@
 		<a mat-icon-button routerLink="../">
 			<mat-icon aria-label="Listado de pacientes">arrow_back</mat-icon>
 		</a>
-		<span>Historia Clínica</span>
+		<span *ngIf="!patient">Historia Clínica</span>
+		<span *ngIf="patient" class="header-row">Historia Clínica - {{patient.name}} {{patient.lastname}}</span>
 		<span class="spacer"></span>
 		<button mat-icon-button (click)="close()" *ngIf="!folded">
 			<mat-icon aria-label="Cerrar todos los paneles">unfold_less</mat-icon>
@@ -338,6 +339,9 @@
 							<input type="file" accept="image/*" multiple (change)="onFilesChanged($event)" name="files">
 						</label>
 						<div class="image-container" *ngFor="let image of files">
+							<img [src]="image.url">
+						</div>
+						<div class="image-container" *ngFor="let image of newVisit.files">
 							<img [src]="image.url">
 						</div>
 					</mat-card-content>

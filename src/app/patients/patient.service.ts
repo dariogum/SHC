@@ -280,35 +280,7 @@ export class PatientService {
 			);
 	}
 
-	addVisit(visit: Visit, patientId: Number): Observable<Visit> {
-		var visitdate = moment(visit.date);
-		var visitday = visitdate.format("YYYY-MM-DD");
-
-		let data = {
-			"data": {
-				"type": "visit",
-				"attributes": {
-					"patient": patientId,
-					"date": visitday,
-					"weight": visit.weight,
-					"height": visit.height,
-					"perimeter": visit.perimeter,
-					"diagnosis": visit.diagnosis,
-					"treatment": visit.treatment,
-				}
-			}
-		};
-		return this.http.post<any>(this.apiVisitsUrl, data, httpOptions)
-			.pipe(
-				map(response => this.parseVisit(response.data)),
-				catchError(this.handleError<Visit>('addVisit'))
-			);
-	}
-
-	updateVisit(visit: Visit, patientId: Number): Observable<any> {
-		const id = typeof visit === 'number' ? visit : visit.id;
-		const url = `${this.apiVisitsUrl}/${id}`;
-
+	visitToJson(visit: Visit, patientId: Number) {
 		var visitdate = moment(visit.date);
 		var visitday = visitdate.format("YYYY-MM-DD");
 
@@ -327,6 +299,22 @@ export class PatientService {
 				}
 			}
 		};
+		return data;
+	}
+
+	addVisit(visit: Visit, patientId: Number): Observable<Visit> {
+		let data = this.visitToJson(visit, patientId);
+		return this.http.post<any>(this.apiVisitsUrl, data, httpOptions)
+			.pipe(
+				map(response => this.parseVisit(response.data)),
+				catchError(this.handleError<Visit>('addVisit'))
+			);
+	}
+
+	updateVisit(visit: Visit, patientId: Number): Observable<any> {
+		const id = typeof visit === 'number' ? visit : visit.id;
+		const url = `${this.apiVisitsUrl}/${id}`;
+		let data = this.visitToJson(visit, patientId);
 
 		return this.http.patch<any>(url, data, httpOptions)
 			.pipe(
@@ -357,7 +345,6 @@ export class PatientService {
 			reportProgress: true,
 			observe: 'events'
 		}).pipe(
-			tap(response => console.log(response)),
 			catchError(this.handleError<any>('uploadFiles'))
 		);
 	}

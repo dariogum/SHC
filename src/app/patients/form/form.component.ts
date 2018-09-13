@@ -136,7 +136,8 @@ export class FormComponent implements OnInit {
 	onVisitSubmit() {
 		if (this.newVisit.id === undefined) {
 			this.patientService.addVisit(this.newVisit, this.patient.id).subscribe(visit => {
-				if(this.files.length) {
+				this.newVisit.id = visit.id;
+				if(this.files && this.files.length) {
 					this.onUpload();
 				}
 				this.patient.visits.push(visit);
@@ -150,10 +151,12 @@ export class FormComponent implements OnInit {
 
 	resetNewVisit() {
 		this.newVisit = new Visit();
+		this.visitForm.reset();
+		this.files = null;
 	}
 
 	updateVisit(event) {
-		if (this.newVisit.id) {
+		if (this.newVisit.id && this.visitForm.form.valid) {
 			let controlName: string;
 			if (event.value !== undefined && event.source) {
 				controlName = event.source.ngControl.name;
