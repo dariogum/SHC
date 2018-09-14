@@ -29,6 +29,7 @@ export class PatientService {
 
 	private apiPatientsUrl = environment.url + '/v1/patients';
 	private apiVisitsUrl = environment.url + '/v1/visits';
+	private apiVersionUrl = environment.url + '/v1';
 
 	constructor(private http: HttpClient) { }
 
@@ -47,8 +48,7 @@ export class PatientService {
 		if(data.relationships && data.relationships.files) {
 			for (var i = 0; i < data.relationships.files.length; i++) {
 				files[i] = {
-					id: data.relationships.files[i].id,
-					name: data.relationships.files[i].name
+					src: this.apiVersionUrl + data.relationships.files[i].links.self
 				};
 			}
 		}

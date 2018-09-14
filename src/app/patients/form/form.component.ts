@@ -11,6 +11,7 @@ import { CITIES } from './../mock-cities';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
 import { ConfirmationPatientDialogComponent } from './confirmation-patient-dialog.component';
 import { PatientService } from './../patient.service';
+import { environment } from './../../../environments/environment';
 
 @Component({
 	selector: 'app-form',
@@ -36,6 +37,8 @@ export class FormComponent implements OnInit {
 	patient: Patient;
 	newVisit: Visit = new Visit();
 	files: FileList = null;
+
+	private apiVersionUrl = environment.url + '/v1';
 
 	@ViewChild(MatAccordion) accordion: MatAccordion;
 	@ViewChild('patientDataForm') public patientDataForm: NgForm;
@@ -133,18 +136,43 @@ export class FormComponent implements OnInit {
 		this.accordion.openAll();
 	}
 
+	addVisitToPatient(visit: Visit) {
+		this.patient.visits.push(visit);
+		let snackBarRef = this.snackBar.open('La visita fue registrada correctamente', 'OK', {
+			duration: 2500,
+		});
+		this.resetNewVisit();
+	}
+
+	onUpload(visit) {
+		if (this.files.length) {
+			if (visit) {
+				visit.files = [];
+			}
+			this.patientService.uploadFiles(this.files, this.newVisit.id).subscribe(result => {
+				if (result.body !== undefined) {
+					for (var i = result.body.length - 1; i >= 0; i--) {
+						this.newVisit.files.push({ src: this.apiVersionUrl + result.body[i].links.self })
+					}
+					if(visit) {
+						this.addVisitToPatient(visit);
+					} else {
+						this.files = null;
+					}
+				}
+			});
+		}
+	}
+
 	onVisitSubmit() {
 		if (this.newVisit.id === undefined) {
 			this.patientService.addVisit(this.newVisit, this.patient.id).subscribe(visit => {
 				this.newVisit.id = visit.id;
-				if(this.files && this.files.length) {
-					this.onUpload();
+				if (this.files && this.files.length) {
+					this.onUpload(this.newVisit);
+				} else {
+					this.addVisitToPatient(this.newVisit);
 				}
-				this.patient.visits.push(visit);
-				this.newVisit = new Visit();
-				let snackBarRef = this.snackBar.open('La visita fue registrada correctamente', 'OK', {
-					duration: 2500,
-				});
 			});
 		}
 	}
@@ -215,16 +243,8 @@ export class FormComponent implements OnInit {
 		for (var i = 0; i < this.files.length; i++) {
 			this.readImage(event, i);
 		}
-		if(this.newVisit.id) {
-			this.onUpload();
-		}
-	}
-
-	onUpload() {
-		if (this.files.length) {
-			this.patientService.uploadFiles(this.files, this.newVisit.id).subscribe(result => {
-				if (result) { }
-			});
+		if (this.newVisit.id) {
+			this.onUpload(false);
 		}
 	}
 
