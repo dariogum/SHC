@@ -21,24 +21,24 @@ import { environment } from './../../../environments/environment';
 })
 export class FormComponent implements OnInit {
 
-	private formClass = 'wide';
-	private folded = false;
-	private newPatient = false;
-	private maxDate = new Date();
+	formClass = 'wide';
+	folded = false;
+	newPatient = false;
+	maxDate = new Date();
 
-	private cities = CITIES;
-	private countries = COUNTRIES;
-	private states = STATES;
-	private socialsecurities = SOCIALSECURITIES;
-	private genders = GENDERS;
-	private birthtypes = BIRTHTYPES;
-	private bloodtypes = BLOODTYPES;
+	cities = CITIES;
+	countries = COUNTRIES;
+	states = STATES;
+	socialsecurities = SOCIALSECURITIES;
+	genders = GENDERS;
+	birthtypes = BIRTHTYPES;
+	bloodtypes = BLOODTYPES;
 
-	private patient: Patient;
-	private visitInForm: Visit = new Visit();
-	private files: FileList = null;
+	patient: Patient;
+	visitInForm: Visit = new Visit();
+	files: FileList = null;
 
-	private apiVersionUrl = environment.url + '/v1';
+	apiVersionUrl = environment.url + '/v1';
 
 	@ViewChild(MatAccordion) accordion: MatAccordion;
 	@ViewChild('patientDataForm') public patientDataForm: NgForm;
