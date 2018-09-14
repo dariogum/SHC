@@ -283,7 +283,7 @@
 					<p matLine>Peso: {{visit.weight}} g | Talla: {{visit.height}} cm | Perímetro encefálico: {{visit.perimeter}} cm</p>
 					<p matLine>Diagnóstico: {{visit.diagnosis}}</p>
 					<p matLine>Tratamiento: {{visit.treatment}}</p>
-					<button mat-icon-button color="primary" (click)="newVisit = visit">
+					<button mat-icon-button color="primary" (click)="visitInForm = visit">
 						<mat-icon>edit</mat-icon>
 					</button>
 					<button mat-icon-button color="warn" (click)="openConfirmationDialog(visit)">
@@ -294,41 +294,41 @@
 
 			<mat-divider></mat-divider>
 
-			<p *ngIf="newVisit.id === undefined">Para registrar una nueva visita ingrese los datos de la visita y presione Guardar</p>
-			<p *ngIf="newVisit.id !== undefined">Para modificar los datos de la visita, sólo ingrese los datos y los cambios se guardarán automáticamente</p>
+			<p *ngIf="visitInForm.id === undefined">Para registrar una nueva visita ingrese los datos de la visita y presione Guardar</p>
+			<p *ngIf="visitInForm.id !== undefined">Para modificar los datos de la visita, sólo ingrese los datos y los cambios se guardarán automáticamente</p>
 			<form method="post" [class]="formClass" #visitForm="ngForm" (ngSubmit)="onVisitSubmit()" enctype="multipart/form-data">
 
 				<div>
 
 					<mat-form-field>
-						<input matInput [matDatepicker]="datepicker" placeholder="Fecha" [min]="patient.birthday" [max]="maxDate" [(ngModel)]="newVisit.date" name="date" required (dateChange)="updateVisit($event)">
+						<input matInput [matDatepicker]="datepicker" placeholder="Fecha" [min]="patient.birthday" [max]="maxDate" [(ngModel)]="visitInForm.date" name="date" required (dateChange)="updateVisit($event)">
 						<mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
 						<mat-datepicker touchUi #datepicker calendarLabel="Fecha"></mat-datepicker>
 					</mat-form-field>
 
 					<mat-form-field>
-						<input matInput type="number" step="50" min="0" placeholder="Peso" [(ngModel)]="newVisit.weight" name="weight" (blur)="updateVisit($event)">
+						<input matInput type="number" step="50" min="0" placeholder="Peso" [(ngModel)]="visitInForm.weight" name="weight" (blur)="updateVisit($event)">
 						<span matSuffix>g</span>
 					</mat-form-field>
 
 					<mat-form-field>
-						<input matInput type="number" step="0.1" min="0" placeholder="Talla" [(ngModel)]="newVisit.height" name="height" (blur)="updateVisit($event)">
+						<input matInput type="number" step="0.1" min="0" placeholder="Talla" [(ngModel)]="visitInForm.height" name="height" (blur)="updateVisit($event)">
 						<span matSuffix>cm</span>
 					</mat-form-field>
 
 					<mat-form-field>
-						<input matInput type="number" step="0.1" min="0" placeholder="Perímetro encefálico" [(ngModel)]="newVisit.perimeter" name="perimeter" (blur)="updateVisit($event)">
+						<input matInput type="number" step="0.1" min="0" placeholder="Perímetro encefálico" [(ngModel)]="visitInForm.perimeter" name="perimeter" (blur)="updateVisit($event)">
 						<span matSuffix>cm</span>
 					</mat-form-field>
 
 				</div>
 
 				<mat-form-field class="full-width">
-					<textarea matInput placeholder="Diagnóstico" [(ngModel)]="newVisit.diagnosis" name="diagnosis" required (blur)="updateVisit($event)"></textarea>
+					<textarea matInput placeholder="Diagnóstico" [(ngModel)]="visitInForm.diagnosis" name="diagnosis" required (blur)="updateVisit($event)"></textarea>
 				</mat-form-field>
 
 				<mat-form-field class="full-width">
-					<textarea matInput placeholder="Tratamiento" [(ngModel)]="newVisit.treatment" name="treatment" (blur)="updateVisit($event)"></textarea>
+					<textarea matInput placeholder="Tratamiento" [(ngModel)]="visitInForm.treatment" name="treatment" (blur)="updateVisit($event)"></textarea>
 				</mat-form-field>
 
 				<mat-card class="files">
@@ -336,20 +336,20 @@
 						<label class="files-container">
 							<mat-icon>camera_alt</mat-icon>
 							Presione aquí para añadir imágenes a la visita
-							<input type="file" accept="image/*" multiple (change)="onFilesChanged($event)" name="files">
+							<input type="file" accept="image/*" multiple name="files" (change)="onFilesChanged($event)">
 						</label>
 						<div class="image-container" *ngFor="let image of files">
 							<img [src]="image.url">
 						</div>
-						<div class="image-container" *ngFor="let image of newVisit.files">
-							<img [src]="image.src">
+						<div class="image-container" *ngFor="let image of visitInForm.files">
+							<img [src]="image.url">
 						</div>
 					</mat-card-content>
 				</mat-card>
 
 				<div>
-					<button type="submit" mat-raised-button color="primary" class="visit-form-button" [disabled]="!visitForm.form.valid" *ngIf="newVisit.id === undefined">Guardar</button>
-					<button type="button" mat-raised-button color="accent" class="visit-form-button" (click)="resetNewVisit()">Nueva visita</button>
+					<button type="submit" mat-raised-button color="primary" class="visit-form-button" [disabled]="!visitForm.form.valid" *ngIf="visitInForm.id === undefined">Guardar</button>
+					<button type="button" mat-raised-button color="accent" class="visit-form-button" (click)="visitInFormReset()">Nueva visita</button>
 				</div>
 
 			</form>

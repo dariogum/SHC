@@ -21,22 +21,22 @@ import { environment } from './../../../environments/environment';
 })
 export class FormComponent implements OnInit {
 
-	formClass = 'wide';
-	folded = false;
-	newPatient = false;
-	maxDate = new Date();
+	private formClass = 'wide';
+	private folded = false;
+	private newPatient = false;
+	private maxDate = new Date();
 
-	cities = CITIES;
-	countries = COUNTRIES;
-	states = STATES;
-	socialsecurities = SOCIALSECURITIES;
-	genders = GENDERS;
-	birthtypes = BIRTHTYPES;
-	bloodtypes = BLOODTYPES;
+	private cities = CITIES;
+	private countries = COUNTRIES;
+	private states = STATES;
+	private socialsecurities = SOCIALSECURITIES;
+	private genders = GENDERS;
+	private birthtypes = BIRTHTYPES;
+	private bloodtypes = BLOODTYPES;
 
-	patient: Patient;
-	newVisit: Visit = new Visit();
-	files: FileList = null;
+	private patient: Patient;
+	private visitInForm: Visit = new Visit();
+	private files: FileList = null;
 
 	private apiVersionUrl = environment.url + '/v1';
 
@@ -136,25 +136,29 @@ export class FormComponent implements OnInit {
 		this.accordion.openAll();
 	}
 
+	addFileToVisit(visit: Visit, files) {
+		for (var i = 0; i < files.lenght; i++) {
+			visit.files.push({ url: this.apiVersionUrl + files[i].links.self })
+		}
+	}
+
 	addVisitToPatient(visit: Visit) {
 		this.patient.visits.push(visit);
 		let snackBarRef = this.snackBar.open('La visita fue registrada correctamente', 'OK', {
 			duration: 2500,
 		});
-		this.resetNewVisit();
+		this.visitInFormReset();
 	}
 
-	onUpload(visit) {
+	uploadFiles(visit: Visit, newVisit: boolean) {
+		if (newVisit) {
+			visit.files = [];
+		}
 		if (this.files.length) {
-			if (visit) {
-				visit.files = [];
-			}
-			this.patientService.uploadFiles(this.files, this.newVisit.id).subscribe(result => {
+			this.patientService.uploadFiles(this.files, visit.id).subscribe(result => {
 				if (result.body !== undefined) {
-					for (var i = result.body.length - 1; i >= 0; i--) {
-						this.newVisit.files.push({ src: this.apiVersionUrl + result.body[i].links.self })
-					}
-					if(visit) {
+					this.addFileToVisit(visit, result.body);
+					if(newVisit) {
 						this.addVisitToPatient(visit);
 					} else {
 						this.files = null;
@@ -165,26 +169,27 @@ export class FormComponent implements OnInit {
 	}
 
 	onVisitSubmit() {
-		if (this.newVisit.id === undefined) {
-			this.patientService.addVisit(this.newVisit, this.patient.id).subscribe(visit => {
-				this.newVisit.id = visit.id;
+		if (this.visitInForm.id === undefined) {
+			this.patientService.addVisit(this.visitInForm, this.patient.id).subscribe(visit => {
+				this.visitInForm.id = visit.id;
 				if (this.files && this.files.length) {
-					this.onUpload(this.newVisit);
+					this.uploadFiles(this.visitInForm, true);
 				} else {
-					this.addVisitToPatient(this.newVisit);
+					this.addVisitToPatient(this.visitInForm);
 				}
 			});
 		}
 	}
 
-	resetNewVisit() {
-		this.newVisit = new Visit();
+	visitInFormReset() {
+		/** This tasks order is important **/
+		this.visitInForm = new Visit();
 		this.visitForm.reset();
 		this.files = null;
 	}
 
 	updateVisit(event) {
-		if (this.newVisit.id && this.visitForm.form.valid) {
+		if (this.visitInForm.id && this.visitForm.form.valid) {
 			let controlName: string;
 			if (event.value !== undefined && event.source) {
 				controlName = event.source.ngControl.name;
@@ -195,7 +200,7 @@ export class FormComponent implements OnInit {
 			}
 			let isVisitControl = this.visitForm.controls[controlName] && !this.visitForm.controls[controlName].pristine;
 			if (isVisitControl) {
-				this.patientService.updateVisit(this.newVisit, this.patient.id).subscribe();
+				this.patientService.updateVisit(this.visitInForm, this.patient.id).subscribe();
 			}
 		}
 	}
@@ -208,8 +213,8 @@ export class FormComponent implements OnInit {
 					if (index > -1) {
 						this.patient.visits.splice(index, 1);
 					}
-					if (visit === this.newVisit) {
-						this.resetNewVisit();
+					if (visit === this.visitInForm) {
+						this.visitInFormReset();
 					}
 					let snackBarRef = this.snackBar.open('La visita fue eliminada correctamente', 'OK', {
 						duration: 2500,
@@ -243,8 +248,8 @@ export class FormComponent implements OnInit {
 		for (var i = 0; i < this.files.length; i++) {
 			this.readImage(event, i);
 		}
-		if (this.newVisit.id) {
-			this.onUpload(false);
+		if (this.visitInForm.id) {
+			this.uploadFiles(this.visitInForm, false);
 		}
 	}
 
