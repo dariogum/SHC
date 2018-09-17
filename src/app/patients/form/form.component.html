@@ -339,9 +339,12 @@
 							<input type="file" accept="image/*" multiple name="files" (change)="onFilesChanged($event)">
 						</label>
 						<div class="image-container" *ngFor="let image of files">
-							<img [src]="image.url">
+							<img *ngIf="image.url" [src]="image.url">
 						</div>
 						<div class="image-container" *ngFor="let image of visitInForm.files">
+							<button type="button" mat-icon-button color="warn" (click)="deleteFile(image)">
+						    <mat-icon aria-label="Delete file">delete</mat-icon>
+						  </button>
 							<img [src]="image.url">
 						</div>
 					</mat-card-content>

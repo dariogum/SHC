@@ -29,6 +29,7 @@ export class PatientService {
 
 	private apiPatientsUrl = environment.url + '/v1/patients';
 	private apiVisitsUrl = environment.url + '/v1/visits';
+	private apiFilesUrl = environment.url + '/v1/files';
 	private apiVersionUrl = environment.url + '/v1';
 
 	constructor(private http: HttpClient) { }
@@ -48,7 +49,8 @@ export class PatientService {
 		if(data.relationships && data.relationships.files) {
 			for (var i = 0; i < data.relationships.files.length; i++) {
 				files[i] = {
-					src: this.apiVersionUrl + data.relationships.files[i].links.self
+					id: data.relationships.files[i].data.id,
+					url: this.apiVersionUrl + data.relationships.files[i].links.self
 				};
 			}
 		}
@@ -341,12 +343,18 @@ export class PatientService {
 			uploadData.append('visitFiles[' + i + ']', files[i], files[i].name);
 		}
 
-		return this.http.post<any>(url, uploadData, {
-			reportProgress: true,
-			observe: 'events'
-		}).pipe(
+		return this.http.post<any>(url, uploadData).pipe(
 			catchError(this.handleError<any>('uploadFiles'))
 		);
+	}
+
+	deleteFile(fileId: number): Observable<any> {
+		const url = `${this.apiFilesUrl}/${fileId}`;
+
+		return this.http.delete<any>(url, httpOptions)
+			.pipe(
+				catchError(this.handleError<any>('deleteFile'))
+			);
 	}
 
 	private handleError<T>(operation = 'operation', result?: T) {

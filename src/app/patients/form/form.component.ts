@@ -136,9 +136,9 @@ export class FormComponent implements OnInit {
 		this.accordion.openAll();
 	}
 
-	addFileToVisit(visit: Visit, files) {
-		for (var i = 0; i < files.lenght; i++) {
-			visit.files.push({ url: this.apiVersionUrl + files[i].links.self })
+	addFileToVisit(visit: Visit, files: any) {
+		for (var i = 0; i < files.length; i++) {
+			visit.files.unshift({ id: files[i].data.id, url: this.apiVersionUrl + files[i].links.self });
 		}
 	}
 
@@ -156,8 +156,8 @@ export class FormComponent implements OnInit {
 		}
 		if (this.files.length) {
 			this.patientService.uploadFiles(this.files, visit.id).subscribe(result => {
-				if (result.body !== undefined) {
-					this.addFileToVisit(visit, result.body);
+				if (result.length) {
+					this.addFileToVisit(visit, result);
 					if(newVisit) {
 						this.addVisitToPatient(visit);
 					} else {
@@ -245,11 +245,12 @@ export class FormComponent implements OnInit {
 
 	onFilesChanged(event) {
 		this.files = event.target.files;
-		for (var i = 0; i < this.files.length; i++) {
-			this.readImage(event, i);
-		}
 		if (this.visitInForm.id) {
 			this.uploadFiles(this.visitInForm, false);
+		} else {
+			for (var i = 0; i < this.files.length; i++) {
+				this.readImage(event, i);
+			}
 		}
 	}
 
@@ -259,6 +260,21 @@ export class FormComponent implements OnInit {
 
 	filterStates(event) {
 		this.states = STATES.filter(state => state.country === event.value.id);
+	}
+
+	deleteFile(file) {
+		this.patientService.deleteFile(file.id)
+			.subscribe(result => {
+				if (result) {
+					let index = this.visitInForm.files.indexOf(file);
+					if (index > -1) {
+						this.visitInForm.files.splice(index, 1);
+					}
+					let snackBarRef = this.snackBar.open('La imagen fue eliminada correctamente', 'OK', {
+						duration: 2500,
+					});
+				}
+			});
 	}
 
 }
