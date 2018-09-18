@@ -47,10 +47,10 @@ export class PatientService {
 		var files = [];
 
 		if(data.relationships && data.relationships.files) {
-			for (var i = 0; i < data.relationships.files.length; i++) {
+			for (var i = 0; i < data.relationships.files.data.length; i++) {
 				files[i] = {
-					id: data.relationships.files[i].data.id,
-					url: this.apiVersionUrl + data.relationships.files[i].links.self
+					id: data.relationships.files.data[i].data.id,
+					url: this.apiVersionUrl + data.relationships.files.data[i].links.self
 				};
 			}
 		}
@@ -110,8 +110,8 @@ export class PatientService {
 			bloodtype = this.findInJson(data.attributes.bloodType, BLOODTYPES);
 		}
 		if (data.relationships && data.relationships.visits) {
-			for (var i = 0; i < data.relationships.visits.length; i++) {
-				visits[i] = this.parseVisit(data.relationships.visits[i].data);
+			for (var i = 0; i < data.relationships.visits.data.length; i++) {
+				visits[i] = this.parseVisit(data.relationships.visits.data[i].data);
 			}
 		}
 
@@ -336,14 +336,14 @@ export class PatientService {
 	}
 
 	uploadFiles(files: FileList, visitId: number): any {
-		const url = `${this.apiVisitsUrl}/${visitId}/addFiles`;
 		const uploadData = new FormData();
 
 		for (var i = files.length - 1; i >= 0; i--) {
+			uploadData.set("visit", visitId.toString());
 			uploadData.append('visitFiles[' + i + ']', files[i], files[i].name);
 		}
 
-		return this.http.post<any>(url, uploadData).pipe(
+		return this.http.post<any>(this.apiFilesUrl, uploadData).pipe(
 			catchError(this.handleError<any>('uploadFiles'))
 		);
 	}

@@ -156,8 +156,8 @@ export class FormComponent implements OnInit {
 		}
 		if (this.files.length) {
 			this.patientService.uploadFiles(this.files, visit.id).subscribe(result => {
-				if (result.length) {
-					this.addFileToVisit(visit, result);
+				if (result.data.length) {
+					this.addFileToVisit(visit, result.data);
 					if(newVisit) {
 						this.addVisitToPatient(visit);
 					} else {
