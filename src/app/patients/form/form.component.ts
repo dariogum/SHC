@@ -10,6 +10,7 @@ import { COUNTRIES, STATES, SOCIALSECURITIES, GENDERS, BIRTHTYPES, BLOODTYPES } 
 import { CITIES } from './../mock-cities';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
 import { ConfirmationPatientDialogComponent } from './confirmation-patient-dialog.component';
+import { ImageDialogComponent } from './image-dialog.component';
 import { PatientService } from './../patient.service';
 import { environment } from './../../../environments/environment';
 
@@ -275,6 +276,12 @@ export class FormComponent implements OnInit {
 					});
 				}
 			});
+	}
+
+	openFile(image) {
+		const dialogRef = this.dialog.open(ImageDialogComponent, {
+			data: image
+		});
 	}
 
 }

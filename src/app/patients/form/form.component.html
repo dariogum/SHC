@@ -102,7 +102,7 @@
 					</mat-form-field>
 
 					<mat-form-field>
-						<mat-select placeholder="Provincia" [(ngModel)]="patient.state" name="state" (selectionChange)="updatePatient($event)" (selectionChange)="filterCities($event)">
+						<mat-select placeholder="Provincia" [(ngModel)]="patient.state" name="state" (selectionChange)="updatePatient($event)" (selectionChange)="filterCities($event)" [disabled]="!patient.country">
 							<mat-option *ngFor="let state of states" [value]="state">
 								{{state.name}}
 							</mat-option>
@@ -110,7 +110,7 @@
 					</mat-form-field>
 
 					<mat-form-field>
-						<mat-select placeholder="Localidad" [(ngModel)]="patient.city" name="city" (selectionChange)="updatePatient($event)">
+						<mat-select placeholder="Localidad" [(ngModel)]="patient.city" name="city" (selectionChange)="updatePatient($event)" [disabled]="!patient.state">
 							<mat-option *ngFor="let city of cities" [value]="city">
 								{{city.name}}
 							</mat-option>
@@ -159,11 +159,11 @@
 								{{socialsecurity.name}}
 							</mat-option>
 						</mat-select>
-						<mat-hint *ngIf="!patient.socialSecurity1?.accepted">No acordó valor de consulta ética!</mat-hint>
+						<mat-hint *ngIf="patient.socialSecurity1 && !patient.socialSecurity1?.accepted">No acordó valor de consulta ética!</mat-hint>
 					</mat-form-field>
 
 					<mat-form-field>
-						<input matInput type="text" placeholder="N° de afiliado" [(ngModel)]="patient.socialSecurity1Number" name="socialSecurity1Number" maxlength="128" (blur)="updatePatient($event)">
+						<input matInput type="text" placeholder="N° de afiliado" [(ngModel)]="patient.socialSecurity1Number" name="socialSecurity1Number" maxlength="128" (blur)="updatePatient($event)" [disabled]="!patient.socialSecurity1">
 					</mat-form-field>
 
 					<mat-form-field>
@@ -172,11 +172,11 @@
 								{{socialsecurity.name}}
 							</mat-option>
 						</mat-select>
-						<mat-hint *ngIf="!patient.socialSecurity2?.accepted">No acordó valor de consulta ética!</mat-hint>
+						<mat-hint *ngIf="patient.socialSecurity2 && !patient.socialSecurity2?.accepted">No acordó valor de consulta ética!</mat-hint>
 					</mat-form-field>
 
 					<mat-form-field>
-						<input matInput type="text" placeholder="N° de afiliado" [(ngModel)]="patient.socialSecurity2Number" name="socialSecurity2Number" maxlength="128" (blur)="updatePatient($event)">
+						<input matInput type="text" placeholder="N° de afiliado" [(ngModel)]="patient.socialSecurity2Number" name="socialSecurity2Number" maxlength="128" (blur)="updatePatient($event)" [disabled]="!patient.socialSecurity2">
 					</mat-form-field>
 
 				</div>
@@ -347,7 +347,7 @@
 							<button type="button" mat-icon-button color="warn" (click)="deleteFile(image)">
 						    <mat-icon aria-label="Delete file">delete</mat-icon>
 						  </button>
-							<img [src]="image.url">
+							<img [src]="image.url" (click)="openFile(image)">
 						</div>
 					</mat-card-content>
 				</mat-card>

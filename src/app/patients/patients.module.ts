@@ -9,6 +9,7 @@ import { FormComponent } from './form/form.component';
 import { NewPatientDialogComponent } from './list/new-patient-dialog.component';
 import { ConfirmationDialogComponent } from './form/confirmation-dialog.component';
 import { ConfirmationPatientDialogComponent } from './form/confirmation-patient-dialog.component';
+import { ImageDialogComponent } from './form/image-dialog.component';
 import { AgePipe, AgeUpPipe } from './age.pipe';
 
 @NgModule({
@@ -43,12 +44,14 @@ import { AgePipe, AgeUpPipe } from './age.pipe';
     AgeUpPipe,
     NewPatientDialogComponent,
     ConfirmationDialogComponent,
-    ConfirmationPatientDialogComponent
+    ConfirmationPatientDialogComponent,
+    ImageDialogComponent
   ],
   entryComponents: [
     NewPatientDialogComponent,
     ConfirmationDialogComponent,
-    ConfirmationPatientDialogComponent
+    ConfirmationPatientDialogComponent,
+    ImageDialogComponent
   ]
 })
 export class PatientsModule { }
