@@ -159,6 +159,7 @@
 								{{socialsecurity.name}}
 							</mat-option>
 						</mat-select>
+						<mat-hint *ngIf="!patient.socialSecurity1?.accepted">No acordó valor de consulta ética!</mat-hint>
 					</mat-form-field>
 
 					<mat-form-field>
@@ -171,6 +172,7 @@
 								{{socialsecurity.name}}
 							</mat-option>
 						</mat-select>
+						<mat-hint *ngIf="!patient.socialSecurity2?.accepted">No acordó valor de consulta ética!</mat-hint>
 					</mat-form-field>
 
 					<mat-form-field>

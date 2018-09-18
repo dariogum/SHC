@@ -271,13 +271,11 @@ export class PatientService {
 			);
 	}
 
-	deletePatient(patient: Patient | number): Observable<any> {
-		const id = typeof patient === 'number' ? patient : patient.id;
-		const url = `${this.apiPatientsUrl}/${id}`;
+	deletePatient(patientId: number): Observable<any> {
+		const url = `${this.apiPatientsUrl}/${patientId}`;
 
 		return this.http.delete<any>(url, httpOptions)
 			.pipe(
-				map(response => response.data),
 				catchError(this.handleError<any>('deletePatient'))
 			);
 	}
