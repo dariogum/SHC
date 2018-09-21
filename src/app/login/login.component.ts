@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { User } from './../classes/user';
+import { LoginService } from './login.service';
 
 @Component({
   selector: 'app-login',
@@ -15,21 +16,24 @@ export class LoginComponent implements OnInit {
 
   user: User = new User();
 
-  constructor(private router: Router, public snackBar: MatSnackBar) { }
+  constructor(private router: Router, public snackBar: MatSnackBar, private loginService: LoginService) { }
 
   ngOnInit() {
   }
 
   onSubmit() {
-    let user1 = this.user.email == 'dariogum@hotmail.com' && this.user.password == 'admin';
-    let user2 = this.user.email == 'ruben.pedicino@hotmail.com' && this.user.password == 'suegrocrack';
-    if (user1 || user2) {
-      this.router.navigate(['/patients']);
-    } else {
-      let snackBarRef = this.snackBar.open('Usuario y/o contraseña incorrectos', 'OK', {
-        duration: 2500,
-      });
-    }
+    this.loginService.verifyByEmail(this.user)
+      .subscribe(user => {
+        if(user){
+          this.user = user;
+          this.router.navigate(['/patients']);
+        } else {
+          let snackBarRef = this.snackBar.open('Usuario y/o contraseña incorrectos', 'OK', {
+            duration: 2500,
+          });
+        }
+      }
+    );
   }
 
 }

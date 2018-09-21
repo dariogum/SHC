@@ -9,6 +9,10 @@
 			<mat-icon aria-label="Opciones">more_vert</mat-icon>
 		</button>
 		<mat-menu #menu="matMenu">
+			<button mat-menu-item (click)="openBottomSheet()">
+				<mat-icon>show_chart</mat-icon>
+				<span>Estadísticas</span>
+			</button>
 			<a href="./" mat-menu-item>
 				<mat-icon>exit_to_app</mat-icon>
 				<span>Cerrar sesión</span>

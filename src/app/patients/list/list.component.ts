@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar, MatBottomSheet } from '@angular/material';
 
 import { Observable, of, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map, filter, tap } from 'rxjs/operators';
@@ -8,6 +8,7 @@ import { Patient } from './../../classes/patient';
 import { PatientService } from './../patient.service';
 
 import { NewPatientDialogComponent } from './new-patient-dialog.component';
+import { StatsComponent } from './../../stats/stats.component';
 
 @Component({
 	selector: 'app-list',
@@ -23,7 +24,7 @@ export class ListComponent implements OnInit {
 
 	private searchTerms = new Subject<string>();
 
-	constructor(public dialog: MatDialog, private patientService: PatientService, public snackBar: MatSnackBar) { }
+	constructor(public dialog: MatDialog, private patientService: PatientService, public snackBar: MatSnackBar, private bottomSheet: MatBottomSheet) { }
 
 	ngOnInit() {
 		this.getPatients();
@@ -51,5 +52,9 @@ export class ListComponent implements OnInit {
 	search(term: string) {
 		this.searchTerms.next(term);
 	}
+
+  openBottomSheet(): void {
+    this.bottomSheet.open(StatsComponent);
+  }
 
 }

@@ -13,7 +13,7 @@ const httpOptions = {
 @Injectable({
 	providedIn: 'root'
 })
-export class UserService {
+export class LoginService {
 
 	private apiUsersUrl = 'http://localhost:8080/v1/users';
 
@@ -28,6 +28,7 @@ export class UserService {
 			password: data.attributes.password,
 			lastname: data.attributes.lastname,
 			name: data.attributes.name,
+			enabled: data.attributes.enabled,
 		}
 
 		return user;
@@ -41,11 +42,19 @@ export class UserService {
 		return users;
 	}
 
+	verifyByEmail(data): Observable<User> {
+		const url = `${this.apiUsersUrl}/login`;
+		return this.http.post<any>(url, data, httpOptions)
+			.pipe(
+				map(response => this.parseUser(response.data)),
+				catchError(this.handleError<User>(`verifyByEmail`))
+			);
+	}
+
 	getUsers(): Observable<User[]> {
 		return this.http.get<any>(this.apiUsersUrl)
 			.pipe(
 				map(response => this.parseUsers(response.data)),
-				//tap(),
 				catchError(this.handleError<User[]>('getUsers', []))
 			);
 	}
@@ -55,7 +64,6 @@ export class UserService {
 		return this.http.get<any>(url)
 			.pipe(
 				map(response => this.parseUser(response.data)),
-				//tap(),
 				catchError(this.handleError<User>(`getUser id=${id}`))
 			);
 	}
@@ -67,7 +75,6 @@ export class UserService {
 		return this.http.get<any>(`${this.apiUsersUrl}?filter=name:${term},lastname:${term}`)
 			.pipe(
 				map(response => this.parseUsers(response.data)),
-				//tap(),
 				catchError(this.handleError<User[]>('searchusers', []))
 			);
 	}
@@ -87,7 +94,6 @@ export class UserService {
 		return this.http.post<any>(this.apiUsersUrl, data, httpOptions)
 			.pipe(
 				map(response => this.parseUser(response.data)),
-				//tap(),
 				catchError(this.handleError<User>('addUser'))
 			);
 	}
@@ -105,6 +111,7 @@ export class UserService {
 					password: user.password,
 					lastname: user.lastname,
 					name: user.name,
+					enabled: user.enabled,
 		    }
 	  	}
 	  };
@@ -112,7 +119,6 @@ export class UserService {
 		return this.http.patch<any>(url, data, httpOptions)
 			.pipe(
 				map(response => response.data),
-				//tap(),
 				catchError(this.handleError<any>('updateUser'))
 			);
 	}
@@ -124,7 +130,6 @@ export class UserService {
 		return this.http.delete<any>(url, httpOptions)
 			.pipe(
 				map(response => response.data),
-				//tap(),
 				catchError(this.handleError<any>('deleteUser'))
 			);
 	}

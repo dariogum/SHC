@@ -1,0 +1,27 @@
+<mat-card>
+	<mat-card-header>
+		<mat-card-title>Visitas totales</mat-card-title>
+	</mat-card-header>
+	<mat-card-content>{{total | async}}</mat-card-content>
+</mat-card>
+
+<mat-card>
+	<mat-card-header>
+		<mat-card-title>Visitas por mes</mat-card-title>
+	</mat-card-header>
+	<mat-card-content>{{totalByMonth | async | json}}</mat-card-content>
+</mat-card>
+
+<mat-card>
+	<mat-card-header>
+		<mat-card-title>Visitas por pacientes</mat-card-title>
+	</mat-card-header>
+	<mat-card-content>{{totalByPatients | async}}</mat-card-content>
+</mat-card>
+
+<mat-card>
+	<mat-card-header>
+		<mat-card-title>Visitas por obra social</mat-card-title>
+	</mat-card-header>
+	<mat-card-content>{{totalBySocialSecurity | async}}</mat-card-content>
+</mat-card>
