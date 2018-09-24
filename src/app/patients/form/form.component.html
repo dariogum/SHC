@@ -340,6 +340,7 @@
 							Presione aquí para añadir imágenes a la visita
 							<input type="file" accept="image/*" multiple name="files" (change)="onFilesChanged($event)">
 						</label>
+						<mat-progress-bar mode="indeterminate" *ngIf="uploadingFiles"></mat-progress-bar>
 						<div class="image-container" *ngFor="let image of files">
 							<img *ngIf="image.url" [src]="image.url">
 						</div>

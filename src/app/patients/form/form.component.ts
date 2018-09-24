@@ -38,6 +38,7 @@ export class FormComponent implements OnInit {
 	patient: Patient;
 	visitInForm: Visit = new Visit();
 	files: FileList = null;
+	uploadingFiles: Boolean = false;
 
 	apiVersionUrl = environment.url + '/v1';
 
@@ -164,6 +165,7 @@ export class FormComponent implements OnInit {
 					} else {
 						this.files = null;
 					}
+					this.uploadingFiles = false;
 				}
 			});
 		}
@@ -247,6 +249,7 @@ export class FormComponent implements OnInit {
 	onFilesChanged(event) {
 		this.files = event.target.files;
 		if (this.visitInForm.id) {
+			this.uploadingFiles = true;
 			this.uploadFiles(this.visitInForm, false);
 		} else {
 			for (var i = 0; i < this.files.length; i++) {
@@ -255,12 +258,12 @@ export class FormComponent implements OnInit {
 		}
 	}
 
-	filterCities(event) {
-		this.cities = CITIES.filter(city => city.state === event.value.id);
-	}
-
 	filterStates(event) {
 		this.states = STATES.filter(state => state.country === event.value.id);
+	}
+
+	filterCities(event) {
+		this.cities = CITIES.filter(city => city.state === event.value.id);
 	}
 
 	deleteFile(file) {
