@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular
 import { Observable, of } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { User } from './../classes/user';
+import { environment } from './../../environments/environment';
 
 const httpOptions = {
 	headers: new HttpHeaders({
@@ -15,7 +16,7 @@ const httpOptions = {
 })
 export class LoginService {
 
-	private apiUsersUrl = 'http://localhost:8080/v1/users';
+	private apiUsersUrl = environment.url + '/v1/users';
 
 	constructor(private http: HttpClient) { }
 
