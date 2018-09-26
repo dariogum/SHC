@@ -1,18 +1,19 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm, FormControl } from '@angular/forms';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatAccordion, MatDialog, MatSnackBar } from '@angular/material';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+
+import { SocialSecurity } from './../../classes/socialsecurity';
 import { Patient } from './../../classes/patient';
 import { Visit } from './../../classes/visit';
-import { SocialSecurity } from './../../classes/socialsecurity';
-import { COUNTRIES, STATES, SOCIALSECURITIES, GENDERS, BIRTHTYPES, BLOODTYPES } from './../mock-data';
-import { CITIES } from './../mock-cities';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
 import { ConfirmationPatientDialogComponent } from './confirmation-patient-dialog.component';
 import { ImageDialogComponent } from './image-dialog.component';
+import { CITIES } from './../mock-cities';
+import { COUNTRIES, STATES, SOCIALSECURITIES, GENDERS, BIRTHTYPES, BLOODTYPES } from './../mock-data';
 import { PatientService } from './../patient.service';
 import { environment } from './../../../environments/environment';
 
@@ -24,36 +25,31 @@ import { environment } from './../../../environments/environment';
 })
 export class FormComponent implements OnInit {
 
-	formClass = 'wide';
-	folded = false;
-	newPatient = false;
-	maxDate = new Date();
-
-	cities = CITIES;
-	countries = COUNTRIES;
-	states = STATES;
-	socialSecurityInput1 = new FormControl();
-	socialsecurities = SOCIALSECURITIES;
-	filteredSocialsecurities: Observable<SocialSecurity[]>;
-	genders = GENDERS;
+	apiVersionUrl: string = environment.url + '/v1';
 	birthtypes = BIRTHTYPES;
 	bloodtypes = BLOODTYPES;
-
-	patient: Patient;
-	visitInForm: Visit = new Visit();
+	cities = CITIES;
+	countries = COUNTRIES;
 	files: FileList = null;
+	filteredSocialsecurities: SocialSecurity[];
+	folded: Boolean = false;
+	formClass: string = 'wide';
+	genders = GENDERS;
+	maxDate: Date = new Date();
+	newPatient: Boolean = false;
+	patient: Patient;
+	socialsecurities = SOCIALSECURITIES;
+	states = STATES;
 	uploadingFiles: Boolean = false;
-
-	apiVersionUrl = environment.url + '/v1';
+	visitInForm: Visit = new Visit();
 
 	@ViewChild(MatAccordion) accordion: MatAccordion;
-	@ViewChild('patientDataForm') public patientDataForm: NgForm;
 	@ViewChild('patientBackgroundForm') public patientBackgroundForm: NgForm;
+	@ViewChild('patientDataForm') public patientDataForm: NgForm;
 	@ViewChild('visitForm') public visitForm: NgForm;
 
-	constructor(private breakpointObserver: BreakpointObserver, private route: ActivatedRoute,
-		private router: Router, public dialog: MatDialog, private patientService: PatientService,
-		public snackBar: MatSnackBar) {
+	constructor(private breakpointObserver: BreakpointObserver, private route: ActivatedRoute, private router: Router,
+		public dialog: MatDialog, private patientService: PatientService, public snackBar: MatSnackBar) {
 		this.breakpointObserver.observe([
 			Breakpoints.HandsetPortrait
 		]).subscribe(result => {
@@ -84,22 +80,38 @@ export class FormComponent implements OnInit {
 
 	ngOnInit() {
 		this.getPatient();
-    this.filteredSocialsecurities = this.socialSecurityInput1.valueChanges
-      .pipe(
-        startWith<string | SocialSecurity>(''),
-        map(value => typeof value === 'string' ? value : value.name),
-        map(name => name ? this._filter(name) : this.socialsecurities.slice())
-      );
 	}
 
 	displayFn(socialSecurity?: SocialSecurity): string | undefined {
-    return socialSecurity ? socialSecurity.name : undefined;
-  }
+		return socialSecurity ? socialSecurity.name : undefined;
+	}
 
-	private _filter(name: string): SocialSecurity[] {
-    const filterValue = name.toLowerCase();
-    return this.socialsecurities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
-  }
+	filterCities(event) {
+		this.cities = CITIES.filter(city => city.state === event.value.id);
+	}
+
+	filterSocialSecurities(event, field) {
+		if (typeof (event) === 'string') {
+			const filterValue = event.toLowerCase();
+			this.filteredSocialsecurities = this.socialsecurities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+		} else {
+			let event = { target: { name: field } };
+			this.updatePatient(event);
+		}
+	}
+
+	filterStates(event) {
+		this.states = STATES.filter(state => state.country === event.value.id);
+	}
+
+	toggleAccordion() {
+		if (this.folded) {
+			this.accordion.openAll();
+		} else {
+			this.accordion.closeAll();
+		}
+		this.folded = !this.folded;
+	}
 
 	getPatient(): void {
 		const id = +this.route.snapshot.paramMap.get('id');
@@ -111,7 +123,6 @@ export class FormComponent implements OnInit {
 	}
 
 	updatePatient(event) {
-		console.log(event);
 		let controlName: string;
 		if (event.value !== undefined && event.source) {
 			controlName = event.source.ngControl.name;
@@ -136,61 +147,6 @@ export class FormComponent implements OnInit {
 		});
 	}
 
-	openConfirmationPatientDialog(): void {
-		const dialogRef = this.dialog.open(ConfirmationPatientDialogComponent, {
-			width: '240px'
-		});
-
-		dialogRef.afterClosed().subscribe(result => {
-			if (result) {
-				this.deletePatient();
-			}
-		});
-	}
-
-	close() {
-		this.folded = true;
-		this.accordion.closeAll();
-	}
-
-	open() {
-		this.folded = false;
-		this.accordion.openAll();
-	}
-
-	addFileToVisit(visit: Visit, files: any) {
-		for (var i = 0; i < files.length; i++) {
-			visit.files.unshift({ id: files[i].data.id, url: this.apiVersionUrl + files[i].links.self });
-		}
-	}
-
-	addVisitToPatient(visit: Visit) {
-		this.patient.visits.push(visit);
-		let snackBarRef = this.snackBar.open('La visita fue registrada correctamente', 'OK', {
-			duration: 2500,
-		});
-		this.visitInFormReset();
-	}
-
-	uploadFiles(visit: Visit, newVisit: boolean) {
-		if (newVisit) {
-			visit.files = [];
-		}
-		if (this.files.length) {
-			this.patientService.uploadFiles(this.files, visit.id).subscribe(result => {
-				if (result.data.length) {
-					this.addFileToVisit(visit, result.data);
-					if(newVisit) {
-						this.addVisitToPatient(visit);
-					} else {
-						this.files = null;
-					}
-					this.uploadingFiles = false;
-				}
-			});
-		}
-	}
-
 	onVisitSubmit() {
 		if (this.visitInForm.id === undefined) {
 			this.patientService.addVisit(this.visitInForm, this.patient.id).subscribe(visit => {
@@ -202,13 +158,6 @@ export class FormComponent implements OnInit {
 				}
 			});
 		}
-	}
-
-	visitInFormReset() {
-		/** This tasks order is important **/
-		this.visitInForm = new Visit();
-		this.visitForm.reset();
-		this.files = null;
 	}
 
 	updateVisit(event) {
@@ -246,16 +195,45 @@ export class FormComponent implements OnInit {
 			});
 	}
 
-	openConfirmationDialog(visit): void {
-		const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-			width: '240px'
-		});
+	visitInFormReset() {
+		/** This tasks order is important **/
+		this.visitInForm = new Visit();
+		this.visitForm.reset();
+		this.files = null;
+	}
 
-		dialogRef.afterClosed().subscribe(result => {
-			if (result) {
-				this.deleteVisit(visit);
-			}
+
+	addFileToVisit(visit: Visit, files: any) {
+		for (let i = 0; i < files.length; i++) {
+			visit.files.unshift({ id: files[i].data.id, url: this.apiVersionUrl + files[i].links.self });
+		}
+	}
+
+	addVisitToPatient(visit: Visit) {
+		this.patient.visits.push(visit);
+		let snackBarRef = this.snackBar.open('La visita fue registrada correctamente', 'OK', {
+			duration: 2500,
 		});
+		this.visitInFormReset();
+	}
+
+	uploadFiles(visit: Visit, newVisit: boolean) {
+		if (newVisit) {
+			visit.files = [];
+		}
+		if (this.files.length) {
+			this.patientService.uploadFiles(this.files, visit.id).subscribe(result => {
+				if (result.data.length) {
+					this.addFileToVisit(visit, result.data);
+					if (newVisit) {
+						this.addVisitToPatient(visit);
+					} else {
+						this.files = null;
+					}
+					this.uploadingFiles = false;
+				}
+			});
+		}
 	}
 
 	readImage(event, index) {
@@ -272,18 +250,10 @@ export class FormComponent implements OnInit {
 			this.uploadingFiles = true;
 			this.uploadFiles(this.visitInForm, false);
 		} else {
-			for (var i = 0; i < this.files.length; i++) {
+			for (let i = 0; i < this.files.length; i++) {
 				this.readImage(event, i);
 			}
 		}
-	}
-
-	filterStates(event) {
-		this.states = STATES.filter(state => state.country === event.value.id);
-	}
-
-	filterCities(event) {
-		this.cities = CITIES.filter(city => city.state === event.value.id);
 	}
 
 	deleteFile(file) {
@@ -304,6 +274,30 @@ export class FormComponent implements OnInit {
 	openFile(image) {
 		const dialogRef = this.dialog.open(ImageDialogComponent, {
 			data: image
+		});
+	}
+
+	openConfirmationDialog(visit): void {
+		const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+			width: '240px'
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			if (result) {
+				this.deleteVisit(visit);
+			}
+		});
+	}
+
+	openConfirmationPatientDialog(): void {
+		const dialogRef = this.dialog.open(ConfirmationPatientDialogComponent, {
+			width: '240px'
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			if (result) {
+				this.deletePatient();
+			}
 		});
 	}
 

@@ -1,10 +1,10 @@
-import { Gender } from './../classes/gender';
-import { Country } from './../classes/country';
-import { State } from './../classes/state';
-import { SocialSecurity } from './../classes/socialsecurity';
 import { BirthType } from './../classes/birthtype';
 import { BloodType } from './../classes/bloodtype';
+import { Country } from './../classes/country';
+import { Gender } from './../classes/gender';
 import { Patient } from './../classes/patient';
+import { SocialSecurity } from './../classes/socialsecurity';
+import { State } from './../classes/state';
 import { Visit } from './../classes/visit';
 
 export const COUNTRIES: Country[] = [

@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
+
 import { Observable, of } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
-import { Patient } from './../classes/patient';
-import { Gender } from './../classes/gender';
-import { Country } from './../classes/country';
-import { State } from './../classes/state';
-import { City } from './../classes/city';
-import { SocialSecurity } from './../classes/socialsecurity';
 import { BirthType } from './../classes/birthtype';
 import { BloodType } from './../classes/bloodtype';
+import { City } from './../classes/city';
+import { Country } from './../classes/country';
+import { Gender } from './../classes/gender';
+import { Patient } from './../classes/patient';
+import { SocialSecurity } from './../classes/socialsecurity';
+import { State } from './../classes/state';
 import { Visit } from './../classes/visit';
-import { GENDERS, COUNTRIES, STATES, SOCIALSECURITIES, BIRTHTYPES, BLOODTYPES } from './mock-data';
-import { CITIES } from './mock-cities';
-import * as moment from 'moment';
 import { environment } from './../../environments/environment';
+import { CITIES } from './mock-cities';
+import { GENDERS, COUNTRIES, STATES, SOCIALSECURITIES, BIRTHTYPES, BLOODTYPES } from './mock-data';
+import * as moment from 'moment';
 
 const httpOptions = {
 	headers: new HttpHeaders({
@@ -35,19 +36,20 @@ export class PatientService {
 	constructor(private http: HttpClient) { }
 
 	findInJson(needle, haystack) {
-		for (var i = haystack.length - 1; i >= 0; i--) {
+		for (let i = haystack.length - 1; i >= 0; i--) {
 			if (haystack[i].id === needle) {
 				return haystack[i];
 			}
 		}
+		
 		return null;
 	}
 
 	parseVisit(data): Visit {
-		var files = [];
+		let files = [];
 
-		if(data.relationships && data.relationships.files) {
-			for (var i = 0; i < data.relationships.files.data.length; i++) {
+		if (data.relationships && data.relationships.files) {
+			for (let i = 0; i < data.relationships.files.data.length; i++) {
 				files[i] = {
 					id: data.relationships.files.data[i].data.id,
 					url: this.apiVersionUrl + data.relationships.files.data[i].links.self
@@ -55,7 +57,7 @@ export class PatientService {
 			}
 		}
 
-		var visit: Visit = {
+		let visit: Visit = {
 			id: data.id,
 			date: moment(data.attributes.date).toDate(),
 			weight: data.attributes.weight,
@@ -71,19 +73,19 @@ export class PatientService {
 	}
 
 	parsePatient(data): Patient {
-		var patient: Patient;
-		var birthday: Date = null;
-		var gender: Gender = null;
-		var country: Country = null;
-		var state: State = null;
-		var city: City = null;
-		var socialSecurity1: SocialSecurity = null;
-		var socialSecurity2: SocialSecurity = null;
-		var birthtype: BirthType = null;
-		var bloodtype: BloodType = null;
-		var visits: Visit[] = [];
+		let patient: Patient;
+		let birthday: Date = null;
+		let gender: Gender = null;
+		let country: Country = null;
+		let state: State = null;
+		let city: City = null;
+		let socialSecurity1: SocialSecurity = null;
+		let socialSecurity2: SocialSecurity = null;
+		let birthtype: BirthType = null;
+		let bloodtype: BloodType = null;
+		let visits: Visit[] = [];
 
-		if(data.attributes.birthday){
+		if (data.attributes.birthday) {
 			birthday = moment(data.attributes.birthday).toDate()
 		}
 		if (data.attributes.gender) {
@@ -111,7 +113,7 @@ export class PatientService {
 			bloodtype = this.findInJson(data.attributes.bloodType, BLOODTYPES);
 		}
 		if (data.relationships && data.relationships.visits) {
-			for (var i = 0; i < data.relationships.visits.data.length; i++) {
+			for (let i = 0; i < data.relationships.visits.data.length; i++) {
 				visits[i] = this.parseVisit(data.relationships.visits.data[i].data);
 			}
 		}
@@ -156,10 +158,11 @@ export class PatientService {
 	}
 
 	parsePatients(data) {
-		var patients: Patient[] = [];
-		for (var i = 0; i < data.length; i++) {
+		let patients: Patient[] = [];
+		for (let i = 0; i < data.length; i++) {
 			patients[i] = this.parsePatient(data[i]);
 		}
+
 		return patients;
 	}
 
@@ -173,6 +176,7 @@ export class PatientService {
 
 	getPatient(id: number): Observable<Patient> {
 		const url = `${this.apiPatientsUrl}/${id}`;
+
 		return this.http.get<any>(url)
 			.pipe(
 				map(response => this.parsePatient(response.data)),
@@ -184,6 +188,7 @@ export class PatientService {
 		if (!term.trim()) {
 			return of([]);
 		}
+
 		return this.http.get<any>(`${this.apiPatientsUrl}?filter=name:${term},lastname:${term}`)
 			.pipe(
 				map(response => this.parsePatients(response.data)),
@@ -201,6 +206,7 @@ export class PatientService {
 				}
 			}
 		};
+
 		return this.http.post<any>(this.apiPatientsUrl, data, httpOptions)
 			.pipe(
 				map(response => this.parsePatient(response.data)),
@@ -212,18 +218,17 @@ export class PatientService {
 		const id = typeof patient === 'number' ? patient : patient.id;
 		const url = `${this.apiPatientsUrl}/${id}`;
 
-		var gender: Number = patient.gender === null ? null : patient.gender.id;
-		var country: Number = patient.country === null ? null : patient.country.id;
-		var state: Number = patient.state === null ? null : patient.state.id;
-		var city: Number = patient.city === null ? null : patient.city.id;
-		var socialSecurity1: Number = patient.socialSecurity1 === null ? null : patient.socialSecurity1.id;
-		var socialSecurity2: Number = patient.socialSecurity2 === null ? null : patient.socialSecurity2.id;
-		var birthtype: Number = patient.birthType === null ? null : patient.birthType.id;
-		var bloodtype: Number = patient.bloodType === null ? null : patient.bloodType.id;
-		var birthday = null;
-
+		let gender: Number = patient.gender === null ? null : patient.gender.id;
+		let country: Number = patient.country === null ? null : patient.country.id;
+		let state: Number = patient.state === null ? null : patient.state.id;
+		let city: Number = patient.city === null ? null : patient.city.id;
+		let socialSecurity1: Number = patient.socialSecurity1 === null ? null : patient.socialSecurity1.id;
+		let socialSecurity2: Number = patient.socialSecurity2 === null ? null : patient.socialSecurity2.id;
+		let birthtype: Number = patient.birthType === null ? null : patient.birthType.id;
+		let bloodtype: Number = patient.bloodType === null ? null : patient.bloodType.id;
+		let birthday = null;
 		if (patient.birthday) {
-			var birthdate = moment(patient.birthday);
+			let birthdate = moment(patient.birthday);
 			birthday = birthdate.format("YYYY-MM-DD");
 		}
 
@@ -284,9 +289,8 @@ export class PatientService {
 	}
 
 	visitToJson(visit: Visit, patientId: Number) {
-		var visitdate = moment(visit.date);
-		var visitday = visitdate.format("YYYY-MM-DD");
-
+		let visitdate = moment(visit.date);
+		let visitday = visitdate.format("YYYY-MM-DD");
 		let data = {
 			"data": {
 				"type": "patient",
@@ -303,11 +307,13 @@ export class PatientService {
 				}
 			}
 		};
+
 		return data;
 	}
 
 	addVisit(visit: Visit, patientId: Number): Observable<Visit> {
 		let data = this.visitToJson(visit, patientId);
+
 		return this.http.post<any>(this.apiVisitsUrl, data, httpOptions)
 			.pipe(
 				map(response => this.parseVisit(response.data)),
@@ -340,7 +346,7 @@ export class PatientService {
 	uploadFiles(files: FileList, visitId: number): any {
 		const uploadData = new FormData();
 
-		for (var i = files.length - 1; i >= 0; i--) {
+		for (let i = files.length - 1; i >= 0; i--) {
 			uploadData.set("visit", visitId.toString());
 			uploadData.append('visitFiles[' + i + ']', files[i], files[i].name);
 		}

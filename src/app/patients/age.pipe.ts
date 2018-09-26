@@ -1,13 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import * as moment from 'moment';
+
 @Pipe({
 	name: 'age'
 })
 export class AgePipe implements PipeTransform {
 
 	transform(value: Date): string {
-		if(!value) {
-			return 'Sin datos aún'
+		if (!value) {
+			return 'Sin datos aún';
 		}
 
 		let today = moment();
@@ -28,10 +29,10 @@ export class AgePipe implements PipeTransform {
 export class AgeUpPipe implements PipeTransform {
 
 	transform(value: Date, birthday: Date): string {
-		if(!birthday || isNaN(birthday.getTime())) {
-			return 'Sin fecha de nacimiento aún'
+		if (!birthday || isNaN(birthday.getTime())) {
+			return 'Sin fecha de nacimiento aún';
 		}
-		
+
 		let update = moment(value);
 		let birthdate = moment(birthday);
 		let years = update.diff(birthdate, 'years');

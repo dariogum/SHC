@@ -1,17 +1,16 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSnackBarModule, MatBottomSheetModule, MatGridListModule, MatDatepickerModule, MatNativeDateModule, MatListModule } from '@angular/material';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSnackBarModule, MatBottomSheetModule,
+  MatGridListModule, MatDatepickerModule, MatNativeDateModule, MatListModule } from '@angular/material';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
-
-import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-
-import { HttpClientModule } from '@angular/common/http';
 import { StatsComponent } from './stats/stats.component';
 
 @NgModule({
@@ -22,10 +21,10 @@ import { StatsComponent } from './stats/stats.component';
   ],
   imports: [
     BrowserModule,
-    HttpClientModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
     FormsModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,

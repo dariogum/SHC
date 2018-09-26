@@ -1,14 +1,9 @@
-.mat-card {
-	background: #3f51b5;
-  color: #fff;
-  height: 50%;
-  width: 75%;
+.mat-grid-tile .mat-card {
+	width: 75%;
+}
+.chart-card {
+	margin: 16px 0;
 }
 h3 {
 	text-align: center;
-}
-.mat-list[dense] .mat-list-item{
-  color: #fff;
-  height: 24px;
-  font-size: 10px;
 }
