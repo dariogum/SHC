@@ -6,6 +6,7 @@ export class Visit {
   weight: number;
   height: number;
   perimeter: number;
+  bloodPressure: string;
   diagnosis: string;
   treatment: string;
   files: any;

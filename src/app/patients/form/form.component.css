@@ -13,24 +13,31 @@
 	margin: 6px 8px;
 }
 
-.wide .mat-form-field {
-	min-width: calc(25% - 16px);
+.wide .apgar-field {
+	width: calc(12.5% - 16px);
 }
 
-.handset .mat-form-field {
-	min-width: calc(100% - 16px) !important;
+.wide .visit-form-field {
+	width: calc(20% - 16px );
 }
 
-.tablet .mat-form-field {
-	min-width: calc(50% - 16px);
+.wide .form-field,
+.tablet .apgar-field {
+	width: calc(25% - 16px);
 }
 
-.full-width {
-	min-width: calc(100% - 16px) !important;
+.handset .apgar-field,
+.wide .comment-field,
+.tablet .form-field,
+.tablet .visit-form-field {
+	width: calc(50% - 16px);
 }
 
-.half-width {
-	min-width: calc(50% - 16px) !important;
+.handset .form-field,
+.handset .comment-field,
+.tablet .comment-field,
+.handset .visit-form-field {
+	width: calc(100% - 16px);
 }
 
 .mat-stepper-vertical p {

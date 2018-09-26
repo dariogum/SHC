@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatAccordion, MatDialog, MatSnackBar } from '@angular/material';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable, of } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { Patient } from './../../classes/patient';
 import { Visit } from './../../classes/visit';
+import { SocialSecurity } from './../../classes/socialsecurity';
 import { COUNTRIES, STATES, SOCIALSECURITIES, GENDERS, BIRTHTYPES, BLOODTYPES } from './../mock-data';
 import { CITIES } from './../mock-cities';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
@@ -30,7 +32,9 @@ export class FormComponent implements OnInit {
 	cities = CITIES;
 	countries = COUNTRIES;
 	states = STATES;
+	socialSecurityInput1 = new FormControl();
 	socialsecurities = SOCIALSECURITIES;
+	filteredSocialsecurities: Observable<SocialSecurity[]>;
 	genders = GENDERS;
 	birthtypes = BIRTHTYPES;
 	bloodtypes = BLOODTYPES;
@@ -80,7 +84,22 @@ export class FormComponent implements OnInit {
 
 	ngOnInit() {
 		this.getPatient();
+    this.filteredSocialsecurities = this.socialSecurityInput1.valueChanges
+      .pipe(
+        startWith<string | SocialSecurity>(''),
+        map(value => typeof value === 'string' ? value : value.name),
+        map(name => name ? this._filter(name) : this.socialsecurities.slice())
+      );
 	}
+
+	displayFn(socialSecurity?: SocialSecurity): string | undefined {
+    return socialSecurity ? socialSecurity.name : undefined;
+  }
+
+	private _filter(name: string): SocialSecurity[] {
+    const filterValue = name.toLowerCase();
+    return this.socialsecurities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+  }
 
 	getPatient(): void {
 		const id = +this.route.snapshot.paramMap.get('id');
@@ -92,6 +111,7 @@ export class FormComponent implements OnInit {
 	}
 
 	updatePatient(event) {
+		console.log(event);
 		let controlName: string;
 		if (event.value !== undefined && event.source) {
 			controlName = event.source.ngControl.name;

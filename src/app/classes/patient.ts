@@ -32,7 +32,8 @@ export class Patient {
   weightNewborn: number;
   bloodType: BloodType;
   rhFactor: number;
-  apgar: number;
+  apgar1: number;
+  apgar2: number;
   gestationalAge: number;
   comments: string;
   father: string;
