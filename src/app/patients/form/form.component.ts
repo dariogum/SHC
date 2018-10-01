@@ -35,7 +35,7 @@ export class FormComponent implements OnInit {
 	folded: Boolean = false;
 	formClass: string = 'wide';
 	genders = GENDERS;
-	maxDate: Date = new Date();
+	today: Date = new Date();
 	newPatient: Boolean = false;
 	patient: Patient;
 	socialsecurities = SOCIALSECURITIES;
@@ -76,6 +76,8 @@ export class FormComponent implements OnInit {
 				this.formClass = 'wide';
 			}
 		});
+
+		this.visitInForm.date = this.today;
 	}
 
 	ngOnInit() {
@@ -200,6 +202,7 @@ export class FormComponent implements OnInit {
 		this.visitInForm = new Visit();
 		this.visitForm.reset();
 		this.files = null;
+		this.visitInForm.date = this.today;
 	}
 
 

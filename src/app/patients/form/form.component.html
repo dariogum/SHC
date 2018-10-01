@@ -33,7 +33,7 @@
 					Información personal
 				</mat-panel-title>
 				<mat-panel-description>
-					{{ maxDate | ageUp:patient.birthday }}
+					{{ today | ageUp:patient.birthday }}
 				</mat-panel-description>
 			</mat-expansion-panel-header>
 			<form method="post" [class]="formClass" #patientDataForm="ngForm">
@@ -63,7 +63,7 @@
 					[(ngModel)]="patient.birthday"
 					placeholder="Fecha de nacimiento"
 					[matDatepicker]="picker"
-					[max]="maxDate"
+					[max]="today"
 					(dateChange)="updatePatient($event)">
 					<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
 					<mat-datepicker touchUi #picker calendarLabel="Fecha de nacimiento"></mat-datepicker>
@@ -432,7 +432,7 @@
 						[(ngModel)]="visitInForm.date"
 						placeholder="Fecha"
 						[matDatepicker]="datepicker"
-						[max]="maxDate"
+						[max]="today"
 						[min]="patient.birthday"
 						required
 						(dateChange)="updateVisit($event)">
