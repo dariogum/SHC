@@ -184,12 +184,14 @@ export class PatientService {
 			);
 	}
 
-	searchPatients(term: string): Observable<Patient[]> {
-		if (!term.trim()) {
+	searchPatients(terms: string): Observable<Patient[]> {
+		if (!terms.trim()) {
 			return of([]);
 		}
+		terms = terms.toLowerCase();
+		terms = encodeURI(terms);
 
-		return this.http.get<any>(`${this.apiPatientsUrl}?filter=name:${term},lastname:${term}`)
+		return this.http.get<any>(`${this.apiPatientsUrl}/search/${terms}`)
 			.pipe(
 				map(response => this.parsePatients(response.data)),
 				catchError(this.handleError<Patient[]>('searchpatients', []))
