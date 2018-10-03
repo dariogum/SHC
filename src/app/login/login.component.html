@@ -1,8 +1,9 @@
 <form method="post" class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
-	<mat-card>
+	<mat-card class="text-center">
 		<mat-card-header>
 			<mat-card-title>Ingresar al sistema de Historias Clínicas</mat-card-title>
 		</mat-card-header>
+		<img mat-card-image src="assets/favicon/favicon-96x96.png" width="96" height="96">
 		<mat-card-content>
 			<mat-form-field class="full-width">
 				<input matInput type="email" placeholder="Email" [(ngModel)]="user.email" autocomplete="username email" name="email" required>

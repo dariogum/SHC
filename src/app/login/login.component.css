@@ -11,3 +11,7 @@
 .text-center {
 	text-align: center;
 }
+.mat-card-image {
+	width: auto;
+	margin: 16px 0;
+}

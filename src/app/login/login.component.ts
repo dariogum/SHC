@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router, public snackBar: MatSnackBar, private loginService: LoginService) { }
 
   ngOnInit() {
+    localStorage.removeItem('currentUser');
   }
 
   onSubmit() {
@@ -26,6 +27,7 @@ export class LoginComponent implements OnInit {
       .subscribe(user => {
         if(user){
           this.user = user;
+          localStorage.setItem('currentUser', JSON.stringify(this.user));
           this.router.navigate(['/patients']);
         } else {
           let snackBarRef = this.snackBar.open('Usuario y/o contraseña incorrectos', 'OK', {

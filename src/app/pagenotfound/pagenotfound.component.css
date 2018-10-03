@@ -1,0 +1,7 @@
+mat-card {
+	width: 75%;
+	margin: 16px auto 0;
+}
+mat-card-actions, mat-card-footer {
+	text-align: center;
+}

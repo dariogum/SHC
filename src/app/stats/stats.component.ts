@@ -54,7 +54,7 @@ export class StatsComponent implements OnInit {
 			visitsByPatientBgColors.push(this.getRandomColor());
 		}
 		this.visitsByPatientChart = new Chart(this.context, {
-			type: 'bar',
+			type: 'horizontalBar',
 			data: {
 				labels: visitsByPatientLabels,
 				datasets: [{
@@ -71,7 +71,7 @@ export class StatsComponent implements OnInit {
             display: false,
         },
 				scales: {
-					yAxes: [{
+					xAxes: [{
 						ticks: {
 							beginAtZero: true,
 							stepSize: 1
@@ -90,12 +90,14 @@ export class StatsComponent implements OnInit {
 		let visitsBySocialSecurityBgColors = [];
 		for (let i = this.data[4].length - 1; i >= 0; i--) {
 			let socialSecurity = this.findInJson(this.data[4][i].socialSecurity, SOCIALSECURITIES);
-			visitsBySocialSecurityLabels.push(socialSecurity.name);
-			visitsBySocialSecurityData.push(this.data[4][i].visits);
-			visitsBySocialSecurityBgColors.push(this.getRandomColor());
+			if(socialSecurity) {
+				visitsBySocialSecurityLabels.push(socialSecurity.name);
+				visitsBySocialSecurityData.push(this.data[4][i].visits);
+				visitsBySocialSecurityBgColors.push(this.getRandomColor());
+			}
 		}
 		this.visitsBySocialSecurityChart = new Chart(this.context, {
-			type: 'bar',
+			type: 'horizontalBar',
 			data: {
 				labels: visitsBySocialSecurityLabels,
 				datasets: [{
@@ -112,7 +114,7 @@ export class StatsComponent implements OnInit {
             display: false,
         },
 				scales: {
-					yAxes: [{
+					xAxes: [{
 						ticks: {
 							beginAtZero: true,
 							stepSize: 1
@@ -135,7 +137,7 @@ export class StatsComponent implements OnInit {
 			visitsByMonthBgColors.push(this.getRandomColor());
 		}
 		this.visitsByMonthChart = new Chart(this.context, {
-			type: 'bar',
+			type: 'horizontalBar',
 			data: {
 				labels: visitsByMonthLabels,
 				datasets: [{
@@ -152,7 +154,7 @@ export class StatsComponent implements OnInit {
             display: false,
         },
 				scales: {
-					yAxes: [{
+					xAxes: [{
 						ticks: {
 							beginAtZero: true,
 							stepSize: 1

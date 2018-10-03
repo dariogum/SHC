@@ -204,7 +204,9 @@ export class PatientService {
 				"type": "patient",
 				"attributes": {
 					"lastname": patient.lastname,
-					"name": patient.name
+					"name": patient.name,
+					"createdBy": JSON.parse(localStorage.getItem('currentUser')).id,
+					"modifiedBy": JSON.parse(localStorage.getItem('currentUser')).id
 				}
 			}
 		};
@@ -269,7 +271,8 @@ export class PatientService {
 					father: patient.father,
 					mother: patient.mother,
 					brothers: patient.brothers,
-					others: patient.others
+					others: patient.others,
+					modifiedBy: JSON.parse(localStorage.getItem('currentUser')).id
 				}
 			}
 		};
