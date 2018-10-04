@@ -13,7 +13,7 @@ import { ConfirmationDialogComponent } from './confirmation-dialog.component';
 import { ConfirmationPatientDialogComponent } from './confirmation-patient-dialog.component';
 import { ImageDialogComponent } from './image-dialog.component';
 import { CITIES } from './../mock-cities';
-import { COUNTRIES, STATES, SOCIALSECURITIES, GENDERS, BIRTHTYPES, BLOODTYPES } from './../mock-data';
+import { COUNTRIES, STATES, SOCIALSECURITIES, GENDERS, BIRTHTYPES, BLOODTYPES, USERSCONFIG } from './../mock-data';
 import { PatientService } from './../patient.service';
 import { environment } from './../../../environments/environment';
 
@@ -25,21 +25,23 @@ import { environment } from './../../../environments/environment';
 })
 export class FormComponent implements OnInit {
 
+	addressData;
 	apiVersionUrl: string = environment.url + '/v1';
 	birthtypes = BIRTHTYPES;
 	bloodtypes = BLOODTYPES;
-	cities = CITIES;
+	cities;
 	countries = COUNTRIES;
 	files: FileList = null;
 	filteredSocialsecurities: SocialSecurity[];
 	folded: Boolean = false;
 	formClass: string = 'wide';
 	genders = GENDERS;
-	today: Date = new Date();
+	multipleSocialSecurity;
 	newPatient: Boolean = false;
 	patient: Patient;
 	socialsecurities = SOCIALSECURITIES;
-	states = STATES;
+	states;
+	today: Date = new Date();
 	uploadingFiles: Boolean = false;
 	visitInForm: Visit = new Visit();
 
@@ -78,18 +80,43 @@ export class FormComponent implements OnInit {
 		});
 
 		this.visitInForm.date = this.today;
+		this.states = STATES.filter(state => state.id === this.findInUserConfig(state.id, 'states'));
+		this.cities = CITIES.filter(city => city.id === this.findInUserConfig(city.id, 'cities'));
+		this.addressData = this.findInUserConfig(true, 'address');
+		this.multipleSocialSecurity = this.findInUserConfig(true, 'multipleSocialSecurity');
 	}
 
 	ngOnInit() {
 		this.getPatient();
 	}
 
+	findInUserConfig(needle, haystack) {
+		let user = JSON.parse(localStorage.getItem('currentUser')).id;
+
+		for (var i = USERSCONFIG.length - 1; i >= 0; i--) {
+			if (USERSCONFIG[i].user === user) {
+				for (var j = USERSCONFIG[i][haystack].length - 1; j >= 0; j--) {
+					if (USERSCONFIG[i][haystack][j] === needle || USERSCONFIG[i][haystack][j] === 'all') {
+						return needle;
+					}
+				}
+				break;
+			}
+		}
+
+		return null;
+	}
+
 	displayFn(socialSecurity?: SocialSecurity): string | undefined {
 		return socialSecurity ? socialSecurity.name : undefined;
 	}
 
+	filterStates(event) {
+		this.states = this.states.filter(state => state.country === event.value.id);
+	}
+
 	filterCities(event) {
-		this.cities = CITIES.filter(city => city.state === event.value.id);
+		this.cities = this.cities.filter(city => city.state === event.value.id);
 	}
 
 	filterSocialSecurities(event, field) {
@@ -100,10 +127,6 @@ export class FormComponent implements OnInit {
 			let event = { target: { name: field } };
 			this.updatePatient(event);
 		}
-	}
-
-	filterStates(event) {
-		this.states = STATES.filter(state => state.country === event.value.id);
 	}
 
 	toggleAccordion() {
@@ -120,6 +143,13 @@ export class FormComponent implements OnInit {
 		this.patientService.getPatient(id)
 			.subscribe(patient => {
 				this.patient = patient;
+				//** Default patient form values **//
+				if (this.patient.country === null) {
+					this.patient.country = this.countries[0];
+				}
+				if (this.patient.state === null) {
+					this.patient.state = this.states[0];
+				}
 				this.newPatient = (this.route.snapshot.queryParamMap.get('newPatient') === 'true');
 			});
 	}

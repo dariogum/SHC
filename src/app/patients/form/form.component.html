@@ -169,7 +169,7 @@
 						value="{{patient.city?.zipcode}}">
 					</mat-form-field>
 				</div>
-				<div>
+				<div *ngIf="addressData">
 					<mat-form-field class="form-field">
 						<input matInput
 						type="text"
@@ -240,7 +240,7 @@
 						[disabled]="!patient.socialSecurity1"
 						(blur)="updatePatient($event)">
 					</mat-form-field>
-					<mat-form-field class="form-field">
+					<mat-form-field class="form-field" *ngIf="multipleSocialSecurity">
 						<input matInput
 						type="text"
 						name="socialSecurity2"
@@ -255,7 +255,7 @@
 						</mat-autocomplete>
 						<mat-hint *ngIf="patient.socialSecurity2 && !patient.socialSecurity2?.accepted">No acordó valor de consulta ética!</mat-hint>
 					</mat-form-field>
-					<mat-form-field class="form-field">
+					<mat-form-field class="form-field" *ngIf="multipleSocialSecurity">
 						<input matInput
 						type="text"
 						name="socialSecurity2Number"

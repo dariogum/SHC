@@ -168,3 +168,31 @@ export const BLOODTYPES: BloodType[] = [
   { id: 3, name: 'B' },
   { id: 4, name: 'AB' },
 ];
+
+export const USERSSTATES = [
+  {
+    user: 1,
+    ids: ['all']
+  },
+  {
+    user: 2,
+    ids: [21]
+  }
+];
+
+export const USERSCONFIG = [
+  {
+    user: 1,
+    address: [true],
+    states: ['all'],
+    cities: ['all'],
+    multipleSocialSecurity: [true],
+  },
+  {
+    user: 2,
+    address: [false],
+    states: [21],
+    cities: [4160, 18233],
+    multipleSocialSecurity: [false],
+  }
+];
