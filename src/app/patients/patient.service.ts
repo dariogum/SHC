@@ -167,7 +167,7 @@ export class PatientService {
 	}
 
 	getPatients(): Observable<Patient[]> {
-		return this.http.get<any>(`${this.apiPatientsUrl}?sort=-id&page=first`)
+		return this.http.get<any>(`${this.apiPatientsUrl}?sort=-modifiedAt&page=first`)
 			.pipe(
 				map(response => this.parsePatients(response.data)),
 				catchError(this.handleError<Patient[]>('getPatients', []))
