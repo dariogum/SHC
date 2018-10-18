@@ -29,6 +29,7 @@ export class FormComponent implements OnInit {
 	apiVersionUrl: string = environment.url + '/v1';
 	birthtypes = BIRTHTYPES;
 	bloodtypes = BLOODTYPES;
+	bolder: boolean = false;
 	cities;
 	countries = COUNTRIES;
 	files: FileList = null;
@@ -84,6 +85,7 @@ export class FormComponent implements OnInit {
 		this.cities = CITIES.filter(city => city.id === this.findInUserConfig(city.id, 'cities'));
 		this.addressData = this.findInUserConfig(true, 'address');
 		this.multipleSocialSecurity = this.findInUserConfig(true, 'multipleSocialSecurity');
+		this.bolder = this.findInUserConfig(true, 'bolder');
 	}
 
 	ngOnInit() {

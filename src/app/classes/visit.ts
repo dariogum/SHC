@@ -9,5 +9,6 @@ export class Visit {
   bloodPressure: string;
   diagnosis: string;
   treatment: string;
+  studiesResults: string;
   files: any;
 }

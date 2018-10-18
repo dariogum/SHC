@@ -108,3 +108,7 @@
   color: #ff4081;
   vertical-align: bottom;
 }
+
+.bolder .mat-form-field {
+	font-weight: bold;
+}

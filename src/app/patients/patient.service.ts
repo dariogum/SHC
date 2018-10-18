@@ -66,6 +66,7 @@ export class PatientService {
 			bloodPressure: data.attributes.bloodPressure,
 			diagnosis: data.attributes.diagnosis,
 			treatment: data.attributes.treatment,
+			studiesResults: data.attributes.studiesResults,
 			files: files
 		};
 
@@ -309,6 +310,7 @@ export class PatientService {
 					"bloodPressure": visit.bloodPressure,
 					"diagnosis": visit.diagnosis,
 					"treatment": visit.treatment,
+					"studiesResults": visit.studiesResults,
 				}
 			}
 		};

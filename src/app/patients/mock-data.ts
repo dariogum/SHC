@@ -187,6 +187,7 @@ export const USERSCONFIG = [
     states: ['all'],
     cities: ['all'],
     multipleSocialSecurity: [true],
+    bolder: [true]
   },
   {
     user: 2,
@@ -194,5 +195,6 @@ export const USERSCONFIG = [
     states: [21],
     cities: [4160, 18233],
     multipleSocialSecurity: [false],
+    bolder: [true]
   }
 ];

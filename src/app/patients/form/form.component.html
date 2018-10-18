@@ -36,7 +36,7 @@
 					{{ today | ageUp:patient.birthday }}
 				</mat-panel-description>
 			</mat-expansion-panel-header>
-			<form method="post" [class]="formClass" #patientDataForm="ngForm">
+			<form method="post" [class]="formClass" [class.bolder]="bolder" #patientDataForm="ngForm">
 				<mat-form-field class="form-field">
 					<input matInput
 					type="text"
@@ -323,7 +323,7 @@
 					<span *ngIf="patient.comments">Sí <i class="material-icons valign-bottom">warning</i></span>
 				</mat-panel-description>
 			</mat-expansion-panel-header>
-			<form method="post" [class]="formClass" #patientBackgroundForm="ngForm">
+			<form method="post" [class]="formClass" [class.bolder]="bolder" #patientBackgroundForm="ngForm">
 				<div>
 					<mat-form-field class="apgar-field">
 						<input matInput
@@ -410,7 +410,7 @@
 			<mat-list dense>
 				<mat-list-item *ngFor="let visit of patient.visits">
 					<h3 matLine>{{visit.date | date:'dd/MM/yyyy'}} - Edad: {{ visit.date | ageUp:patient.birthday}}</h3>
-					<p matLine>Peso: {{visit.weight}} g | Talla: {{visit.height}} cm | Perímetro encefálico: {{visit.perimeter}} cm | T.A.: {{visit.bloodPressure}}</p>
+					<p matLine>Peso: {{visit.weight}} kg | Talla: {{visit.height}} cm | Perímetro encefálico: {{visit.perimeter}} cm | T.A.: {{visit.bloodPressure}}</p>
 					<p matLine>Diagnóstico: {{visit.diagnosis}}</p>
 					<p matLine>Tratamiento: {{visit.treatment}}</p>
 					<button mat-icon-button color="primary" (click)="visitInForm = visit">
@@ -424,7 +424,7 @@
 			<mat-divider></mat-divider>
 			<p *ngIf="visitInForm.id === undefined">Para registrar una nueva visita ingrese los datos de la visita y presione Guardar</p>
 			<p *ngIf="visitInForm.id !== undefined">Para modificar los datos de la visita, sólo ingrese los datos y los cambios se guardarán automáticamente</p>
-			<form method="post" [class]="formClass" #visitForm="ngForm" (ngSubmit)="onVisitSubmit()" enctype="multipart/form-data">
+			<form method="post" [class]="formClass" [class.bolder]="bolder" #visitForm="ngForm" (ngSubmit)="onVisitSubmit()" enctype="multipart/form-data">
 				<div>
 					<mat-form-field class="visit-form-field">
 						<input matInput
@@ -448,7 +448,7 @@
 						min="0"
 						step="50"
 						(blur)="updateVisit($event)">
-						<span matSuffix>g</span>
+						<span matSuffix>kg</span>
 					</mat-form-field>
 					<mat-form-field class="visit-form-field">
 						<input matInput
@@ -496,6 +496,13 @@
 					name="treatment"
 					[(ngModel)]="visitInForm.treatment"
 					placeholder="Tratamiento"
+					(blur)="updateVisit($event)"></textarea>
+				</mat-form-field>
+				<mat-form-field class="comment-field">
+					<textarea matInput
+					name="studiesResults"
+					[(ngModel)]="visitInForm.studiesResults"
+					placeholder="Resultados de Estudios"
 					(blur)="updateVisit($event)"></textarea>
 				</mat-form-field>
 				<mat-card class="files">

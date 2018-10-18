@@ -15,11 +15,9 @@ import Chart from 'chart.js';
 export class StatsComponent implements OnInit {
 	startDate = moment().format('YYYY-MM-01');
 	endDate = moment().format("YYYY-MM-DD");
-	@ViewChild('visitsByPatient') visitsByPatient: ElementRef;
 	@ViewChild('visitsBySocialSecurity') visitsBySocialSecurity: ElementRef;
 	@ViewChild('visitsByMonth') visitsByMonth: ElementRef;
 	context: CanvasRenderingContext2D;
-	visitsByPatientChart;
 	visitsBySocialSecurityChart;
 	visitsByMonthChart;
 
@@ -27,7 +25,6 @@ export class StatsComponent implements OnInit {
 		@Inject(MAT_BOTTOM_SHEET_DATA) public data: any) { }
 
 	ngOnInit() {
-		this.initializeVisitsByPatientChart();
 		this.initializeVisitsBySocialSecurityChart();
 		this.initializeVisitsByMonthChart();
 	}
@@ -40,46 +37,6 @@ export class StatsComponent implements OnInit {
 		}
 		
 		return null;
-	}
-
-	initializeVisitsByPatientChart() {
-		this.context = (<HTMLCanvasElement>this.visitsByPatient.nativeElement).getContext('2d');
-
-		let visitsByPatientLabels = [];
-		let visitsByPatientData = [];
-		let visitsByPatientBgColors = [];
-		for (let i = this.data[3].length - 1; i >= 0; i--) {
-			visitsByPatientLabels.push(this.data[3][i].patientName);
-			visitsByPatientData.push(this.data[3][i].visits);
-			visitsByPatientBgColors.push(this.getRandomColor());
-		}
-		this.visitsByPatientChart = new Chart(this.context, {
-			type: 'horizontalBar',
-			data: {
-				labels: visitsByPatientLabels,
-				datasets: [{
-					data: visitsByPatientData,
-					backgroundColor: visitsByPatientBgColors,
-				}]
-			},
-			options: {
-				title: {
-            display: true,
-            text: 'Visitas por paciente'
-        },
-        legend: {
-            display: false,
-        },
-				scales: {
-					xAxes: [{
-						ticks: {
-							beginAtZero: true,
-							stepSize: 1
-						}
-					}]
-				}
-			}
-		});
 	}
 
 	initializeVisitsBySocialSecurityChart() {
@@ -189,14 +146,6 @@ export class StatsComponent implements OnInit {
 			.subscribe(visitsByMonth => {
 				this.data[2] = visitsByMonth;
 				this.initializeVisitsByMonthChart();
-			});
-	}
-
-	getVisitsByPatients(): void {
-		this.statsService.getVisitsByPatients(moment(this.startDate).format("YYYY-MM-DD"), moment(this.endDate).format("YYYY-MM-DD"))
-			.subscribe(visitsByPatients => {
-				this.data[3] = visitsByPatients;
-				this.initializeVisitsByPatientChart();
 			});
 	}
 
