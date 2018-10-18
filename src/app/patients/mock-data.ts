@@ -193,7 +193,7 @@ export const USERSCONFIG = [
     user: 2,
     address: [false],
     states: [21],
-    cities: [4160, 18233, 10406],
+    cities: [4160, 18233, 10406, 8620, 11160, 13853, 14970, 18603, 20611, 21725],
     multipleSocialSecurity: [false],
     bolder: [true]
   }

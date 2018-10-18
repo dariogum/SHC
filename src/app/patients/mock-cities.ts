@@ -912,7 +912,7 @@ export const CITIES: City[] = [
 	{ id: 21183, name: 'VEINTIDOS DE AGOSTO', state: 21, zipcode: 2124 },
 	{ id: 21192, name: 'VELAZQUEZ', state: 21, zipcode: 3550 },
 	{ id: 21196, name: 'VENADO TUERTO', state: 21, zipcode: 2600 },
-	{ id: 21203, name: 'VERA', state: 21, zipcode: 3550 },
+	{ id: 21203, name: 'VERA', state: 21, zipcode: 3550 }, 111
 	{ id: 21205, name: 'VERA MUJICA', state: 21, zipcode: 3040 },
 	{ id: 21206, name: 'VERA Y PINTADO', state: 21, zipcode: 3054 },
 	{ id: 21229, name: 'VICENTE A. ECHEVARRIA', state: 21, zipcode: 2142 },
