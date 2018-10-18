@@ -187,13 +187,13 @@ export const USERSCONFIG = [
     states: ['all'],
     cities: ['all'],
     multipleSocialSecurity: [true],
-    bolder: [true]
+    bolder: [false]
   },
   {
     user: 2,
     address: [false],
     states: [21],
-    cities: [4160, 18233],
+    cities: [4160, 18233, 10406],
     multipleSocialSecurity: [false],
     bolder: [true]
   }
