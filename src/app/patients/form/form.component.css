@@ -109,6 +109,8 @@
   vertical-align: bottom;
 }
 
-.bolder .mat-form-field {
+.bolder .mat-form-field,
+.mat-expansion-panel-header.bolder {
 	font-weight: bold;
+	font-size: 18px;
 }

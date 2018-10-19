@@ -28,7 +28,7 @@
 	<mat-spinner *ngIf="!patient"></mat-spinner>
 	<mat-accordion [multi]="true" *ngIf="patient">
 		<mat-expansion-panel [expanded]="newPatient">
-			<mat-expansion-panel-header>
+			<mat-expansion-panel-header [class.bolder]="bolder">
 				<mat-panel-title>
 					Información personal
 				</mat-panel-title>
@@ -315,7 +315,7 @@
 			</form>
 		</mat-expansion-panel>
 		<mat-expansion-panel [expanded]="false">
-			<mat-expansion-panel-header>
+			<mat-expansion-panel-header [class.bolder]="bolder">
 				<mat-panel-title>
 					Antecedentes
 				</mat-panel-title>
@@ -400,14 +400,14 @@
 			</form>
 		</mat-expansion-panel>
 		<mat-expansion-panel [expanded]="true">
-			<mat-expansion-panel-header>
+			<mat-expansion-panel-header [class.bolder]="bolder">
 				<mat-panel-title>
 					Visitas
 				</mat-panel-title>
 				<mat-panel-description>
 				</mat-panel-description>
 			</mat-expansion-panel-header>
-			<mat-list dense>
+			<mat-list>
 				<mat-list-item *ngFor="let visit of patient.visits">
 					<h3 matLine>{{visit.date | date:'dd/MM/yyyy'}} - Edad: {{ visit.date | ageUp:patient.birthday}}</h3>
 					<p matLine>Peso: {{visit.weight}} kg | Talla: {{visit.height}} cm | Perímetro encefálico: {{visit.perimeter}} cm | T.A.: {{visit.bloodPressure}}</p>
