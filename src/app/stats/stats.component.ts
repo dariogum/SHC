@@ -53,6 +53,9 @@ export class StatsComponent implements OnInit {
 				visitsBySocialSecurityBgColors.push(this.getRandomColor());
 			}
 		}
+		if(this.visitsBySocialSecurityChart && 'destroy' in this.visitsBySocialSecurityChart) {
+			this.visitsBySocialSecurityChart.destroy();
+		}
 		this.visitsBySocialSecurityChart = new Chart(this.context, {
 			type: 'horizontalBar',
 			data: {
@@ -63,6 +66,9 @@ export class StatsComponent implements OnInit {
 				}]
 			},
 			options: {
+				tooltips: {
+            mode: 'point'
+        },
 				title: {
             display: true,
             text: 'Visitas por obra social'
@@ -93,6 +99,9 @@ export class StatsComponent implements OnInit {
 			visitsByMonthData.push(this.data[2][i].visits);
 			visitsByMonthBgColors.push(this.getRandomColor());
 		}
+		if(this.visitsByMonthChart && 'destroy' in this.visitsByMonthChart) {
+			this.visitsByMonthChart.destroy();
+		}
 		this.visitsByMonthChart = new Chart(this.context, {
 			type: 'horizontalBar',
 			data: {
@@ -103,6 +112,9 @@ export class StatsComponent implements OnInit {
 				}]
 			},
 			options: {
+				tooltips: {
+            mode: 'point'
+        },
 				title: {
             display: true,
             text: 'Visitas por mes y año'
@@ -131,7 +143,7 @@ export class StatsComponent implements OnInit {
 		return color;
 	}
 
-	getNewPatients(): any {
+	getNewPatients(event): any {
 		this.statsService.getNewPatients(moment(this.startDate).format("YYYY-MM-DD"), moment(this.endDate).format("YYYY-MM-DD"))
 			.subscribe(newPatients => this.data[0] = newPatients);
 	}

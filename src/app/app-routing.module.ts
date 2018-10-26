@@ -11,6 +11,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: './patients/patients.module#PatientsModule'
   },
+	{
+    path: 'users',
+    canActivate: [AuthGuard],
+    loadChildren: './users/users.module#UsersModule'
+  },
   { path: '**', component: PagenotfoundComponent }
 ];
 

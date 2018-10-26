@@ -1,0 +1,44 @@
+<mat-toolbar color="primary">
+	<mat-toolbar-row>
+		<span>Listado de usuarios</span>
+		<span class="spacer"></span>
+		<button mat-icon-button (click)="openNewUserDialog()">
+			<mat-icon aria-label="Crear un nuevo usuario">add</mat-icon>
+		</button>
+		<button mat-icon-button [matMenuTriggerFor]="menu">
+			<mat-icon aria-label="Opciones">more_vert</mat-icon>
+		</button>
+		<mat-menu #menu="matMenu">
+			<a routerLink="/patients" mat-menu-item>
+				<mat-icon>folder_shared</mat-icon>
+				<span>Pacientes</span>
+			</a>
+			<a routerLink="/" mat-menu-item>
+				<mat-icon>exit_to_app</mat-icon>
+				<span>Cerrar sesión</span>
+			</a>
+		</mat-menu>
+	</mat-toolbar-row>
+</mat-toolbar>
+<mat-card class="main-card">
+	<mat-card-content>
+		<form method="post">
+			<mat-form-field class="full-width">
+				<input matInput #searchInput type="text" placeholder="Buscar un usuario por apellido y/o nombre..." (keyup)="search(searchInput.value)">
+				<mat-hint align="start">Ingrese al menos 3 caracteres y espere</mat-hint>
+			</mat-form-field>
+		</form>
+		<mat-nav-list>
+			<mat-list-item *ngFor="let user of users | async">
+				<mat-icon matListIcon>person</mat-icon>
+				<a matLine routerLink="{{user.id}}">{{ user.lastname }} {{ user.name }}</a>
+			</mat-list-item>
+		</mat-nav-list>
+		<mat-nav-list *ngIf="lastUsers">
+			<mat-list-item *ngFor="let user of lastUsers | async">
+				<mat-icon matListIcon>person</mat-icon>
+				<a matLine routerLink="{{user.id}}">{{ user.lastname }} {{ user.name }}</a>
+			</mat-list-item>
+		</mat-nav-list>
+	</mat-card-content>
+</mat-card>

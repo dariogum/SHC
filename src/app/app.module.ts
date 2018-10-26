@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSnackBarModule, MatBottomSheetModule,
-  MatGridListModule, MatDatepickerModule, MatNativeDateModule, MatListModule } from '@angular/material';
+  MatGridListModule, MatDatepickerModule, MatNativeDateModule, MatListModule, MatIconModule, MatMenuModule, MatToolbarModule } from '@angular/material';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 
@@ -36,7 +36,10 @@ import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
     MatGridListModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatListModule
+    MatListModule,
+    MatIconModule,
+    MatMenuModule,
+    MatToolbarModule
   ],
   entryComponents: [
     StatsComponent,

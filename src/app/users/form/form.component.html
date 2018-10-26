@@ -1,0 +1,78 @@
+<mat-toolbar color="primary">
+	<mat-toolbar-row>
+		<a mat-icon-button routerLink="../">
+			<mat-icon aria-label="Listado de usuarios">arrow_back</mat-icon>
+		</a>
+		<span *ngIf="!user">Detalle del usuario</span>
+		<span *ngIf="user" class="header-row">Detalle del usuario - {{user.name}} {{user.lastname}}</span>
+		<span class="spacer"></span>
+		<button mat-icon-button (click)="toggleAccordion()" *ngIf="!folded">
+			<mat-icon aria-label="Cerrar todos los paneles">unfold_less</mat-icon>
+		</button>
+		<button mat-icon-button (click)="toggleAccordion()" *ngIf="folded">
+			<mat-icon aria-label="Abrir todos los paneles">unfold_more</mat-icon>
+		</button>
+		<button mat-icon-button [matMenuTriggerFor]="menu">
+			<mat-icon aria-label="Opciones del usuario">more_vert</mat-icon>
+		</button>
+		<mat-menu #menu="matMenu">
+			<button mat-menu-item (click)="openConfirmationUserDialog()">
+				<mat-icon>delete</mat-icon>
+				<span>Eliminar</span>
+			</button>
+		</mat-menu>
+	</mat-toolbar-row>
+</mat-toolbar>
+
+<div class="main-card">
+	<mat-spinner *ngIf="!user"></mat-spinner>
+	<mat-accordion [multi]="true" *ngIf="user">
+		<mat-expansion-panel [expanded]="true">
+			<mat-expansion-panel-header [class.bolder]="bolder">
+				<mat-panel-title>
+					Información personal
+				</mat-panel-title>
+			</mat-expansion-panel-header>
+			<form method="post" [class]="formClass" [class.bolder]="bolder" #userDataForm="ngForm">
+				<mat-form-field class="form-field">
+					<input matInput
+					type="text"
+					name="lastname"
+					[(ngModel)]="user.lastname"
+					placeholder="Apellido/s"
+					maxlength="256"
+					required
+					(blur)="updateUser($event)">
+				</mat-form-field>
+				<mat-form-field class="form-field">
+					<input matInput
+					type="text"
+					name="name"
+					[(ngModel)]="user.name"
+					placeholder="Nombre/s"
+					maxlength="256"
+					required
+					(blur)="updateUser($event)">
+				</mat-form-field>
+				<mat-form-field class="form-field">
+					<input matInput
+					type="email"
+					name="email"
+					[(ngModel)]="user.email"
+					placeholder="Email"
+					maxlength="256"
+					required
+					(blur)="updateUser($event)">
+				</mat-form-field>
+				<mat-form-field class="form-field">
+					<input matInput
+					type="password"
+					name="password"
+					[(ngModel)]="user.password"
+					placeholder="Password"
+					required>
+				</mat-form-field>
+			</form>
+		</mat-expansion-panel>
+	</mat-accordion>
+</div>

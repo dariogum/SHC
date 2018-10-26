@@ -16,7 +16,7 @@ export class NewPatientDialogComponent {
   constructor(public dialogRef: MatDialogRef<NewPatientDialogComponent>, private router: Router,
     private patientService: PatientService) { }
 
-  addPacient() {
+  addPatient() {
     this.patientService.addPatient(this.patient)
       .subscribe(patient => {
         this.dialogRef.close();
