@@ -222,6 +222,7 @@
 						[(ngModel)]="patient.socialSecurity1"
 						placeholder="Obra Social 1"
 						[matAutocomplete]="socialSecurity1"
+						socialSecurityValidator
 						(ngModelChange)="filterSocialSecurities($event, 'socialSecurity1')">
 						<mat-autocomplete #socialSecurity1="matAutocomplete" [displayWith]="displayFn">
 						  <mat-option *ngFor="let socialsecurity of filteredSocialsecurities" [value]="socialsecurity">

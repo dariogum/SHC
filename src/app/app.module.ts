@@ -13,13 +13,15 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { StatsComponent } from './stats/stats.component';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
+import { SocialSecurityValidatorDirective } from './patients/socialsecurity-validator.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     StatsComponent,
-    PagenotfoundComponent
+    PagenotfoundComponent,
+    SocialSecurityValidatorDirective
   ],
   imports: [
     BrowserModule,
