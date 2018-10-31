@@ -10,6 +10,7 @@ import { UsersRoutingModule } from './users-routing.module';
 import { ListComponent } from './list/list.component';
 import { FormComponent } from './form/form.component';
 import { NewUserDialogComponent } from './list/new-user-dialog.component';
+import { ConfirmationUserDialogComponent } from './form/confirmation-user-dialog.component';
 
 @NgModule({
   imports: [
@@ -40,10 +41,12 @@ import { NewUserDialogComponent } from './list/new-user-dialog.component';
   declarations: [
     ListComponent,
     FormComponent,
-    NewUserDialogComponent
+    NewUserDialogComponent,
+    ConfirmationUserDialogComponent
   ],
   entryComponents: [
-    NewUserDialogComponent
+    NewUserDialogComponent,
+    ConfirmationUserDialogComponent
   ]
 })
 export class UsersModule { }

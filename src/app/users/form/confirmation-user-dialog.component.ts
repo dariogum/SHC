@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 
 @Component({
-  selector: 'confirmation-patient-dialog',
-  templateUrl: 'confirmation-patient-dialog.html',
+  selector: 'confirmation-user-dialog',
+  templateUrl: 'confirmation-user-dialog.html',
 })
-export class ConfirmationPatientDialogComponent {
+export class ConfirmationUserDialogComponent {
 
-  constructor(public dialogRef: MatDialogRef<ConfirmationPatientDialogComponent>) {}
+  constructor(public dialogRef: MatDialogRef<ConfirmationUserDialogComponent>) {}
 
 }

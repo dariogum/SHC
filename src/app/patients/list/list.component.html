@@ -29,6 +29,7 @@
 		<form method="post">
 			<mat-form-field class="full-width">
 				<input matInput #searchInput type="text" placeholder="Buscar un paciente por apellido y/o nombre..." (keyup)="search(searchInput.value)">
+				<mat-icon matSuffix (click)="ngOnInit()">restore</mat-icon>
 				<mat-hint align="start">Ingrese al menos 3 caracteres y espere</mat-hint>
 			</mat-form-field>
 		</form>

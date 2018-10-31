@@ -6,6 +6,7 @@ import { MatAccordion, MatDialog, MatSnackBar } from '@angular/material';
 import { Observable, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
+import { ConfirmationUserDialogComponent } from './confirmation-user-dialog.component';
 import { User } from './../../classes/user';
 import { USERSCONFIG } from './../../patients/mock-data';
 import { UserService } from './../user.service';
@@ -120,6 +121,18 @@ export class FormComponent implements OnInit {
 				duration: 2500,
 			});
 			this.router.navigate(['users']);
+		});
+	}
+
+	openConfirmationUserDialog(): void {
+		const dialogRef = this.dialog.open(ConfirmationUserDialogComponent, {
+			width: '240px'
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			if (result) {
+				this.deleteUser();
+			}
 		});
 	}
 
