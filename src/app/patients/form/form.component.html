@@ -4,7 +4,11 @@
 			<mat-icon aria-label="Listado de pacientes">arrow_back</mat-icon>
 		</a>
 		<span *ngIf="!patient">Historia Clínica</span>
-		<span *ngIf="patient" class="header-row">Historia Clínica - {{patient.name}} {{patient.lastname}}</span>
+		<span *ngIf="patient" class="header-row">
+			Historia Clínica 
+			- {{patient.name}} {{patient.lastname}}
+			<i *ngIf="patient.oldId">- Legajo: {{patient.oldId}}</i>
+		</span>
 		<span class="spacer"></span>
 		<button mat-icon-button (click)="toggleAccordion()" *ngIf="!folded">
 			<mat-icon aria-label="Cerrar todos los paneles">unfold_less</mat-icon>

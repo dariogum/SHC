@@ -121,6 +121,7 @@ export class PatientService {
 
 		patient = {
 			id: data.id,
+			oldId: data.attributes.oldId,
 			lastname: data.attributes.lastname,
 			name: data.attributes.name,
 			birthday: birthday,

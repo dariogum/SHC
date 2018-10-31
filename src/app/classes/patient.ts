@@ -9,6 +9,7 @@ import { Visit } from './visit';
 
 export class Patient {
   id: number;
+  oldId: number;
   lastname: string;
   name: string;
   birthday: Date;
