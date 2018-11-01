@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
-
 import { Observable, of } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
+
 import { BirthType } from './../classes/birthtype';
 import { BloodType } from './../classes/bloodtype';
 import { City } from './../classes/city';
@@ -13,8 +13,8 @@ import { SocialSecurity } from './../classes/socialsecurity';
 import { State } from './../classes/state';
 import { Visit } from './../classes/visit';
 import { environment } from './../../environments/environment';
-import { CITIES } from './mock-cities';
-import { GENDERS, COUNTRIES, STATES, SOCIALSECURITIES, BIRTHTYPES, BLOODTYPES } from './mock-data';
+import { CatalogsService } from './../catalogs/catalogs.service';
+import { ConfigService } from './../auth/config.service';
 import * as moment from 'moment';
 
 const httpOptions = {
@@ -23,27 +23,17 @@ const httpOptions = {
 	})
 };
 
+const APIVERSIONURL = environment.url + '/v1';
+const APIPATIENTSURL = APIVERSIONURL + '/patients';
+const APIVISITSURL = APIVERSIONURL + '/visits';
+const APIFILESURL = APIVERSIONURL + '/files';
+
 @Injectable({
 	providedIn: 'root'
 })
 export class PatientService {
 
-	private apiPatientsUrl = environment.url + '/v1/patients';
-	private apiVisitsUrl = environment.url + '/v1/visits';
-	private apiFilesUrl = environment.url + '/v1/files';
-	private apiVersionUrl = environment.url + '/v1';
-
-	constructor(private http: HttpClient) { }
-
-	findInJson(needle, haystack) {
-		for (let i = haystack.length - 1; i >= 0; i--) {
-			if (haystack[i].id === needle) {
-				return haystack[i];
-			}
-		}
-		
-		return null;
-	}
+	constructor(private http: HttpClient, private configService: ConfigService, private catalogsService: CatalogsService) { }
 
 	parseVisit(data): Visit {
 		let files = [];
@@ -52,7 +42,7 @@ export class PatientService {
 			for (let i = 0; i < data.relationships.files.data.length; i++) {
 				files[i] = {
 					id: data.relationships.files.data[i].data.id,
-					url: this.apiVersionUrl + data.relationships.files.data[i].links.self
+					url: APIVERSIONURL + data.relationships.files.data[i].links.self
 				};
 			}
 		}
@@ -76,42 +66,42 @@ export class PatientService {
 	parsePatient(data): Patient {
 		let patient: Patient;
 		let birthday: Date = null;
-		let gender: Gender = null;
-		let country: Country = null;
-		let state: State = null;
-		let city: City = null;
-		let socialSecurity1: SocialSecurity = null;
-		let socialSecurity2: SocialSecurity = null;
 		let birthtype: BirthType = null;
 		let bloodtype: BloodType = null;
+		let country: Country = null;
+		let city: City = null;
+		let gender: Gender = null;
+		let socialSecurity1: SocialSecurity = null;
+		let socialSecurity2: SocialSecurity = null;
+		let state: State = null;
 		let visits: Visit[] = [];
 
 		if (data.attributes.birthday) {
 			birthday = moment(data.attributes.birthday).toDate()
 		}
-		if (data.attributes.gender) {
-			gender = this.findInJson(data.attributes.gender, GENDERS);
-		}
-		if (data.attributes.country) {
-			country = this.findInJson(data.attributes.country, COUNTRIES);
-		}
-		if (data.attributes.state) {
-			state = this.findInJson(data.attributes.state, STATES);
-		}
-		if (data.attributes.city) {
-			city = this.findInJson(data.attributes.city, CITIES);
-		}
-		if (data.attributes.socialSecurity1) {
-			socialSecurity1 = this.findInJson(data.attributes.socialSecurity1, SOCIALSECURITIES);
-		}
-		if (data.attributes.socialSecurity2) {
-			socialSecurity2 = this.findInJson(data.attributes.socialSecurity2, SOCIALSECURITIES);
-		}
 		if (data.attributes.birthType) {
-			birthtype = this.findInJson(data.attributes.birthType, BIRTHTYPES);
+			birthtype = this.catalogsService.getBirthType(data.attributes.birthType);
 		}
 		if (data.attributes.bloodType) {
-			bloodtype = this.findInJson(data.attributes.bloodType, BLOODTYPES);
+			bloodtype = this.catalogsService.getBloodType(data.attributes.bloodType);
+		}
+		if (data.attributes.city) {
+			city = this.catalogsService.getCity(data.attributes.city);
+		}
+		if (data.attributes.country) {
+			country = this.catalogsService.getCountry(data.attributes.country);
+		}
+		if (data.attributes.gender) {
+			gender = this.catalogsService.getGender(data.attributes.gender);
+		}
+		if (data.attributes.socialSecurity1) {
+			socialSecurity1 = this.catalogsService.getSocialSecurity(data.attributes.socialSecurity1);
+		}
+		if (data.attributes.socialSecurity2) {
+			socialSecurity2 = this.catalogsService.getSocialSecurity(data.attributes.socialSecurity2);
+		}
+		if (data.attributes.state) {
+			state = this.catalogsService.getState(data.attributes.state);
 		}
 		if (data.relationships && data.relationships.visits) {
 			for (let i = 0; i < data.relationships.visits.data.length; i++) {
@@ -169,7 +159,7 @@ export class PatientService {
 	}
 
 	getPatients(): Observable<Patient[]> {
-		return this.http.get<any>(`${this.apiPatientsUrl}?sort=-modifiedAt&page=first`)
+		return this.http.get<any>(`${APIPATIENTSURL}?sort=-modifiedAt&page=first`)
 			.pipe(
 				map(response => this.parsePatients(response.data)),
 				catchError(this.handleError<Patient[]>('getPatients', []))
@@ -177,7 +167,7 @@ export class PatientService {
 	}
 
 	getPatient(id: number): Observable<Patient> {
-		const url = `${this.apiPatientsUrl}/${id}`;
+		const url = `${APIPATIENTSURL}/${id}`;
 
 		return this.http.get<any>(url)
 			.pipe(
@@ -193,7 +183,7 @@ export class PatientService {
 		terms = terms.toLowerCase();
 		terms = encodeURI(terms);
 
-		return this.http.get<any>(`${this.apiPatientsUrl}/search/${terms}`)
+		return this.http.get<any>(`${APIPATIENTSURL}/search/${terms}`)
 			.pipe(
 				map(response => this.parsePatients(response.data)),
 				catchError(this.handleError<Patient[]>('searchpatients', []))
@@ -213,7 +203,7 @@ export class PatientService {
 			}
 		};
 
-		return this.http.post<any>(this.apiPatientsUrl, data, httpOptions)
+		return this.http.post<any>(APIPATIENTSURL, data, httpOptions)
 			.pipe(
 				map(response => this.parsePatient(response.data)),
 				catchError(this.handleError<Patient>('addPatient'))
@@ -222,7 +212,7 @@ export class PatientService {
 
 	updatePatient(patient: Patient): Observable<any> {
 		const id = typeof patient === 'number' ? patient : patient.id;
-		const url = `${this.apiPatientsUrl}/${id}`;
+		const url = `${APIPATIENTSURL}/${id}`;
 
 		let gender: Number = patient.gender === null ? null : patient.gender.id;
 		let country: Number = patient.country === null ? null : patient.country.id;
@@ -287,7 +277,7 @@ export class PatientService {
 	}
 
 	deletePatient(patientId: number): Observable<any> {
-		const url = `${this.apiPatientsUrl}/${patientId}`;
+		const url = `${APIPATIENTSURL}/${patientId}`;
 
 		return this.http.delete<any>(url, httpOptions)
 			.pipe(
@@ -322,7 +312,7 @@ export class PatientService {
 	addVisit(visit: Visit, patientId: Number): Observable<Visit> {
 		let data = this.visitToJson(visit, patientId);
 
-		return this.http.post<any>(this.apiVisitsUrl, data, httpOptions)
+		return this.http.post<any>(APIVISITSURL, data, httpOptions)
 			.pipe(
 				map(response => this.parseVisit(response.data)),
 				catchError(this.handleError<Visit>('addVisit'))
@@ -331,7 +321,7 @@ export class PatientService {
 
 	updateVisit(visit: Visit, patientId: Number): Observable<any> {
 		const id = typeof visit === 'number' ? visit : visit.id;
-		const url = `${this.apiVisitsUrl}/${id}`;
+		const url = `${APIVISITSURL}/${id}`;
 		let data = this.visitToJson(visit, patientId);
 
 		return this.http.patch<any>(url, data, httpOptions)
@@ -343,7 +333,7 @@ export class PatientService {
 
 	deleteVisit(visit: Visit | number): Observable<any> {
 		const id = typeof visit === 'number' ? visit : visit.id;
-		const url = `${this.apiVisitsUrl}/${id}`;
+		const url = `${APIVISITSURL}/${id}`;
 
 		return this.http.delete<any>(url, httpOptions)
 			.pipe(
@@ -359,13 +349,13 @@ export class PatientService {
 			uploadData.append('visitFiles[' + i + ']', files[i], files[i].name);
 		}
 
-		return this.http.post<any>(this.apiFilesUrl, uploadData).pipe(
+		return this.http.post<any>(APIFILESURL, uploadData).pipe(
 			catchError(this.handleError<any>('uploadFiles'))
 		);
 	}
 
 	deleteFile(fileId: number): Observable<any> {
-		const url = `${this.apiFilesUrl}/${fileId}`;
+		const url = `${APIFILESURL}/${fileId}`;
 
 		return this.http.delete<any>(url, httpOptions)
 			.pipe(

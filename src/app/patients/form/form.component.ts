@@ -12,10 +12,12 @@ import { Visit } from './../../classes/visit';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
 import { ConfirmationPatientDialogComponent } from './confirmation-patient-dialog.component';
 import { ImageDialogComponent } from './image-dialog.component';
-import { CITIES } from './../mock-cities';
-import { COUNTRIES, STATES, SOCIALSECURITIES, GENDERS, BIRTHTYPES, BLOODTYPES, USERSCONFIG } from './../mock-data';
+import { CatalogsService } from './../../catalogs/catalogs.service';
+import { ConfigService } from './../../auth/config.service';
 import { PatientService } from './../patient.service';
 import { environment } from './../../../environments/environment';
+
+const APIVERSIONURL: string = environment.url + '/v1';
 
 @Component({
 	selector: 'app-form',
@@ -25,22 +27,22 @@ import { environment } from './../../../environments/environment';
 })
 export class FormComponent implements OnInit {
 
-	addressData;
-	apiVersionUrl: string = environment.url + '/v1';
-	birthtypes = BIRTHTYPES;
-	bloodtypes = BLOODTYPES;
-	bolder: boolean = false;
+	addressFields;
+	birthtypes;
+	bloodtypes;
+	biggerFont: boolean = false;
 	cities;
-	countries = COUNTRIES;
+	countries;
+	currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
 	files: FileList = null;
 	filteredSocialsecurities: SocialSecurity[];
 	folded: Boolean = false;
 	formClass: string = 'wide';
-	genders = GENDERS;
-	multipleSocialSecurity;
+	genders;
+	multipleSocialSecurities;
 	newPatient: Boolean = false;
 	patient: Patient;
-	socialsecurities = SOCIALSECURITIES;
+	socialsecurities;
 	states;
 	today: Date = new Date();
 	uploadingFiles: Boolean = false;
@@ -52,7 +54,10 @@ export class FormComponent implements OnInit {
 	@ViewChild('visitForm') public visitForm: NgForm;
 
 	constructor(private breakpointObserver: BreakpointObserver, private route: ActivatedRoute, private router: Router,
-		public dialog: MatDialog, private patientService: PatientService, public snackBar: MatSnackBar) {
+		public dialog: MatDialog, private patientService: PatientService, private configService: ConfigService,
+		private catalogsService: CatalogsService, public snackBar: MatSnackBar) { }
+
+	ngOnInit() {
 		this.breakpointObserver.observe([
 			Breakpoints.HandsetPortrait
 		]).subscribe(result => {
@@ -80,33 +85,19 @@ export class FormComponent implements OnInit {
 			}
 		});
 
+		this.addressFields = this.configService.getUserConfig(this.currentUser, 'addressFields');
+		this.biggerFont = this.configService.getUserConfig(this.currentUser, 'biggerFont');
+		this.birthtypes = this.catalogsService.getBirthTypes();
+		this.bloodtypes = this.catalogsService.getBloodTypes();
+		this.cities = this.catalogsService.getCities(this.configService.getUserConfig(this.currentUser, 'cities'));
+		this.countries = this.catalogsService.getCountries();
+		this.genders = this.catalogsService.getGenders();
+		this.socialsecurities = this.catalogsService.getSocialSecurities();
+		this.multipleSocialSecurities = this.configService.getUserConfig(this.currentUser, 'multipleSocialSecurities');
+		this.states = this.catalogsService.getStates(this.configService.getUserConfig(this.currentUser, 'states'));
 		this.visitInForm.date = this.today;
-		this.states = STATES.filter(state => state.id === this.findInUserConfig(state.id, 'states'));
-		this.cities = CITIES.filter(city => city.id === this.findInUserConfig(city.id, 'cities'));
-		this.addressData = this.findInUserConfig(true, 'address');
-		this.multipleSocialSecurity = this.findInUserConfig(true, 'multipleSocialSecurity');
-		this.bolder = this.findInUserConfig(true, 'bolder');
-	}
-
-	ngOnInit() {
+		
 		this.getPatient();
-	}
-
-	findInUserConfig(needle, haystack) {
-		let user = JSON.parse(localStorage.getItem('currentUser')).id;
-
-		for (var i = USERSCONFIG.length - 1; i >= 0; i--) {
-			if (USERSCONFIG[i].user === user) {
-				for (var j = USERSCONFIG[i][haystack].length - 1; j >= 0; j--) {
-					if (USERSCONFIG[i][haystack][j] === needle || USERSCONFIG[i][haystack][j] === 'all') {
-						return needle;
-					}
-				}
-				break;
-			}
-		}
-
-		return null;
 	}
 
 	displayFn(socialSecurity?: SocialSecurity): string | undefined {
@@ -114,11 +105,11 @@ export class FormComponent implements OnInit {
 	}
 
 	filterStates(event) {
-		this.states = this.states.filter(state => state.country === event.value.id);
+		this.states = this.catalogsService.getStates(this.configService.getUserConfig(this.currentUser, 'states')).filter(state => state.country === event.value.id);
 	}
 
 	filterCities(event) {
-		this.cities = this.cities.filter(city => city.state === event.value.id);
+		this.cities = this.catalogsService.getCities(this.configService.getUserConfig(this.currentUser, 'cities')).filter(city => city.state === event.value.id);
 	}
 
 	filterSocialSecurities(event, field) {
@@ -240,7 +231,7 @@ export class FormComponent implements OnInit {
 
 	addFileToVisit(visit: Visit, files: any) {
 		for (let i = 0; i < files.length; i++) {
-			visit.files.unshift({ id: files[i].data.id, url: this.apiVersionUrl + files[i].links.self });
+			visit.files.unshift({ id: files[i].data.id, url: APIVERSIONURL + files[i].links.self });
 		}
 	}
 

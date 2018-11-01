@@ -32,7 +32,7 @@
 	<mat-spinner *ngIf="!patient"></mat-spinner>
 	<mat-accordion [multi]="true" *ngIf="patient">
 		<mat-expansion-panel [expanded]="newPatient">
-			<mat-expansion-panel-header [class.bolder]="bolder">
+			<mat-expansion-panel-header [class.bolder]="biggerFont">
 				<mat-panel-title>
 					Información personal
 				</mat-panel-title>
@@ -40,7 +40,7 @@
 					{{ today | ageUp:patient.birthday }}
 				</mat-panel-description>
 			</mat-expansion-panel-header>
-			<form method="post" [class]="formClass" [class.bolder]="bolder" #patientDataForm="ngForm">
+			<form method="post" [class]="formClass" [class.bolder]="biggerFont" #patientDataForm="ngForm">
 				<mat-form-field class="form-field">
 					<input matInput
 					type="text"
@@ -173,7 +173,7 @@
 						value="{{patient.city?.zipcode}}">
 					</mat-form-field>
 				</div>
-				<div *ngIf="addressData">
+				<div *ngIf="addressFields">
 					<mat-form-field class="form-field">
 						<input matInput
 						type="text"
@@ -245,7 +245,7 @@
 						[disabled]="!patient.socialSecurity1"
 						(blur)="updatePatient($event)">
 					</mat-form-field>
-					<mat-form-field class="form-field" *ngIf="multipleSocialSecurity">
+					<mat-form-field class="form-field" *ngIf="multipleSocialSecurities">
 						<input matInput
 						type="text"
 						name="socialSecurity2"
@@ -260,7 +260,7 @@
 						</mat-autocomplete>
 						<mat-hint *ngIf="patient.socialSecurity2 && !patient.socialSecurity2?.accepted">No acordó valor de consulta ética!</mat-hint>
 					</mat-form-field>
-					<mat-form-field class="form-field" *ngIf="multipleSocialSecurity">
+					<mat-form-field class="form-field" *ngIf="multipleSocialSecurities">
 						<input matInput
 						type="text"
 						name="socialSecurity2Number"
@@ -320,7 +320,7 @@
 			</form>
 		</mat-expansion-panel>
 		<mat-expansion-panel [expanded]="false">
-			<mat-expansion-panel-header [class.bolder]="bolder">
+			<mat-expansion-panel-header [class.bolder]="biggerFont">
 				<mat-panel-title>
 					Antecedentes
 				</mat-panel-title>
@@ -328,7 +328,7 @@
 					<span *ngIf="patient.comments">Sí <i class="material-icons valign-bottom">warning</i></span>
 				</mat-panel-description>
 			</mat-expansion-panel-header>
-			<form method="post" [class]="formClass" [class.bolder]="bolder" #patientBackgroundForm="ngForm">
+			<form method="post" [class]="formClass" [class.bolder]="biggerFont" #patientBackgroundForm="ngForm">
 				<div>
 					<mat-form-field class="apgar-field">
 						<input matInput
@@ -405,7 +405,7 @@
 			</form>
 		</mat-expansion-panel>
 		<mat-expansion-panel [expanded]="true">
-			<mat-expansion-panel-header [class.bolder]="bolder">
+			<mat-expansion-panel-header [class.bolder]="biggerFont">
 				<mat-panel-title>
 					Visitas
 				</mat-panel-title>
@@ -429,7 +429,7 @@
 			<mat-divider></mat-divider>
 			<p *ngIf="visitInForm.id === undefined">Para registrar una nueva visita ingrese los datos de la visita y presione Guardar</p>
 			<p *ngIf="visitInForm.id !== undefined">Para modificar los datos de la visita, sólo ingrese los datos y los cambios se guardarán automáticamente</p>
-			<form method="post" [class]="formClass" [class.bolder]="bolder" #visitForm="ngForm" (ngSubmit)="onVisitSubmit()" enctype="multipart/form-data">
+			<form method="post" [class]="formClass" [class.bolder]="biggerFont" #visitForm="ngForm" (ngSubmit)="onVisitSubmit()" enctype="multipart/form-data">
 				<div>
 					<mat-form-field class="visit-form-field">
 						<input matInput

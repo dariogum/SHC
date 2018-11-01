@@ -1,3 +1,5 @@
+import { Relative } from './../classes/relative';
+
 export const RELATIVES = [
   { id: 1, name: 'Padre' },
   { id: 2, name: 'Madre' },

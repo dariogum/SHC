@@ -13,7 +13,7 @@
 				<mat-icon>show_chart</mat-icon>
 				<span>Estadísticas</span>
 			</button>
-			<a routerLink="/users" mat-menu-item>
+			<a routerLink="/users" mat-menu-item *ngIf="userRole === 'administrator'">
 				<mat-icon>people</mat-icon>
 				<span>Usuarios</span>
 			</a>

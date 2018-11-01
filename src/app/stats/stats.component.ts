@@ -2,8 +2,8 @@ import { Component, Inject, ViewChild, ElementRef, OnInit } from '@angular/core'
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material';
 import { Observable, of, Subject } from 'rxjs';
 
-import { SOCIALSECURITIES } from './../patients/mock-data';
 import { StatsService } from './stats.service';
+import { CatalogsService } from './../catalogs/catalogs.service';
 import * as moment from 'moment';
 import Chart from 'chart.js';
 
@@ -22,21 +22,11 @@ export class StatsComponent implements OnInit {
 	visitsByMonthChart;
 
 	constructor(private bottomSheetRef: MatBottomSheetRef<StatsComponent>, private statsService: StatsService,
-		@Inject(MAT_BOTTOM_SHEET_DATA) public data: any) { }
+		@Inject(MAT_BOTTOM_SHEET_DATA) public data: any, private catalogsService: CatalogsService) { }
 
 	ngOnInit() {
 		this.initializeVisitsBySocialSecurityChart();
 		this.initializeVisitsByMonthChart();
-	}
-
-	findInJson(needle, haystack) {
-		for (let i = haystack.length - 1; i >= 0; i--) {
-			if (haystack[i].id === needle) {
-				return haystack[i];
-			}
-		}
-		
-		return null;
 	}
 
 	initializeVisitsBySocialSecurityChart() {
@@ -46,7 +36,7 @@ export class StatsComponent implements OnInit {
 		let visitsBySocialSecurityData = [];
 		let visitsBySocialSecurityBgColors = [];
 		for (let i = this.data[4].length - 1; i >= 0; i--) {
-			let socialSecurity = this.findInJson(this.data[4][i].socialSecurity, SOCIALSECURITIES);
+			let socialSecurity = this.catalogsService.getSocialSecurity(this.data[4][i].socialSecurity);
 			if(socialSecurity) {
 				visitsBySocialSecurityLabels.push(socialSecurity.name);
 				visitsBySocialSecurityData.push(this.data[4][i].visits);

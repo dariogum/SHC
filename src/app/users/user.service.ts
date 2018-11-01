@@ -7,6 +7,8 @@ import { User } from './../classes/user';
 import { environment } from './../../environments/environment';
 import * as moment from 'moment';
 
+const APIUSERSURL = environment.url + '/v1/users';
+
 const httpOptions = {
 	headers: new HttpHeaders({
 		'Content-Type': 'application/json'
@@ -18,19 +20,8 @@ const httpOptions = {
 })
 export class UserService {
 
-	private apiUsersUrl = environment.url + '/v1/users';
 
 	constructor(private http: HttpClient) { }
-
-	findInJson(needle, haystack) {
-		for (let i = haystack.length - 1; i >= 0; i--) {
-			if (haystack[i].id === needle) {
-				return haystack[i];
-			}
-		}
-		
-		return null;
-	}
 
 	parseUser(data): User {
 		var user: User;
@@ -56,7 +47,7 @@ export class UserService {
 	}
 
 	getUsers(): Observable<User[]> {
-		return this.http.get<any>(`${this.apiUsersUrl}`)
+		return this.http.get<any>(`${APIUSERSURL}`)
 			.pipe(
 				map(response => this.parseUsers(response.data)),
 				catchError(this.handleError<User[]>('getUsers', []))
@@ -64,7 +55,7 @@ export class UserService {
 	}
 
 	getUser(id: number): Observable<User> {
-		const url = `${this.apiUsersUrl}/${id}`;
+		const url = `${APIUSERSURL}/${id}`;
 
 		return this.http.get<any>(url)
 			.pipe(
@@ -80,7 +71,7 @@ export class UserService {
 		terms = terms.toLowerCase();
 		terms = encodeURI(terms);
 
-		return this.http.get<any>(`${this.apiUsersUrl}/search/${terms}`)
+		return this.http.get<any>(`${APIUSERSURL}/search/${terms}`)
 			.pipe(
 				map(response => this.parseUsers(response.data)),
 				catchError(this.handleError<User[]>('searchusers', []))
@@ -101,7 +92,7 @@ export class UserService {
 			}
 		};
 
-		return this.http.post<any>(this.apiUsersUrl, data, httpOptions)
+		return this.http.post<any>(APIUSERSURL, data, httpOptions)
 			.pipe(
 				map(response => this.parseUser(response.data)),
 				catchError(this.handleError<User>('addUser'))
@@ -110,7 +101,7 @@ export class UserService {
 
 	updateUser(user: User): Observable<any> {
 		const id = typeof user === 'number' ? user : user.id;
-		const url = `${this.apiUsersUrl}/${id}`;
+		const url = `${APIUSERSURL}/${id}`;
 
 		let data = {
 			"data": {
@@ -133,7 +124,7 @@ export class UserService {
 	}
 
 	deleteUser(userId: number): Observable<any> {
-		const url = `${this.apiUsersUrl}/${userId}`;
+		const url = `${APIUSERSURL}/${userId}`;
 
 		return this.http.delete<any>(url, httpOptions)
 			.pipe(

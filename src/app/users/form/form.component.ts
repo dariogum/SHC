@@ -8,7 +8,6 @@ import { map, startWith } from 'rxjs/operators';
 
 import { ConfirmationUserDialogComponent } from './confirmation-user-dialog.component';
 import { User } from './../../classes/user';
-import { USERSCONFIG } from './../../patients/mock-data';
 import { UserService } from './../user.service';
 import { environment } from './../../../environments/environment';
 
@@ -21,8 +20,6 @@ import { environment } from './../../../environments/environment';
 export class FormComponent implements OnInit {
 
 	addressData;
-	apiVersionUrl: string = environment.url + '/v1';
-	bolder: boolean = false;
 	folded: Boolean = false;
 	formClass: string = 'wide';
 	user: User;
@@ -58,29 +55,10 @@ export class FormComponent implements OnInit {
 				this.formClass = 'wide';
 			}
 		});
-
-		this.bolder = this.findInUserConfig(true, 'bolder');
 	}
 
 	ngOnInit() {
 		this.getUser();
-	}
-
-	findInUserConfig(needle, haystack) {
-		let user = JSON.parse(localStorage.getItem('currentUser')).id;
-
-		for (var i = USERSCONFIG.length - 1; i >= 0; i--) {
-			if (USERSCONFIG[i].user === user) {
-				for (var j = USERSCONFIG[i][haystack].length - 1; j >= 0; j--) {
-					if (USERSCONFIG[i][haystack][j] === needle || USERSCONFIG[i][haystack][j] === 'all') {
-						return needle;
-					}
-				}
-				break;
-			}
-		}
-
-		return null;
 	}
 
 	toggleAccordion() {
