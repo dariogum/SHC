@@ -19,8 +19,7 @@ import { environment } from './../../../environments/environment';
 })
 export class FormComponent implements OnInit {
 
-	addressData;
-	folded: Boolean = false;
+	folded: boolean = false;
 	formClass: string = 'wide';
 	user: User;
 

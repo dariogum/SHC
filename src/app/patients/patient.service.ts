@@ -17,16 +17,15 @@ import { CatalogsService } from './../catalogs/catalogs.service';
 import { ConfigService } from './../auth/config.service';
 import * as moment from 'moment';
 
-const httpOptions = {
+const APIVERSIONURL = environment.url + '/v1';
+const APIFILESURL = APIVERSIONURL + '/files';
+const APIPATIENTSURL = APIVERSIONURL + '/patients';
+const APIVISITSURL = APIVERSIONURL + '/visits';
+const HTTPOPTIONS = {
 	headers: new HttpHeaders({
 		'Content-Type': 'application/json'
 	})
 };
-
-const APIVERSIONURL = environment.url + '/v1';
-const APIPATIENTSURL = APIVERSIONURL + '/patients';
-const APIVISITSURL = APIVERSIONURL + '/visits';
-const APIFILESURL = APIVERSIONURL + '/files';
 
 @Injectable({
 	providedIn: 'root'
@@ -37,7 +36,6 @@ export class PatientService {
 
 	parseVisit(data): Visit {
 		let files = [];
-
 		if (data.relationships && data.relationships.files) {
 			for (let i = 0; i < data.relationships.files.data.length; i++) {
 				files[i] = {
@@ -203,7 +201,7 @@ export class PatientService {
 			}
 		};
 
-		return this.http.post<any>(APIPATIENTSURL, data, httpOptions)
+		return this.http.post<any>(APIPATIENTSURL, data, HTTPOPTIONS)
 			.pipe(
 				map(response => this.parsePatient(response.data)),
 				catchError(this.handleError<Patient>('addPatient'))
@@ -269,7 +267,7 @@ export class PatientService {
 			}
 		};
 
-		return this.http.patch<any>(url, data, httpOptions)
+		return this.http.patch<any>(url, data, HTTPOPTIONS)
 			.pipe(
 				map(response => response.data),
 				catchError(this.handleError<any>('updatePatient'))
@@ -279,7 +277,7 @@ export class PatientService {
 	deletePatient(patientId: number): Observable<any> {
 		const url = `${APIPATIENTSURL}/${patientId}`;
 
-		return this.http.delete<any>(url, httpOptions)
+		return this.http.delete<any>(url, HTTPOPTIONS)
 			.pipe(
 				catchError(this.handleError<any>('deletePatient'))
 			);
@@ -312,7 +310,7 @@ export class PatientService {
 	addVisit(visit: Visit, patientId: Number): Observable<Visit> {
 		let data = this.visitToJson(visit, patientId);
 
-		return this.http.post<any>(APIVISITSURL, data, httpOptions)
+		return this.http.post<any>(APIVISITSURL, data, HTTPOPTIONS)
 			.pipe(
 				map(response => this.parseVisit(response.data)),
 				catchError(this.handleError<Visit>('addVisit'))
@@ -324,7 +322,7 @@ export class PatientService {
 		const url = `${APIVISITSURL}/${id}`;
 		let data = this.visitToJson(visit, patientId);
 
-		return this.http.patch<any>(url, data, httpOptions)
+		return this.http.patch<any>(url, data, HTTPOPTIONS)
 			.pipe(
 				map(response => response.data),
 				catchError(this.handleError<any>('updateVisit'))
@@ -335,7 +333,7 @@ export class PatientService {
 		const id = typeof visit === 'number' ? visit : visit.id;
 		const url = `${APIVISITSURL}/${id}`;
 
-		return this.http.delete<any>(url, httpOptions)
+		return this.http.delete<any>(url, HTTPOPTIONS)
 			.pipe(
 				catchError(this.handleError<any>('deleteVisit'))
 			);
@@ -357,7 +355,7 @@ export class PatientService {
 	deleteFile(fileId: number): Observable<any> {
 		const url = `${APIFILESURL}/${fileId}`;
 
-		return this.http.delete<any>(url, httpOptions)
+		return this.http.delete<any>(url, HTTPOPTIONS)
 			.pipe(
 				catchError(this.handleError<any>('deleteFile'))
 			);

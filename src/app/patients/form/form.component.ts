@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostBinding } from '@angular/core';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,8 +23,7 @@ const APIVERSIONURL: string = environment.url + '/v1';
 @Component({
 	selector: 'app-form',
 	templateUrl: './form.component.html',
-	styleUrls: ['./form.component.css']
-
+	styleUrls: ['./form.component.css'],
 })
 export class FormComponent implements OnInit {
 
@@ -36,17 +36,18 @@ export class FormComponent implements OnInit {
 	currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
 	files: FileList = null;
 	filteredSocialsecurities: SocialSecurity[];
-	folded: Boolean = false;
+	folded: boolean = false;
 	formClass: string = 'wide';
 	genders;
 	multipleSocialSecurities;
-	newPatient: Boolean = false;
+	newPatient: boolean = false;
 	patient: Patient;
 	socialsecurities;
 	states;
 	today: Date = new Date();
-	uploadingFiles: Boolean = false;
+	uploadingFiles: boolean = false;
 	visitInForm: Visit = new Visit();
+	visitFormOpen: boolean = false;
 
 	@ViewChild(MatAccordion) accordion: MatAccordion;
 	@ViewChild('patientBackgroundForm') public patientBackgroundForm: NgForm;

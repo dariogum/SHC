@@ -7,3 +7,6 @@
 .full-width {
 	width: 100%;
 }
+.matSuffixButton {
+	cursor: pointer;
+}

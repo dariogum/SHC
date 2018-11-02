@@ -114,3 +114,8 @@
 	font-weight: bold;
 	font-size: 18px;
 }
+
+.new-visit-button {
+  left: 50%;
+  margin-left: -28px;
+}
