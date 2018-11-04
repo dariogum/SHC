@@ -7,13 +7,14 @@ import { MatToolbarModule, MatButtonModule, MatIconModule, MatFormFieldModule, M
     MatSnackBarModule, MatAutocompleteModule, MatProgressBarModule } from '@angular/material';
 
 import { PatientsRoutingModule } from './patients-routing.module';
-import { ListComponent } from './list/list.component';
-import { FormComponent } from './form/form.component';
-import { NewPatientDialogComponent } from './list/new-patient-dialog.component';
-import { ConfirmationDialogComponent } from './form/confirmation-dialog.component';
-import { ConfirmationPatientDialogComponent } from './form/confirmation-patient-dialog.component';
-import { ImageDialogComponent } from './form/image-dialog.component';
 import { AgePipe, AgeUpPipe } from './age.pipe';
+import { FormComponent } from './form/form.component';
+import { ConfirmationPatientDialogComponent } from './form/confirmation-patient-dialog.component';
+import { ListComponent } from './list/list.component';
+import { NewPatientDialogComponent } from './list/new-patient-dialog.component';
+import { VisitsComponent } from './visits/visits.component';
+import { ConfirmationDialogComponent } from './visits/confirmation-dialog.component';
+import { ImageDialogComponent } from './visits/image-dialog.component';
 
 @NgModule({
   imports: [
@@ -42,20 +43,21 @@ import { AgePipe, AgeUpPipe } from './age.pipe';
     MatProgressBarModule
   ],
   declarations: [
-    ListComponent,
-    FormComponent,
     AgePipe,
     AgeUpPipe,
-    NewPatientDialogComponent,
     ConfirmationDialogComponent,
     ConfirmationPatientDialogComponent,
-    ImageDialogComponent
+    FormComponent,
+    ImageDialogComponent,
+    ListComponent,
+    NewPatientDialogComponent,
+    VisitsComponent
   ],
   entryComponents: [
-    NewPatientDialogComponent,
     ConfirmationDialogComponent,
     ConfirmationPatientDialogComponent,
-    ImageDialogComponent
+    ImageDialogComponent,
+    NewPatientDialogComponent,
   ]
 })
 export class PatientsModule { }

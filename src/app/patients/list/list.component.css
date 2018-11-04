@@ -1,12 +1,12 @@
 .spacer {
-	flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 .main-card {
-	margin: 16px;
+  margin: 16px;
 }
 .full-width {
-	width: 100%;
+  width: 100%;
 }
 .matSuffixButton {
-	cursor: pointer;
+  cursor: pointer;
 }

@@ -1,0 +1,88 @@
+.mat-form-field {
+  margin: 6px 8px;
+}
+
+.wide .visit-form-field {
+  width: calc(20% - 16px );
+}
+
+.wide .form-field {
+  width: calc(25% - 16px);
+}
+
+.wide .comment-field,
+.tablet .form-field,
+.tablet .visit-form-field {
+  width: calc(50% - 16px);
+}
+
+.handset .form-field,
+.handset .comment-field,
+.tablet .comment-field,
+.handset .visit-form-field {
+  width: calc(100% - 16px);
+}
+
+.visit-form-button {
+  margin-right: 8px;
+}
+
+.files {
+  margin-bottom: 16px;
+}
+
+.files-container {
+  border: 1px dashed #ccc;
+  display: block;
+  padding: 8px;
+  text-align: center;
+}
+
+.files-container .mat-icon {
+  display: block;
+  margin: 0 auto 4px;
+}
+
+.files-container [type=file] {
+  display: none;
+  width: 100%;
+}
+
+.image-container {
+  display: inline-block;
+  margin: 8px; 
+  position: relative;
+}
+
+.image-container img {
+  max-width: 100%;
+}
+
+.image-container .mat-icon-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.wide .image-container {
+  max-width: calc(25% - 16px);
+}
+
+.tablet .image-container {
+  max-width: calc(50% - 16px);
+}
+
+.handset .image-container {
+  max-width: calc(100% - 16px);
+}
+
+.bolder .mat-form-field,
+.mat-expansion-panel-header.bolder {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.new-visit-button {
+  left: 50%;
+  margin-left: -28px;
+}
