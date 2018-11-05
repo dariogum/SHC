@@ -13,69 +13,25 @@ import Chart from 'chart.js';
 	styleUrls: ['./stats.component.css']
 })
 export class StatsComponent implements OnInit {
-	startDate = moment().format('YYYY-MM-01');
-	endDate = moment().format("YYYY-MM-DD");
-	@ViewChild('visitsBySocialSecurity') visitsBySocialSecurity: ElementRef;
 	@ViewChild('visitsByMonth') visitsByMonth: ElementRef;
+	@ViewChild('visitsBySocialSecurity') visitsBySocialSecurity: ElementRef;
+
 	context: CanvasRenderingContext2D;
+	endDate = moment().format("YYYY-MM-DD");
+	startDate = moment().format('YYYY-MM-01');
 	visitsBySocialSecurityChart;
 	visitsByMonthChart;
 
-	constructor(private bottomSheetRef: MatBottomSheetRef<StatsComponent>, private statsService: StatsService,
-		@Inject(MAT_BOTTOM_SHEET_DATA) public data: any, private catalogsService: CatalogsService) { }
+	constructor(
+		private catalogsService: CatalogsService,
+		private bottomSheetRef: MatBottomSheetRef<StatsComponent>,
+		private statsService: StatsService,
+		@Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
+	) { }
 
 	ngOnInit() {
-		this.initializeVisitsBySocialSecurityChart();
 		this.initializeVisitsByMonthChart();
-	}
-
-	initializeVisitsBySocialSecurityChart() {
-		this.context = (<HTMLCanvasElement>this.visitsBySocialSecurity.nativeElement).getContext('2d');
-
-		let visitsBySocialSecurityLabels = [];
-		let visitsBySocialSecurityData = [];
-		let visitsBySocialSecurityBgColors = [];
-		for (let i = this.data[4].length - 1; i >= 0; i--) {
-			let socialSecurity = this.catalogsService.getSocialSecurity(this.data[4][i].socialSecurity);
-			if(socialSecurity) {
-				visitsBySocialSecurityLabels.push(socialSecurity.name);
-				visitsBySocialSecurityData.push(this.data[4][i].visits);
-				visitsBySocialSecurityBgColors.push(this.getRandomColor());
-			}
-		}
-		if(this.visitsBySocialSecurityChart && 'destroy' in this.visitsBySocialSecurityChart) {
-			this.visitsBySocialSecurityChart.destroy();
-		}
-		this.visitsBySocialSecurityChart = new Chart(this.context, {
-			type: 'horizontalBar',
-			data: {
-				labels: visitsBySocialSecurityLabels,
-				datasets: [{
-					data: visitsBySocialSecurityData,
-					backgroundColor: visitsBySocialSecurityBgColors,
-				}]
-			},
-			options: {
-				tooltips: {
-            mode: 'point'
-        },
-				title: {
-            display: true,
-            text: 'Visitas por obra social'
-        },
-        legend: {
-            display: false,
-        },
-				scales: {
-					xAxes: [{
-						ticks: {
-							beginAtZero: true,
-							stepSize: 1
-						}
-					}]
-				}
-			}
-		});
+		this.initializeVisitsBySocialSecurityChart();
 	}
 
 	initializeVisitsByMonthChart() {
@@ -89,7 +45,7 @@ export class StatsComponent implements OnInit {
 			visitsByMonthData.push(this.data[2][i].visits);
 			visitsByMonthBgColors.push(this.getRandomColor());
 		}
-		if(this.visitsByMonthChart && 'destroy' in this.visitsByMonthChart) {
+		if (this.visitsByMonthChart && 'destroy' in this.visitsByMonthChart) {
 			this.visitsByMonthChart.destroy();
 		}
 		this.visitsByMonthChart = new Chart(this.context, {
@@ -103,15 +59,64 @@ export class StatsComponent implements OnInit {
 			},
 			options: {
 				tooltips: {
-            mode: 'point'
-        },
+					mode: 'point'
+				},
 				title: {
-            display: true,
-            text: 'Visitas por mes y año'
-        },
-        legend: {
-            display: false,
-        },
+					display: true,
+					text: 'Visitas por mes y año'
+				},
+				legend: {
+					display: false,
+				},
+				scales: {
+					xAxes: [{
+						ticks: {
+							beginAtZero: true,
+							stepSize: 1
+						}
+					}]
+				}
+			}
+		});
+	}
+
+	initializeVisitsBySocialSecurityChart() {
+		this.context = (<HTMLCanvasElement>this.visitsBySocialSecurity.nativeElement).getContext('2d');
+
+		let visitsBySocialSecurityLabels = [];
+		let visitsBySocialSecurityData = [];
+		let visitsBySocialSecurityBgColors = [];
+		for (let i = this.data[4].length - 1; i >= 0; i--) {
+			let socialSecurity = this.catalogsService.getSocialSecurity(this.data[4][i].socialSecurity);
+			if (socialSecurity) {
+				visitsBySocialSecurityLabels.push(socialSecurity.name);
+				visitsBySocialSecurityData.push(this.data[4][i].visits);
+				visitsBySocialSecurityBgColors.push(this.getRandomColor());
+			}
+		}
+		if (this.visitsBySocialSecurityChart && 'destroy' in this.visitsBySocialSecurityChart) {
+			this.visitsBySocialSecurityChart.destroy();
+		}
+		this.visitsBySocialSecurityChart = new Chart(this.context, {
+			type: 'horizontalBar',
+			data: {
+				labels: visitsBySocialSecurityLabels,
+				datasets: [{
+					data: visitsBySocialSecurityData,
+					backgroundColor: visitsBySocialSecurityBgColors,
+				}]
+			},
+			options: {
+				tooltips: {
+					mode: 'point'
+				},
+				title: {
+					display: true,
+					text: 'Visitas por obra social'
+				},
+				legend: {
+					display: false,
+				},
 				scales: {
 					xAxes: [{
 						ticks: {

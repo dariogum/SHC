@@ -2,10 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
-import { User } from './../classes/user';
-import { environment } from './../../environments/environment';
 
-const httpOptions = {
+import { environment } from './../../environments/environment';
+import { User } from './../classes/user';
+
+const APIUSERSURL = environment.url + '/v1/users';
+const HTTPOPTIONS = {
 	headers: new HttpHeaders({
 		'Content-Type': 'application/json'
 	})
@@ -16,7 +18,6 @@ const httpOptions = {
 })
 export class LoginService {
 
-	private apiUsersUrl = environment.url + '/v1/users';
 
 	constructor(private http: HttpClient) { }
 
@@ -24,12 +25,12 @@ export class LoginService {
 		var user: User;
 
 		user = {
-			id: data.id,
 			email: data.attributes.email,
-			password: data.attributes.password,
+			enabled: data.attributes.enabled,
+			id: data.id,
 			lastname: data.attributes.lastname,
 			name: data.attributes.name,
-			enabled: data.attributes.enabled,
+			password: data.attributes.password,
 		}
 
 		return user;
@@ -44,8 +45,8 @@ export class LoginService {
 	}
 
 	verifyByEmail(data): Observable<User> {
-		const url = `${this.apiUsersUrl}/login`;
-		return this.http.post<any>(url, data, httpOptions)
+		const url = `${APIUSERSURL}/login`;
+		return this.http.post<any>(url, data, HTTPOPTIONS)
 			.pipe(
 				map(response => this.parseUser(response.data)),
 				catchError(this.handleError<User>(`verifyByEmail`))

@@ -83,6 +83,7 @@
 }
 
 .new-visit-button {
-  left: 50%;
-  margin-left: -28px;
+  bottom: -43px;
+  position: absolute;
+  right: 30px;
 }

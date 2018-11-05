@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
-
 import { Observable, of } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
+
 import { User } from './../classes/user';
 import { environment } from './../../environments/environment';
 import * as moment from 'moment';
@@ -20,7 +20,6 @@ const httpOptions = {
 })
 export class UserService {
 
-
 	constructor(private http: HttpClient) { }
 
 	parseUser(data): User {
@@ -29,10 +28,10 @@ export class UserService {
 		user = {
 			id: data.id,
 			email: data.attributes.email,
-			password: data.attributes.password,
+			enabled: data.attributes.enabled,
 			lastname: data.attributes.lastname,
 			name: data.attributes.name,
-			enabled: data.attributes.enabled,
+			password: data.attributes.password,
 		}
 
 		return user;
@@ -81,14 +80,14 @@ export class UserService {
 	addUser(user: User): Observable<User> {
 		let data = {
 			"data": {
-				"type": "user",
 				"attributes": {
 					email: user.email,
-					password: user.password,
+					enabled: user.enabled,
 					lastname: user.lastname,
 					name: user.name,
-					enabled: user.enabled,
-				}
+					password: user.password,
+				},
+				"type": "user",
 			}
 		};
 
@@ -105,14 +104,14 @@ export class UserService {
 
 		let data = {
 			"data": {
-				"type": "user",
-				"id": user.id,
 				"attributes": {
 					email: user.email,
+					enabled: user.enabled,
 					lastname: user.lastname,
 					name: user.name,
-					enabled: user.enabled,
-				}
+				},
+				"id": user.id,
+				"type": "user",
 			}
 		};
 

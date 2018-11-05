@@ -5,22 +5,23 @@ import { catchError, tap, map } from 'rxjs/operators';
 
 import { BirthType } from './../classes/birthtype';
 import { BloodType } from './../classes/bloodtype';
+import { CatalogsService } from './../catalogs/catalogs.service';
 import { City } from './../classes/city';
+import { ConfigService } from './../auth/config.service';
 import { Country } from './../classes/country';
+import { environment } from './../../environments/environment';
 import { Gender } from './../classes/gender';
 import { Patient } from './../classes/patient';
 import { SocialSecurity } from './../classes/socialsecurity';
 import { State } from './../classes/state';
 import { Visit } from './../classes/visit';
-import { environment } from './../../environments/environment';
-import { CatalogsService } from './../catalogs/catalogs.service';
-import { ConfigService } from './../auth/config.service';
 import * as moment from 'moment';
 
 const APIVERSIONURL = environment.url + '/v1';
 const APIFILESURL = APIVERSIONURL + '/files';
 const APIPATIENTSURL = APIVERSIONURL + '/patients';
 const APIVISITSURL = APIVERSIONURL + '/visits';
+
 const HTTPOPTIONS = {
 	headers: new HttpHeaders({
 		'Content-Type': 'application/json'
@@ -32,7 +33,11 @@ const HTTPOPTIONS = {
 })
 export class PatientService {
 
-	constructor(private http: HttpClient, private configService: ConfigService, private catalogsService: CatalogsService) { }
+	constructor(
+		private catalogsService: CatalogsService,
+		private configService: ConfigService,
+		private http: HttpClient,
+	) { }
 
 	parseVisit(data): Visit {
 		let files = [];
@@ -46,16 +51,16 @@ export class PatientService {
 		}
 
 		let visit: Visit = {
-			id: data.id,
-			date: moment(data.attributes.date).toDate(),
-			weight: data.attributes.weight,
-			height: data.attributes.height,
-			perimeter: data.attributes.perimeter,
 			bloodPressure: data.attributes.bloodPressure,
+			date: moment(data.attributes.date).toDate(),
 			diagnosis: data.attributes.diagnosis,
-			treatment: data.attributes.treatment,
+			files: files,
+			height: data.attributes.height,
+			id: data.id,
+			perimeter: data.attributes.perimeter,
 			studiesResults: data.attributes.studiesResults,
-			files: files
+			treatment: data.attributes.treatment,
+			weight: data.attributes.weight,
 		};
 
 		return visit;
@@ -212,15 +217,16 @@ export class PatientService {
 		const id = typeof patient === 'number' ? patient : patient.id;
 		const url = `${APIPATIENTSURL}/${id}`;
 
-		let gender: Number = patient.gender === null ? null : patient.gender.id;
-		let country: Number = patient.country === null ? null : patient.country.id;
-		let state: Number = patient.state === null ? null : patient.state.id;
-		let city: Number = patient.city === null ? null : patient.city.id;
-		let socialSecurity1: Number = patient.socialSecurity1 === null ? null : patient.socialSecurity1.id;
-		let socialSecurity2: Number = patient.socialSecurity2 === null ? null : patient.socialSecurity2.id;
+		let birthday = null;
 		let birthtype: Number = patient.birthType === null ? null : patient.birthType.id;
 		let bloodtype: Number = patient.bloodType === null ? null : patient.bloodType.id;
-		let birthday = null;
+		let city: Number = patient.city === null ? null : patient.city.id;
+		let country: Number = patient.country === null ? null : patient.country.id;
+		let gender: Number = patient.gender === null ? null : patient.gender.id;
+		let socialSecurity1: Number = patient.socialSecurity1 === null ? null : patient.socialSecurity1.id;
+		let socialSecurity2: Number = patient.socialSecurity2 === null ? null : patient.socialSecurity2.id;
+		let state: Number = patient.state === null ? null : patient.state.id;
+		
 		if (patient.birthday) {
 			let birthdate = moment(patient.birthday);
 			birthday = birthdate.format("YYYY-MM-DD");
@@ -286,6 +292,7 @@ export class PatientService {
 	visitToJson(visit: Visit, patientId: Number) {
 		let visitdate = moment(visit.date);
 		let visitday = visitdate.format("YYYY-MM-DD");
+
 		let data = {
 			"data": {
 				"type": "patient",
@@ -320,6 +327,7 @@ export class PatientService {
 	updateVisit(visit: Visit, patientId: Number): Observable<any> {
 		const id = typeof visit === 'number' ? visit : visit.id;
 		const url = `${APIVISITSURL}/${id}`;
+		
 		let data = this.visitToJson(visit, patientId);
 
 		return this.http.patch<any>(url, data, HTTPOPTIONS)

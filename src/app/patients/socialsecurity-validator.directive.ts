@@ -1,5 +1,11 @@
 import { Directive, Input, forwardRef } from '@angular/core';
-import { NG_VALIDATORS, AbstractControl, ValidatorFn, Validator, FormControl } from '@angular/forms';
+import {
+	AbstractControl,
+	FormControl,
+	NG_VALIDATORS,
+	ValidatorFn,
+	Validator,
+} from '@angular/forms';
 
 @Directive({
   selector: '[socialSecurityValidator][ngModel]',

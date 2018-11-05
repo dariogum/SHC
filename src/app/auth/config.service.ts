@@ -1,14 +1,5 @@
 import { Injectable } from '@angular/core';
 
-const PERMISSIONS = [
-	"viewPatientPersonalData",
-	"viewPatientBackground",
-	"viewVisits",
-	"deleteUser",
-	"deletePatient",
-	"deleteVisit",
-];
-
 const CONFIG = [
 	{
 		user: 1,
@@ -36,6 +27,15 @@ const CONFIG = [
 			states: [21],
 		}
 	}
+];
+
+const PERMISSIONS = [
+	"viewPatientPersonalData",
+	"viewPatientBackground",
+	"viewVisits",
+	"deleteUser",
+	"deletePatient",
+	"deleteVisit",
 ];
 
 @Injectable({

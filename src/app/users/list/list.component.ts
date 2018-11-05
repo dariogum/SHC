@@ -3,11 +3,11 @@ import { MatDialog, MatSnackBar, MatBottomSheet } from '@angular/material';
 import { Observable, of, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map, filter, tap } from 'rxjs/operators';
 
-import { User } from './../../classes/user';
-import { UserService } from './../user.service';
 import { NewUserDialogComponent } from './new-user-dialog.component';
 import { StatsComponent } from './../../stats/stats.component';
 import { StatsService } from './../../stats/stats.service';
+import { User } from './../../classes/user';
+import { UserService } from './../user.service';
 import * as moment from 'moment';
 
 @Component({
@@ -21,7 +21,6 @@ export class ListComponent implements OnInit {
 	user: User;
 	users: Observable<User[]>;
 	searchTerms = new Subject<string>();
-	today: Date = new Date();
 
 	constructor(public dialog: MatDialog, private userService: UserService, public snackBar: MatSnackBar,
 		private bottomSheet: MatBottomSheet, private statsService: StatsService) { }
@@ -53,10 +52,10 @@ export class ListComponent implements OnInit {
 		});
 	}
 
-  openBottomSheet(): void {
-  	this.statsService.getStats(moment().format('YYYY-MM-01'), moment().format("YYYY-MM-DD")).subscribe(stats => {
-  		this.bottomSheet.open(StatsComponent, {data: stats});
-  	});
-  }
+	openBottomSheet(): void {
+		this.statsService.getStats(moment().format('YYYY-MM-01'), moment().format("YYYY-MM-DD")).subscribe(stats => {
+			this.bottomSheet.open(StatsComponent, { data: stats });
+		});
+	}
 
 }

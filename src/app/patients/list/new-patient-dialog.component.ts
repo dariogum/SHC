@@ -13,8 +13,11 @@ export class NewPatientDialogComponent {
 
 	patient: Patient = new Patient();
 
-  constructor(public dialogRef: MatDialogRef<NewPatientDialogComponent>, private router: Router,
-    private patientService: PatientService) { }
+  constructor(
+    public dialogRef: MatDialogRef<NewPatientDialogComponent>,
+    private patientService: PatientService,
+    private router: Router,
+  ) { }
 
   addPatient() {
     this.patientService.addPatient(this.patient)
@@ -25,7 +28,7 @@ export class NewPatientDialogComponent {
         };
         this.router.navigate(['patients/' + patient.id], navigationExtras);
       }
-    );
+      );
   }
 
 }

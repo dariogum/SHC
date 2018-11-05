@@ -3,12 +3,12 @@ import { MatDialog, MatSnackBar, MatBottomSheet } from '@angular/material';
 import { Observable, of, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map, filter, tap } from 'rxjs/operators';
 
+import { ConfigService } from './../../auth/config.service';
+import { NewPatientDialogComponent } from './new-patient-dialog.component';
 import { Patient } from './../../classes/patient';
 import { PatientService } from './../patient.service';
-import { NewPatientDialogComponent } from './new-patient-dialog.component';
 import { StatsComponent } from './../../stats/stats.component';
 import { StatsService } from './../../stats/stats.service';
-import { ConfigService } from './../../auth/config.service';
 import * as moment from 'moment';
 
 @Component({
@@ -26,8 +26,14 @@ export class ListComponent implements OnInit {
 	today: Date = new Date();
 	userRole: string;
 
-	constructor(public dialog: MatDialog, private patientService: PatientService, public snackBar: MatSnackBar,
-		private bottomSheet: MatBottomSheet, private statsService: StatsService, private configService: ConfigService) { }
+	constructor(
+		private bottomSheet: MatBottomSheet,
+		private configService: ConfigService,
+		public dialog: MatDialog,
+		private patientService: PatientService,
+		public snackBar: MatSnackBar,
+		private statsService: StatsService,
+	) { }
 
 	ngOnInit() {
 		this.userRole = this.configService.getUserConfig(this.currentUser, 'role');
@@ -58,10 +64,10 @@ export class ListComponent implements OnInit {
 		});
 	}
 
-  openBottomSheet(): void {
-  	this.statsService.getStats(moment().format('YYYY-MM-01'), moment().format("YYYY-MM-DD")).subscribe(stats => {
-  		this.bottomSheet.open(StatsComponent, {data: stats});
-  	});
-  }
+	openBottomSheet(): void {
+		this.statsService.getStats(moment().format('YYYY-MM-01'), moment().format("YYYY-MM-DD")).subscribe(stats => {
+			this.bottomSheet.open(StatsComponent, { data: stats });
+		});
+	}
 
 }

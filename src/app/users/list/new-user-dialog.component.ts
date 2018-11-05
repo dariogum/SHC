@@ -13,8 +13,11 @@ export class NewUserDialogComponent {
 
 	user: User = new User();
 
-  constructor(public dialogRef: MatDialogRef<NewUserDialogComponent>, private router: Router,
-    private userService: UserService) { }
+  constructor(
+    public dialogRef: MatDialogRef<NewUserDialogComponent>,
+    private router: Router,
+    private userService: UserService
+  ) { }
 
   addUser() {
     this.userService.addUser(this.user)
@@ -22,7 +25,7 @@ export class NewUserDialogComponent {
         this.dialogRef.close();
         this.router.navigate(['users/' + user.id]);
       }
-    );
+      );
   }
 
 }

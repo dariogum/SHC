@@ -3,15 +3,14 @@
 		<mat-panel-title>
 			Visitas
 		</mat-panel-title>
-		<mat-panel-description>
-		</mat-panel-description>
 	</mat-expansion-panel-header>
 	<mat-list>
 		<mat-list-item *ngFor="let visit of patient.visits">
-			<h3 matLine>{{visit.date | date:'dd/MM/yyyy'}} - Edad: {{ visit.date | ageUp:patient.birthday}}</h3>
-			<p matLine>Peso: {{visit.weight}} kg | Talla: {{visit.height}} cm | Perímetro encefálico: {{visit.perimeter}} cm | T.A.: {{visit.bloodPressure}}</p>
-			<p matLine>Diagnóstico: {{visit.diagnosis}}</p>
-			<p matLine>Tratamiento: {{visit.treatment}}</p>
+			<mat-icon color="primary" matListIcon>event</mat-icon>
+			<h3 matLine>{{visit.date | date:'dd/MM/yyyy'}} - <b>Edad</b>: {{ visit.date | ageUp:patient.birthday}}</h3>
+			<p matLine><b>Peso</b>: {{visit.weight}} kg | <b>Talla</b>: {{visit.height}} cm | <b>Perímetro encefálico</b>: {{visit.perimeter}} cm | <b>T.A.</b>: {{visit.bloodPressure}}</p>
+			<p matLine><b>Diagnóstico</b>: {{visit.diagnosis}}</p>
+			<p matLine><b>Tratamiento</b>: {{visit.treatment}}</p>
 			<button mat-icon-button color="primary" (click)="visitInForm = visit; visitFormOpen = true">
 				<mat-icon>edit</mat-icon>
 			</button>
@@ -20,12 +19,17 @@
 			</button>
 		</mat-list-item>
 	</mat-list>
-	<button type="button" mat-fab class="new-visit-button" (click)="visitInFormReset(); visitFormOpen = true">
-		<mat-icon aria-label="Agregar una nueva visita">add</mat-icon>
-	</button>
+	<div style="position: relative;">
+		<button type="button" mat-fab class="new-visit-button" (click)="visitInFormReset(); visitFormOpen = true" [disabled]="visitFormOpen">
+			<mat-icon aria-label="Agregar una nueva visita">add</mat-icon>
+		</button>
+	</div>
 </mat-expansion-panel>
-<mat-expansion-panel [expanded]="visitFormOpen" [hideToggle]="true" [disabled]="!visitFormOpen">
-	<mat-expansion-panel-header>
+<mat-expansion-panel [expanded]="visitFormOpen" [hideToggle]="true" [disabled]="true">
+	<mat-expansion-panel-header collapsedHeight="64px">
+		<mat-panel-title *ngIf="!visitFormOpen">
+			Presione el botón circular con el símbolo +
+		</mat-panel-title>
 		<mat-panel-title *ngIf="visitFormOpen && !visitInForm.id">
 			Ingrese los datos de la visita y presione Guardar
 		</mat-panel-title>

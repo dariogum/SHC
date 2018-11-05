@@ -3,25 +3,38 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSnackBarModule, MatBottomSheetModule,
-  MatGridListModule, MatDatepickerModule, MatNativeDateModule, MatListModule, MatIconModule, MatMenuModule, MatToolbarModule } from '@angular/material';
+import {
+  MatBottomSheetModule,
+  MatButtonModule,
+  MatCardModule,
+  MatDatepickerModule,
+  MatFormFieldModule,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatNativeDateModule,
+  MatSnackBarModule,
+  MatToolbarModule
+} from '@angular/material';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './login/login.component';
-import { StatsComponent } from './stats/stats.component';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { SocialSecurityValidatorDirective } from './patients/socialsecurity-validator.directive';
+import { StatsComponent } from './stats/stats.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    StatsComponent,
     PagenotfoundComponent,
-    SocialSecurityValidatorDirective
+    SocialSecurityValidatorDirective,
+    StatsComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,18 +42,18 @@ import { SocialSecurityValidatorDirective } from './patients/socialsecurity-vali
     HttpClientModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSnackBarModule,
     MatBottomSheetModule,
-    MatGridListModule,
+    MatButtonModule,
+    MatCardModule,
     MatDatepickerModule,
-    MatNativeDateModule,
-    MatListModule,
+    MatFormFieldModule,
+    MatGridListModule,
     MatIconModule,
+    MatInputModule,
+    MatListModule,
     MatMenuModule,
+    MatNativeDateModule,
+    MatSnackBarModule,
     MatToolbarModule
   ],
   entryComponents: [

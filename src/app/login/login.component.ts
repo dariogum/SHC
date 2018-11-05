@@ -16,7 +16,11 @@ export class LoginComponent implements OnInit {
 
   user: User = new User();
 
-  constructor(private router: Router, public snackBar: MatSnackBar, private loginService: LoginService) { }
+  constructor(
+    private loginService: LoginService,
+    private router: Router,
+    public snackBar: MatSnackBar,
+  ) { }
 
   ngOnInit() {
     localStorage.removeItem('currentUser');
@@ -25,7 +29,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.loginService.verifyByEmail(this.user)
       .subscribe(user => {
-        if(user){
+        if (user) {
           this.user = user;
           localStorage.setItem('currentUser', JSON.stringify(this.user));
           this.router.navigate(['/patients']);
@@ -35,7 +39,7 @@ export class LoginComponent implements OnInit {
           });
         }
       }
-    );
+      );
   }
 
 }

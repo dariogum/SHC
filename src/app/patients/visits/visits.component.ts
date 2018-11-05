@@ -2,19 +2,20 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { NgForm } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
-import { Patient } from './../../classes/patient';
-import { Visit } from './../../classes/visit';
-import { PatientService } from './../patient.service';
+
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
-import { ImageDialogComponent } from './image-dialog.component';
 import { environment } from './../../../environments/environment';
+import { ImageDialogComponent } from './image-dialog.component';
+import { Patient } from './../../classes/patient';
+import { PatientService } from './../patient.service';
+import { Visit } from './../../classes/visit';
 
 const APIVERSIONURL: string = environment.url + '/v1';
 
 @Component({
-  selector: 'app-visits',
-  templateUrl: './visits.component.html',
-  styleUrls: ['./visits.component.css']
+	selector: 'app-visits',
+	templateUrl: './visits.component.html',
+	styleUrls: ['./visits.component.css']
 })
 export class VisitsComponent implements OnInit {
 
@@ -29,11 +30,15 @@ export class VisitsComponent implements OnInit {
 
 	@ViewChild('visitForm') public visitForm: NgForm;
 
-  constructor(private breakpointObserver: BreakpointObserver, private patientService: PatientService,
-  	public snackBar: MatSnackBar, public dialog: MatDialog) { }
+	constructor(
+		private breakpointObserver: BreakpointObserver,
+		public dialog: MatDialog,
+		private patientService: PatientService,
+		public snackBar: MatSnackBar,
+	) { }
 
-  ngOnInit() {
-  	this.breakpointObserver.observe([
+	ngOnInit() {
+		this.breakpointObserver.observe([
 			Breakpoints.HandsetPortrait
 		]).subscribe(result => {
 			if (result.matches) {
@@ -59,9 +64,9 @@ export class VisitsComponent implements OnInit {
 				this.formClass = 'wide';
 			}
 		});
-  }
+	}
 
-  onVisitSubmit() {
+	onVisitSubmit() {
 		if (this.visitInForm.id === undefined) {
 			this.patientService.addVisit(this.visitInForm, this.patient.id).subscribe(visit => {
 				this.visitInForm.id = visit.id;
@@ -69,6 +74,7 @@ export class VisitsComponent implements OnInit {
 					this.uploadFiles(this.visitInForm, true);
 				} else {
 					this.addVisitToPatient(this.visitInForm);
+					this.visitFormOpen = false;
 				}
 			});
 		}

@@ -7,13 +7,13 @@ import { MatAccordion, MatDialog, MatSnackBar } from '@angular/material';
 import { Observable, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
-import { SocialSecurity } from './../../classes/socialsecurity';
-import { Patient } from './../../classes/patient';
-import { ConfirmationPatientDialogComponent } from './confirmation-patient-dialog.component';
 import { CatalogsService } from './../../catalogs/catalogs.service';
 import { ConfigService } from './../../auth/config.service';
-import { PatientService } from './../patient.service';
+import { ConfirmationPatientDialogComponent } from './confirmation-patient-dialog.component';
 import { environment } from './../../../environments/environment';
+import { Patient } from './../../classes/patient';
+import { PatientService } from './../patient.service';
+import { SocialSecurity } from './../../classes/socialsecurity';
 
 const APIVERSIONURL: string = environment.url + '/v1';
 
@@ -45,10 +45,16 @@ export class FormComponent implements OnInit {
 	@ViewChild('patientBackgroundForm') public patientBackgroundForm: NgForm;
 	@ViewChild('patientDataForm') public patientDataForm: NgForm;
 
-	constructor(private breakpointObserver: BreakpointObserver, private route: ActivatedRoute,
-		private router: Router, public dialog: MatDialog, private patientService: PatientService,
-		private configService: ConfigService, private catalogsService: CatalogsService,
-		public snackBar: MatSnackBar) { }
+	constructor(
+		private breakpointObserver: BreakpointObserver,
+		private catalogsService: CatalogsService,
+		private configService: ConfigService,
+		public dialog: MatDialog,
+		private patientService: PatientService,
+		private route: ActivatedRoute,
+		private router: Router,
+		public snackBar: MatSnackBar
+	) { }
 
 	ngOnInit() {
 		this.breakpointObserver.observe([
@@ -85,10 +91,10 @@ export class FormComponent implements OnInit {
 		this.cities = this.catalogsService.getCities(this.configService.getUserConfig(this.currentUser, 'cities'));
 		this.countries = this.catalogsService.getCountries();
 		this.genders = this.catalogsService.getGenders();
-		this.socialsecurities = this.catalogsService.getSocialSecurities();
 		this.multipleSocialSecurities = this.configService.getUserConfig(this.currentUser, 'multipleSocialSecurities');
+		this.socialsecurities = this.catalogsService.getSocialSecurities();
 		this.states = this.catalogsService.getStates(this.configService.getUserConfig(this.currentUser, 'states'));
-		
+
 		this.getPatient();
 	}
 

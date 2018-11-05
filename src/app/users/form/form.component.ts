@@ -1,15 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { MatAccordion, MatDialog, MatSnackBar } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
 import { ConfirmationUserDialogComponent } from './confirmation-user-dialog.component';
+import { environment } from './../../../environments/environment';
 import { User } from './../../classes/user';
 import { UserService } from './../user.service';
-import { environment } from './../../../environments/environment';
 
 @Component({
 	selector: 'app-form',
@@ -26,8 +26,16 @@ export class FormComponent implements OnInit {
 	@ViewChild(MatAccordion) accordion: MatAccordion;
 	@ViewChild('userDataForm') public userDataForm: NgForm;
 
-	constructor(private breakpointObserver: BreakpointObserver, private route: ActivatedRoute, private router: Router,
-		public dialog: MatDialog, private userService: UserService, public snackBar: MatSnackBar) {
+	constructor(
+		private breakpointObserver: BreakpointObserver,
+		public dialog: MatDialog,
+		private route: ActivatedRoute,
+		private router: Router,
+		public snackBar: MatSnackBar,
+		private userService: UserService,
+	) { }
+
+	ngOnInit() {
 		this.breakpointObserver.observe([
 			Breakpoints.HandsetPortrait
 		]).subscribe(result => {
@@ -54,10 +62,7 @@ export class FormComponent implements OnInit {
 				this.formClass = 'wide';
 			}
 		});
-	}
-
-	ngOnInit() {
-		this.getUser();
+	this.getUser();
 	}
 
 	toggleAccordion() {
