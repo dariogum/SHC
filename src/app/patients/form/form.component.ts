@@ -18,168 +18,175 @@ import { SocialSecurity } from './../../classes/socialsecurity';
 const APIVERSIONURL: string = environment.url + '/v1';
 
 @Component({
-	selector: 'app-form',
-	templateUrl: './form.component.html',
-	styleUrls: ['./form.component.css'],
+  selector: 'app-form',
+  templateUrl: './form.component.html',
+  styleUrls: ['./form.component.css'],
 })
 export class FormComponent implements OnInit {
 
-	addressFields;
-	birthtypes;
-	bloodtypes;
-	biggerFont: boolean = false;
-	cities;
-	countries;
-	currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
-	filteredSocialsecurities: SocialSecurity[];
-	folded: boolean = false;
-	formClass: string = 'wide';
-	genders;
-	multipleSocialSecurities;
-	newPatient: boolean = false;
-	patient: Patient;
-	socialsecurities;
-	states;
+  addressFields;
+  birthtypes;
+  bloodtypes;
+  biggerFont = false;
+  cities;
+  countries;
+  currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
+  filteredSocialsecurities: SocialSecurity[];
+  folded = false;
+  formClass = 'wide';
+  genders;
+  multipleSocialSecurities;
+  newPatient = false;
+  patient: Patient;
+  socialsecurities;
+  states;
 
-	@ViewChild(MatAccordion) accordion: MatAccordion;
-	@ViewChild('patientBackgroundForm') public patientBackgroundForm: NgForm;
-	@ViewChild('patientDataForm') public patientDataForm: NgForm;
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  @ViewChild('patientBackgroundForm') public patientBackgroundForm: NgForm;
+  @ViewChild('patientDataForm') public patientDataForm: NgForm;
 
-	constructor(
-		private breakpointObserver: BreakpointObserver,
-		private catalogsService: CatalogsService,
-		private configService: ConfigService,
-		public dialog: MatDialog,
-		private patientService: PatientService,
-		private route: ActivatedRoute,
-		private router: Router,
-		public snackBar: MatSnackBar
-	) { }
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private catalogsService: CatalogsService,
+    private configService: ConfigService,
+    public dialog: MatDialog,
+    private patientService: PatientService,
+    private route: ActivatedRoute,
+    private router: Router,
+    public snackBar: MatSnackBar
+  ) { }
 
-	ngOnInit() {
-		this.breakpointObserver.observe([
-			Breakpoints.HandsetPortrait
-		]).subscribe(result => {
-			if (result.matches) {
-				this.formClass = 'handset';
-			}
-		});
+  ngOnInit() {
+    this.breakpointObserver.observe([
+      Breakpoints.HandsetPortrait
+    ]).subscribe(result => {
+      if (result.matches) {
+        this.formClass = 'handset';
+      }
+    });
 
-		this.breakpointObserver.observe([
-			Breakpoints.HandsetLandscape,
-			Breakpoints.TabletPortrait,
-		]).subscribe(result => {
-			if (result.matches) {
-				this.formClass = 'tablet';
-			}
-		});
+    this.breakpointObserver.observe([
+      Breakpoints.HandsetLandscape,
+      Breakpoints.TabletPortrait,
+    ]).subscribe(result => {
+      if (result.matches) {
+        this.formClass = 'tablet';
+      }
+    });
 
-		this.breakpointObserver.observe([
-			Breakpoints.TabletLandscape,
-			Breakpoints.WebPortrait,
-			Breakpoints.WebLandscape,
-		]).subscribe(result => {
-			if (result.matches) {
-				this.formClass = 'wide';
-			}
-		});
+    this.breakpointObserver.observe([
+      Breakpoints.TabletLandscape,
+      Breakpoints.WebPortrait,
+      Breakpoints.WebLandscape,
+    ]).subscribe(result => {
+      if (result.matches) {
+        this.formClass = 'wide';
+      }
+    });
 
-		this.addressFields = this.configService.getUserConfig(this.currentUser, 'addressFields');
-		this.biggerFont = this.configService.getUserConfig(this.currentUser, 'biggerFont');
-		this.birthtypes = this.catalogsService.getBirthTypes();
-		this.bloodtypes = this.catalogsService.getBloodTypes();
-		this.cities = this.catalogsService.getCities(this.configService.getUserConfig(this.currentUser, 'cities'));
-		this.countries = this.catalogsService.getCountries();
-		this.genders = this.catalogsService.getGenders();
-		this.multipleSocialSecurities = this.configService.getUserConfig(this.currentUser, 'multipleSocialSecurities');
-		this.socialsecurities = this.catalogsService.getSocialSecurities();
-		this.states = this.catalogsService.getStates(this.configService.getUserConfig(this.currentUser, 'states'));
+    this.addressFields = this.configService.getUserConfig(this.currentUser, 'addressFields');
+    this.biggerFont = this.configService.getUserConfig(this.currentUser, 'biggerFont');
+    this.birthtypes = this.catalogsService.getBirthTypes();
+    this.bloodtypes = this.catalogsService.getBloodTypes();
+    this.cities = this.catalogsService.getCities(this.configService.getUserConfig(this.currentUser,
+      'cities'));
+    this.countries = this.catalogsService.getCountries();
+    this.genders = this.catalogsService.getGenders();
+    this.multipleSocialSecurities = this.configService.getUserConfig(this.currentUser,
+      'multipleSocialSecurities');
+    this.socialsecurities = this.catalogsService.getSocialSecurities();
+    this.states = this.catalogsService.getStates(this.configService.getUserConfig(this.currentUser,
+      'states'));
 
-		this.getPatient();
-	}
+    this.getPatient();
+  }
 
-	displayFn(socialSecurity?: SocialSecurity): string | undefined {
-		return socialSecurity ? socialSecurity.name : undefined;
-	}
+  displayFn(socialSecurity?: SocialSecurity): string | undefined {
+    return socialSecurity ? socialSecurity.name : undefined;
+  }
 
-	filterStates(event) {
-		this.states = this.catalogsService.getStates(this.configService.getUserConfig(this.currentUser, 'states')).filter(state => state.country === event.value.id);
-	}
+  filterStates(event) {
+    this.states = this.catalogsService.getStates(this.configService.getUserConfig(this.currentUser,
+      'states')).filter(prov => prov.country === event.value.id);
+  }
 
-	filterCities(event) {
-		this.cities = this.catalogsService.getCities(this.configService.getUserConfig(this.currentUser, 'cities')).filter(city => city.state === event.value.id);
-	}
+  filterCities(event) {
+    this.cities = this.catalogsService.getCities(this.configService.getUserConfig(this.currentUser,
+      'cities')).filter(city => city.state === event.value.id);
+  }
 
-	filterSocialSecurities(event, field) {
-		if (typeof (event) === 'string') {
-			const filterValue = event.toLowerCase();
-			this.filteredSocialsecurities = this.socialsecurities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
-		} else {
-			let event = { target: { name: field } };
-			this.updatePatient(event);
-		}
-	}
+  filterSocialSecurities(event, field) {
+    if (typeof (event) === 'string') {
+      const filterValue = event.toLowerCase();
+      this.filteredSocialsecurities = this.socialsecurities.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+    } else {
+      event = { target: { name: field } };
+      this.updatePatient(event);
+    }
+  }
 
-	toggleAccordion() {
-		if (this.folded) {
-			this.accordion.openAll();
-		} else {
-			this.accordion.closeAll();
-		}
-		this.folded = !this.folded;
-	}
+  toggleAccordion() {
+    if (this.folded) {
+      this.accordion.openAll();
+    } else {
+      this.accordion.closeAll();
+    }
+    this.folded = !this.folded;
+  }
 
-	getPatient(): void {
-		const id = +this.route.snapshot.paramMap.get('id');
-		this.patientService.getPatient(id)
-			.subscribe(patient => {
-				this.patient = patient;
-				//** Default patient form values **//
-				if (this.patient.country === null) {
-					this.patient.country = this.countries[0];
-				}
-				if (this.patient.state === null) {
-					this.patient.state = this.states[0];
-				}
-				this.newPatient = (this.route.snapshot.queryParamMap.get('newPatient') === 'true');
-			});
-	}
+  getPatient(): void {
+    const id = +this.route.snapshot.paramMap.get('id');
+    this.patientService.getPatient(id)
+      .subscribe(patient => {
+        this.patient = patient;
+        // Default patient form values //
+        if (this.patient.country === null) {
+          this.patient.country = this.countries[0];
+        }
+        if (this.patient.state === null) {
+          this.patient.state = this.states[0];
+        }
+        this.newPatient = (this.route.snapshot.queryParamMap.get('newPatient') === 'true');
+      });
+  }
 
-	updatePatient(event) {
-		let controlName: string;
-		if (event.value !== undefined && event.source) {
-			controlName = event.source.ngControl.name;
-		} else if (event.value !== undefined) {
-			controlName = event.targetElement.name;
-		} else {
-			controlName = event.target.name;
-		}
-		let isBackgroundControl = this.patientBackgroundForm.controls[controlName] && !this.patientBackgroundForm.controls[controlName].pristine;
-		let isDataControl = this.patientDataForm.controls[controlName] && !this.patientDataForm.controls[controlName].pristine;
-		if (isBackgroundControl || isDataControl) {
-			this.patientService.updatePatient(this.patient).subscribe();
-		}
-	}
+  updatePatient(event) {
+    let controlName: string;
+    if (event.value !== undefined && event.source) {
+      controlName = event.source.ngControl.name;
+    } else if (event.value !== undefined) {
+      controlName = event.targetElement.name;
+    } else {
+      controlName = event.target.name;
+    }
+    const isBackgroundControl = this.patientBackgroundForm.controls[controlName] &&
+      !this.patientBackgroundForm.controls[controlName].pristine;
+    const isDataControl = this.patientDataForm.controls[controlName] &&
+      !this.patientDataForm.controls[controlName].pristine;
+    if (isBackgroundControl || isDataControl) {
+      this.patientService.updatePatient(this.patient).subscribe();
+    }
+  }
 
-	deletePatient() {
-		this.patientService.deletePatient(this.patient.id).subscribe(confirmation => {
-			let snackBarRef = this.snackBar.open('Paciente eliminado correctamente', 'OK', {
-				duration: 2500,
-			});
-			this.router.navigate(['patients']);
-		});
-	}
+  deletePatient() {
+    this.patientService.deletePatient(this.patient.id).subscribe(confirmation => {
+      const snackBarRef = this.snackBar.open('Paciente eliminado correctamente', 'OK', {
+        duration: 2500,
+      });
+      this.router.navigate(['patients']);
+    });
+  }
 
-	openConfirmationPatientDialog(): void {
-		const dialogRef = this.dialog.open(ConfirmationPatientDialogComponent, {
-			width: '240px'
-		});
+  openConfirmationPatientDialog(): void {
+    const dialogRef = this.dialog.open(ConfirmationPatientDialogComponent, {
+      width: '240px'
+    });
 
-		dialogRef.afterClosed().subscribe(result => {
-			if (result) {
-				this.deletePatient();
-			}
-		});
-	}
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deletePatient();
+      }
+    });
+  }
 
 }

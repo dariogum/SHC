@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('currentUser', JSON.stringify(this.user));
           this.router.navigate(['/patients']);
         } else {
-          let snackBarRef = this.snackBar.open('Usuario y/o contraseña incorrectos', 'OK', {
+          const snackBarRef = this.snackBar.open('Usuario y/o contraseña incorrectos', 'OK', {
             duration: 2500,
           });
         }

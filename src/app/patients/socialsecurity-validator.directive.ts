@@ -1,24 +1,24 @@
 import { Directive, Input, forwardRef } from '@angular/core';
 import {
-	AbstractControl,
-	FormControl,
-	NG_VALIDATORS,
-	ValidatorFn,
-	Validator,
+  AbstractControl,
+  FormControl,
+  NG_VALIDATORS,
+  ValidatorFn,
+  Validator,
 } from '@angular/forms';
 
 @Directive({
-  selector: '[socialSecurityValidator][ngModel]',
+  selector: '[app-socialSecurityValidator][ngModel]',
   providers: [{
-  	provide: NG_VALIDATORS,
-  	useExisting: forwardRef(() => SocialSecurityValidatorDirective),
-  	multi: true
+    provide: NG_VALIDATORS,
+    useExisting: forwardRef(() => SocialSecurityValidatorDirective),
+    multi: true
   }]
 })
 export class SocialSecurityValidatorDirective implements Validator {
-	validator: ValidatorFn;
+  validator: ValidatorFn;
 
-	constructor() {
+  constructor() {
     this.validator = socialSecurityValidator();
   }
 
@@ -27,16 +27,16 @@ export class SocialSecurityValidatorDirective implements Validator {
   }
 }
 
-function socialSecurityValidator() : ValidatorFn { 
-	return (control: AbstractControl) => {
-	  let socialSecurity = control.value;
-	  if (typeof(socialSecurity) === 'string') {
-	    return {
-	        socialSecurityName: {
-	            valid: false
-	        }
-	    };
-	  }
-	  return null;
-	}
+function socialSecurityValidator(): ValidatorFn {
+  return (control: AbstractControl) => {
+    const socialSecurity = control.value;
+    if (typeof (socialSecurity) === 'string') {
+      return {
+        socialSecurityName: {
+          valid: false
+        }
+      };
+    }
+    return null;
+  };
 }

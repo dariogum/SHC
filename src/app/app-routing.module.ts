@@ -5,13 +5,13 @@ import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
-	{ path: '', component: LoginComponent },
-	{
+  { path: '', component: LoginComponent },
+  {
     path: 'patients',
     canActivate: [AuthGuard],
     loadChildren: './patients/patients.module#PatientsModule'
   },
-	{
+  {
     path: 'users',
     canActivate: [AuthGuard],
     loadChildren: './users/users.module#UsersModule'

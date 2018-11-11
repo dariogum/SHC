@@ -2,45 +2,45 @@ import { Pipe, PipeTransform } from '@angular/core';
 import * as moment from 'moment';
 
 @Pipe({
-	name: 'age'
+  name: 'age'
 })
 export class AgePipe implements PipeTransform {
 
-	transform(value: Date): string {
-		if (!value) {
-			return 'Sin datos aún';
-		}
+  transform(value: Date): string {
+    if (!value) {
+      return 'Sin datos aún';
+    }
 
-		let today = moment();
-		let birthdate = moment(value);
-		let years = today.diff(birthdate, 'years');
-		let html: string = years + " años ";
+    const today = moment();
+    const birthdate = moment(value);
+    const years = today.diff(birthdate, 'years');
+    let html: string = years + ' años ';
 
-		html += today.subtract(years, 'years').diff(birthdate, 'months') + " meses";
+    html += today.subtract(years, 'years').diff(birthdate, 'months') + ' meses';
 
-		return html;
-	}
+    return html;
+  }
 
 }
 
 @Pipe({
-	name: 'ageUp'
+  name: 'ageUp'
 })
 export class AgeUpPipe implements PipeTransform {
 
-	transform(value: Date, birthday: Date): string {
-		if (!birthday || isNaN(birthday.getTime())) {
-			return 'Sin fecha de nacimiento aún';
-		}
+  transform(value: Date, birthday: Date): string {
+    if (!birthday || isNaN(birthday.getTime())) {
+      return 'Sin fecha de nacimiento aún';
+    }
 
-		let update = moment(value);
-		let birthdate = moment(birthday);
-		let years = update.diff(birthdate, 'years');
-		let months = update.subtract(years, 'years').diff(birthdate, 'months');
-		let days = update.subtract(months, 'months').diff(birthdate, 'days');
-		let html: string = years + " años " + months + " meses " + days + " días";
+    const update = moment(value);
+    const birthdate = moment(birthday);
+    const years = update.diff(birthdate, 'years');
+    const months = update.subtract(years, 'years').diff(birthdate, 'months');
+    const days = update.subtract(months, 'months').diff(birthdate, 'days');
+    const html: string = years + ' años ' + months + ' meses ' + days + ' días';
 
-		return html;
-	}
+    return html;
+  }
 
 }

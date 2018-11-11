@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
-  selector: 'image-dialog',
+  selector: 'app-image-dialog',
   templateUrl: 'image-dialog.html',
 })
 export class ImageDialogComponent {

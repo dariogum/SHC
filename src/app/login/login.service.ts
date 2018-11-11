@@ -8,55 +8,55 @@ import { User } from './../classes/user';
 
 const APIUSERSURL = environment.url + '/v1/users';
 const HTTPOPTIONS = {
-	headers: new HttpHeaders({
-		'Content-Type': 'application/json'
-	})
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json'
+  })
 };
 
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root'
 })
 export class LoginService {
 
 
-	constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-	parseUser(data): User {
-		var user: User;
+  parseUser(data): User {
+    const user: User;
 
-		user = {
-			email: data.attributes.email,
-			enabled: data.attributes.enabled,
-			id: data.id,
-			lastname: data.attributes.lastname,
-			name: data.attributes.name,
-			password: data.attributes.password,
-		}
+    user = {
+      email: data.attributes.email,
+      enabled: data.attributes.enabled,
+      id: data.id,
+      lastname: data.attributes.lastname,
+      name: data.attributes.name,
+      password: data.attributes.password,
+    };
 
-		return user;
-	}
+    return user;
+  }
 
-	parseUsers(data) {
-		var users: User[] = [];
-		for (var i = 0; i < data.length; i++) {
-			users[i] = this.parseUser(data[i]);
-		}
-		return users;
-	}
+  parseUsers(data) {
+    const users: User[] = [];
+    for (let i = 0; i < data.length; i++) {
+      users[i] = this.parseUser(data[i]);
+    }
+    return users;
+  }
 
-	verifyByEmail(data): Observable<User> {
-		const url = `${APIUSERSURL}/login`;
-		return this.http.post<any>(url, data, HTTPOPTIONS)
-			.pipe(
-				map(response => this.parseUser(response.data)),
-				catchError(this.handleError<User>(`verifyByEmail`))
-			);
-	}
+  verifyByEmail(data): Observable<User> {
+    const url = `${APIUSERSURL}/login`;
+    return this.http.post<any>(url, data, HTTPOPTIONS)
+      .pipe(
+        map(response => this.parseUser(response.data)),
+        catchError(this.handleError<User>(`verifyByEmail`))
+      );
+  }
 
-	private handleError<T>(operation = 'operation', result?: T) {
-		return (error: any): Observable<T> => {
-			console.error(`${operation} failed: ${error.message}`);
-			return of(result as T);
-		};
-	}
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(`${operation} failed: ${error.message}`);
+      return of(result as T);
+    };
+  }
 }

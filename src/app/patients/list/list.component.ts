@@ -12,62 +12,62 @@ import { StatsService } from './../../stats/stats.service';
 import * as moment from 'moment';
 
 @Component({
-	selector: 'app-list',
-	templateUrl: './list.component.html',
-	styleUrls: ['./list.component.css']
+  selector: 'app-list',
+  templateUrl: './list.component.html',
+  styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
 
-	currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
-	lastPatients: Observable<Patient[]> = null;
-	patient: Patient;
-	patients: Observable<Patient[]>;
-	searchTerms = new Subject<string>();
-	today: Date = new Date();
-	userRole: string;
+  currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
+  lastPatients: Observable<Patient[]> = null;
+  patient: Patient;
+  patients: Observable<Patient[]>;
+  searchTerms = new Subject<string>();
+  today: Date = new Date();
+  userRole: string;
 
-	constructor(
-		private bottomSheet: MatBottomSheet,
-		private configService: ConfigService,
-		public dialog: MatDialog,
-		private patientService: PatientService,
-		public snackBar: MatSnackBar,
-		private statsService: StatsService,
-	) { }
+  constructor(
+    private bottomSheet: MatBottomSheet,
+    private configService: ConfigService,
+    public dialog: MatDialog,
+    private patientService: PatientService,
+    public snackBar: MatSnackBar,
+    private statsService: StatsService,
+  ) { }
 
-	ngOnInit() {
-		this.userRole = this.configService.getUserConfig(this.currentUser, 'role');
+  ngOnInit() {
+    this.userRole = this.configService.getUserConfig(this.currentUser, 'role');
 
-		this.getPatients();
+    this.getPatients();
 
-		this.patients = this.searchTerms.pipe(
-			debounceTime(300),
-			filter(term => term.length > 2),
-			distinctUntilChanged(),
-			tap(_ => this.lastPatients = null),
-			switchMap((term: string) => this.patientService.searchPatients(term)),
-		);
-	}
+    this.patients = this.searchTerms.pipe(
+      debounceTime(300),
+      filter(term => term.length > 2),
+      distinctUntilChanged(),
+      tap(_ => this.lastPatients = null),
+      switchMap((term: string) => this.patientService.searchPatients(term)),
+    );
+  }
 
-	getPatients(): void {
-		this.patientService.getPatients()
-			.subscribe(patients => this.lastPatients = of(patients));
-	}
+  getPatients(): void {
+    this.patientService.getPatients()
+      .subscribe(patients => this.lastPatients = of(patients));
+  }
 
-	search(term: string) {
-		this.searchTerms.next(term);
-	}
+  search(term: string) {
+    this.searchTerms.next(term);
+  }
 
-	openNewPatientDialog(): void {
-		const dialogRef = this.dialog.open(NewPatientDialogComponent, {
-			width: '240px'
-		});
-	}
+  openNewPatientDialog(): void {
+    const dialogRef = this.dialog.open(NewPatientDialogComponent, {
+      width: '240px'
+    });
+  }
 
-	openBottomSheet(): void {
-		this.statsService.getStats(moment().format('YYYY-MM-01'), moment().format("YYYY-MM-DD")).subscribe(stats => {
-			this.bottomSheet.open(StatsComponent, { data: stats });
-		});
-	}
+  openBottomSheet(): void {
+    this.statsService.getStats(moment().format('YYYY-MM-01'), moment().format('YYYY-MM-DD')).subscribe(stats => {
+      this.bottomSheet.open(StatsComponent, { data: stats });
+    });
+  }
 
 }

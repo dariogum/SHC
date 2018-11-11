@@ -6,12 +6,12 @@ import { User } from './../../classes/user';
 import { UserService } from './../user.service';
 
 @Component({
-  selector: 'new-user-dialog',
+  selector: 'app-new-user-dialog',
   templateUrl: 'new-user-dialog.html',
 })
 export class NewUserDialogComponent {
 
-	user: User = new User();
+  user: User = new User();
 
   constructor(
     public dialogRef: MatDialogRef<NewUserDialogComponent>,
