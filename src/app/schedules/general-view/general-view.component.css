@@ -6,6 +6,9 @@
   animation-duration: .25s;
   margin: 16px;
 }
+.mat-card-content form {
+  margin-bottom: 24px;
+}
 .mat-form-field {
   margin: 6px 8px;
 }
@@ -22,8 +25,17 @@
   cursor: pointer;
 }
 .mat-grid-list {
-	margin: 8px 0;
 	height: 70vh;
+}
+.mat-list[dense] {
+  display: inline-block;
+}
+.mat-list.daily {
+  width: 100%;
+}
+.mat-list.weekly,
+.mat-list.monthly {
+  width: 14%;
 }
 
 @keyframes fadeIn {

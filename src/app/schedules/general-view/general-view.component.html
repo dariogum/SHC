@@ -26,7 +26,22 @@
 </mat-toolbar>
 <mat-card class="main-card">
   <mat-card-content>
-    <form method="post" [class]="formClass">
+    <div class="mat-toolbar-row">
+      <mat-slide-toggle>Ver agendas no vigentes</mat-slide-toggle>
+      <span class="spacer"></span>
+      <mat-button-toggle-group appearance="legacy" [(ngModel)]="viewType" name="viewType" (change)="changeTypeOfView($event)">
+        <mat-button-toggle value="daily">
+          <mat-icon>view_day</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="weekly">
+          <mat-icon>view_week</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="monthly">
+          <mat-icon>view_agenda</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <form method="post" [class]="screenType">
       <mat-form-field class="form-field">
         <mat-select name="schedule" placeholder="Agenda">
           <mat-option [value]="0">Todas</mat-option>
@@ -45,27 +60,10 @@
         <mat-icon class="matSuffixButton" matSuffix (click)="ngOnInit()" *ngIf="searchProffesional.value.length">clear</mat-icon>
         <mat-hint align="start">Ingrese al menos 3 caracteres y espere</mat-hint>
       </mat-form-field>
-      <mat-button-toggle-group appearance="legacy" [(ngModel)]="viewType" name="viewType" (change)="changeTypeOfView($event)">
-        <mat-button-toggle value="daily">
-          <mat-icon>view_day</mat-icon>
-        </mat-button-toggle>
-        <mat-button-toggle value="weekly">
-          <mat-icon>view_week</mat-icon>
-        </mat-button-toggle>
-        <mat-button-toggle value="monthly">
-          <mat-icon>view_agenda</mat-icon>
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-      <mat-slide-toggle>Ver agendas no vigentes</mat-slide-toggle>
     </form>
-    <mat-divider></mat-divider>
-    <mat-grid-list cols="7" rows="4" rowHeight="fit">
-      <mat-grid-tile [colspan]="cols" [rowspan]="rows" *ngFor="let tile of tiles">
-        <mat-grid-tile-header>{{tile.name}}</mat-grid-tile-header>
-        <mat-list dense>
-          <mat-list-item *ngFor="let appointment of APPOINTMENTS">{{appointment.patient}}</mat-list-item>
-        </mat-list>
-      </mat-grid-tile>
-    </mat-grid-list>
+    <mat-list dense *ngFor="let tile of tiles" [ngClass]="viewType">
+      <h3 mat-subheader>{{tile.name}}</h3>
+      <mat-list-item *ngFor="let appointment of APPOINTMENTS">{{appointment.patient}}</mat-list-item>
+    </mat-list>
   </mat-card-content>
 </mat-card>

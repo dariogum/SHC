@@ -29,10 +29,8 @@ export class GeneralViewComponent implements OnInit {
     },
   ];
 
-  cols = 7;
   currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
-  formClass = 'wide';
-  rows = 4;
+  screenType = 'wide';
   schedules = [
     {
       id: 1,
@@ -67,7 +65,7 @@ export class GeneralViewComponent implements OnInit {
       Breakpoints.HandsetPortrait
     ]).subscribe(result => {
       if (result.matches) {
-        this.formClass = 'handset';
+        this.screenType = 'handset';
       }
     });
 
@@ -76,7 +74,7 @@ export class GeneralViewComponent implements OnInit {
       Breakpoints.TabletPortrait,
     ]).subscribe(result => {
       if (result.matches) {
-        this.formClass = 'tablet';
+        this.screenType = 'tablet';
       }
     });
 
@@ -86,7 +84,7 @@ export class GeneralViewComponent implements OnInit {
       Breakpoints.WebLandscape,
     ]).subscribe(result => {
       if (result.matches) {
-        this.formClass = 'wide';
+        this.screenType = 'wide';
       }
     });
   }
@@ -95,14 +93,10 @@ export class GeneralViewComponent implements OnInit {
     switch (event.value) {
       case "weekly":
         this.tiles = this.getDays('isoWeek');
-        this.cols = 1;
-        this.rows = 4;
         this.viewType = event.value;
         break;
       case "monthly":
         this.tiles = this.getDays('month');
-        this.cols = 1;
-        this.rows = 1;
         this.viewType = event.value;
         break;
       default:
@@ -111,8 +105,6 @@ export class GeneralViewComponent implements OnInit {
           date: this.todayDate,
           appointments: [],
         }];
-        this.cols = 7;
-        this.rows = 4;
         this.viewType = event.value;
         break;
     }
