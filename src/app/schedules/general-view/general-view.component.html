@@ -1,0 +1,71 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>Agendas</span>
+    <span class="spacer"></span>
+    <button mat-icon-button>
+      <mat-icon aria-label="Crear una nueva agenda">add</mat-icon>
+    </button>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon aria-label="Opciones">more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <a routerLink="/patients" mat-menu-item>
+        <mat-icon>folder_shared</mat-icon>
+        <span>Pacientes</span>
+      </a>
+      <a routerLink="/users" mat-menu-item *ngIf="userRole === 'administrator'">
+        <mat-icon>people</mat-icon>
+        <span>Usuarios</span>
+      </a>
+      <a routerLink="/" mat-menu-item>
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Cerrar sesión</span>
+      </a>
+    </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>
+<mat-card class="main-card">
+  <mat-card-content>
+    <form method="post" [class]="formClass">
+      <mat-form-field class="form-field">
+        <mat-select name="schedule" placeholder="Agenda">
+          <mat-option [value]="0">Todas</mat-option>
+          <mat-option *ngFor="let schedule of schedules" [value]="schedule">
+            {{schedule.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="form-field">
+        <input matInput #searchPatient type="text" placeholder="Paciente">
+        <mat-icon class="matSuffixButton" matSuffix (click)="ngOnInit()" *ngIf="searchPatient.value.length">clear</mat-icon>
+        <mat-hint align="start">Ingrese al menos 3 caracteres y espere</mat-hint>
+      </mat-form-field>
+      <mat-form-field class="form-field">
+        <input matInput #searchProffesional type="text" placeholder="Profesional">
+        <mat-icon class="matSuffixButton" matSuffix (click)="ngOnInit()" *ngIf="searchProffesional.value.length">clear</mat-icon>
+        <mat-hint align="start">Ingrese al menos 3 caracteres y espere</mat-hint>
+      </mat-form-field>
+      <mat-button-toggle-group appearance="legacy" [(ngModel)]="viewType" name="viewType" (change)="changeTypeOfView($event)">
+        <mat-button-toggle value="daily">
+          <mat-icon>view_day</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="weekly">
+          <mat-icon>view_week</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="monthly">
+          <mat-icon>view_agenda</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+      <mat-slide-toggle>Ver agendas no vigentes</mat-slide-toggle>
+    </form>
+    <mat-divider></mat-divider>
+    <mat-grid-list cols="7" rows="4" rowHeight="fit">
+      <mat-grid-tile [colspan]="cols" [rowspan]="rows" *ngFor="let tile of tiles">
+        <mat-grid-tile-header>{{tile.name}}</mat-grid-tile-header>
+        <mat-list dense>
+          <mat-list-item *ngFor="let appointment of APPOINTMENTS">{{appointment.patient}}</mat-list-item>
+        </mat-list>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-content>
+</mat-card>

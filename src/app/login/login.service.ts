@@ -22,9 +22,7 @@ export class LoginService {
   constructor(private http: HttpClient) { }
 
   parseUser(data): User {
-    const user: User;
-
-    user = {
+    const user: User = {
       email: data.attributes.email,
       enabled: data.attributes.enabled,
       id: data.id,

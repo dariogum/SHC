@@ -13,6 +13,10 @@
 				<mat-icon>show_chart</mat-icon>
 				<span>Estadísticas</span>
 			</button>
+			<a routerLink="/schedules" mat-menu-item *ngIf="userRole === 'administrator'">
+				<mat-icon>calendar_today</mat-icon>
+				<span>Agenda</span>
+			</a>
 			<a routerLink="/users" mat-menu-item *ngIf="userRole === 'administrator'">
 				<mat-icon>people</mat-icon>
 				<span>Usuarios</span>

@@ -16,6 +16,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: './users/users.module#UsersModule'
   },
+  {
+    path: 'schedules',
+    canActivate: [AuthGuard],
+    loadChildren: './schedules/schedules.module#SchedulesModule'
+  },
   { path: '**', component: PagenotfoundComponent }
 ];
 

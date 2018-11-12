@@ -1,0 +1,32 @@
+.spacer {
+  flex: 1 1 auto;
+}
+.main-card {
+	animation-name: fadeIn;
+  animation-duration: .25s;
+  margin: 16px;
+}
+.mat-form-field {
+  margin: 6px 8px;
+}
+.wide .form-field {
+  width: calc(25% - 16px);
+}
+.tablet .form-field {
+  width: calc(50% - 16px);
+}
+.handset .form-field {
+  width: calc(100% - 16px);
+}
+.matSuffixButton {
+  cursor: pointer;
+}
+.mat-grid-list {
+	margin: 8px 0;
+	height: 70vh;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}

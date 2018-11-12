@@ -2,6 +2,8 @@
   flex: 1 1 auto;
 }
 .main-card {
+	animation-name: fadeIn;
+  animation-duration: .25s;
   margin: 16px;
 }
 .full-width {
@@ -9,4 +11,9 @@
 }
 .matSuffixButton {
   cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
 }
