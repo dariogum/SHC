@@ -43,9 +43,8 @@
     </div>
     <form method="post" [class]="screenType">
       <mat-form-field class="form-field">
-        <mat-select name="schedule" placeholder="Agenda">
-          <mat-option [value]="0">Todas</mat-option>
-          <mat-option *ngFor="let schedule of schedules" [value]="schedule">
+        <mat-select name="schedule" placeholder="Agenda" [(ngModel)]="selectedSchedules" name="selectedSchedules" multiple>
+          <mat-option *ngFor="let schedule of validSchedules" [value]="schedule">
             {{schedule.name}}
           </mat-option>
         </mat-select>
@@ -61,9 +60,32 @@
         <mat-hint align="start">Ingrese al menos 3 caracteres y espere</mat-hint>
       </mat-form-field>
     </form>
-    <mat-list dense *ngFor="let tile of tiles" [ngClass]="viewType">
-      <h3 mat-subheader>{{tile.name}}</h3>
-      <mat-list-item *ngFor="let appointment of APPOINTMENTS">{{appointment.patient}}</mat-list-item>
-    </mat-list>
+    <mat-nav-list dense *ngFor="let list of lists" [ngClass]="viewType">
+      <h3 mat-subheader>{{list.name}}</h3>
+      <mat-list-item *ngFor="let appointment of getAppointments(list.date)" [style.background]="appointment.schedule.color">
+        <a matLine href="...">{{appointment.hour}} | {{appointment.patient}}</a>
+        <button mat-icon-button [matMenuTriggerFor]="itemMenu">
+          <mat-icon aria-label="Opciones">more_vert</mat-icon>
+        </button>
+        <mat-menu #itemMenu="matMenu">
+          <button mat-menu-item>
+            <mat-icon>update</mat-icon>
+            <span>Reprogramar</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon>print</mat-icon>
+            <span>Imprimir</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon>send</mat-icon>
+            <span>Notificar</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon color="warn">cancel</mat-icon>
+            <span>Cancelar</span>
+          </button>
+        </mat-menu>
+      </mat-list-item>
+    </mat-nav-list>
   </mat-card-content>
 </mat-card>

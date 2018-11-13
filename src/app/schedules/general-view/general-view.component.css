@@ -27,14 +27,15 @@
 .mat-grid-list {
 	height: 70vh;
 }
-.mat-list[dense] {
+.mat-nav-list[dense] {
   display: inline-block;
+  vertical-align: top;
 }
-.mat-list.daily {
+.mat-nav-list.daily {
   width: 100%;
 }
-.mat-list.weekly,
-.mat-list.monthly {
+.mat-nav-list.weekly,
+.mat-nav-list.monthly {
   width: 14%;
 }
 
