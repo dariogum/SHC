@@ -1,0 +1,56 @@
+<mat-toolbar>
+	<span>Turno</span>
+	<span class="spacer"></span>
+	<button mat-icon-button>
+		<mat-icon>update</mat-icon>
+	</button>
+	<button mat-icon-button>
+		<mat-icon>print</mat-icon>
+	</button>
+	<button mat-icon-button>
+		<mat-icon>send</mat-icon>
+	</button>
+	<button mat-icon-button>
+		<mat-icon color="warn">cancel</mat-icon>
+	</button>
+</mat-toolbar>
+<form method="post">
+	<mat-chip-list>
+		<mat-chip color="primary" selected>Reprogramado</mat-chip>
+		<mat-chip color="primary" selected>Confirmado</mat-chip>
+		<mat-chip color="warn" selected>No impreso</mat-chip>
+		<mat-chip color="warn" selected>Recordatorio no enviado</mat-chip>
+	</mat-chip-list>
+	<mat-form-field class="form-field">
+		<mat-select placeholder="Agenda" [(ngModel)]="data.appointment.schedule" name="schedule">
+			<mat-option *ngFor="let schedule of SCHEDULES" [value]="schedule">
+				{{schedule.name}}
+			</mat-option>
+		</mat-select>
+	</mat-form-field>
+	<mat-form-field class="date-field">
+		<input matInput [matDatepicker]="pickerDate" placeholder="Fecha" [(ngModel)]="data.appointment.date" name="date">
+		<mat-datepicker-toggle matSuffix [for]="pickerDate"></mat-datepicker-toggle>
+		<mat-datepicker touchUi #pickerDate calendarLabel="Fecha"></mat-datepicker>
+	</mat-form-field>
+	<mat-form-field class="hour-field">
+		<input matInput type="number" min="0" max="23" step="1" placeholder="Hora" [(ngModel)]="hour" name="hour" maxlength="2">
+	</mat-form-field>
+	<span>:</span>
+	<mat-form-field class="minutes-field">
+		<input matInput type="number" min="0" max="59" step="1" placeholder="Minutos" [(ngModel)]="minutes" name="minutes" maxlength="2">
+	</mat-form-field>
+	<mat-form-field class="form-field">
+		<input matInput type="text" placeholder="Paciente" [(ngModel)]="data.appointment.patient" name="patient">
+	</mat-form-field>
+	<mat-form-field class="form-field">
+		<input matInput type="text" placeholder="Profesional" [(ngModel)]="data.appointment.schedule.professional" name="professional">
+	</mat-form-field>
+	<mat-form-field class="form-field">
+		<mat-select placeholder="Vía de recordatorio" [(ngModel)]="data.appointment.reminderWay" name="reminderWay">
+			<mat-option [value]="">Seleccione una</mat-option>
+			<mat-option [value]="tel">Teléfono</mat-option>
+			<mat-option [value]="email">Email</mat-option>
+		</mat-select>
+	</mat-form-field>
+</form>

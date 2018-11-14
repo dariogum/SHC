@@ -1,0 +1,24 @@
+.spacer {
+  flex: 1 1 auto;
+}
+.mat-form-field,
+.mat-chip-list {
+  margin: 6px 8px;
+}
+.form-field {
+  width: calc(100% - 16px);
+}
+.date-field {
+	width: calc(75% - 16px);
+}
+.hour-field,
+.minutes-field {
+	width: calc(12.5% - 18px);
+}
+.mat-chip {
+	font-size: 12px;
+}
+.mat-standard-chip {
+  border-radius: 12px;
+  min-height: 24px;
+}

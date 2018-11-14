@@ -7,18 +7,22 @@
   margin: 16px;
 }
 .mat-card-content form {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
-.mat-form-field {
+.mat-form-field,
+.mat-slide-toggle {
   margin: 6px 8px;
 }
-.wide .form-field {
+.wide .form-field,
+.wide .mat-slide-toggle {
   width: calc(25% - 16px);
 }
-.tablet .form-field {
+.tablet .form-field,
+.tablet .mat-slide-toggle {
   width: calc(50% - 16px);
 }
-.handset .form-field {
+.handset .form-field,
+.handset .mat-slide-toggle {
   width: calc(100% - 16px);
 }
 .matSuffixButton {
