@@ -5,7 +5,7 @@
 		</a>
 		<span *ngIf="!patient">Historia Clínica</span>
 		<span *ngIf="patient" class="header-row">
-			Historia Clínica 
+			NHC{{patient.id}} 
 			- {{patient.name}} {{patient.lastname}}
 			<i *ngIf="patient.oldId">- Legajo: {{patient.oldId}}</i>
 		</span>
@@ -34,7 +34,7 @@
 		<mat-expansion-panel [expanded]="newPatient">
 			<mat-expansion-panel-header [class.bolder]="biggerFont">
 				<mat-panel-title>
-					Información personal
+					Información Personal
 				</mat-panel-title>
 				<mat-panel-description>
 					{{ today | ageUp:patient.birthday }}

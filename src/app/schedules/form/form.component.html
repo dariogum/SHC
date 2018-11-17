@@ -48,9 +48,17 @@
 	</mat-form-field>
 	<mat-form-field class="form-field">
 		<mat-select placeholder="Vía de recordatorio" [(ngModel)]="data.appointment.reminderWay" name="reminderWay">
-			<mat-option [value]="">Seleccione una</mat-option>
-			<mat-option [value]="tel">Teléfono</mat-option>
-			<mat-option [value]="email">Email</mat-option>
+			<mat-option [value]="1">Teléfono</mat-option>
+			<mat-option [value]="2">Email</mat-option>
 		</mat-select>
+	</mat-form-field>
+	<mat-form-field class="form-field">
+		<input matInput type="text" placeholder="Email / Teléfono" [(ngModel)]="data.appointment.reminderData" name="reminderData">
+	</mat-form-field>
+	<mat-form-field class="form-field">
+		<textarea matInput
+		name="indications"
+		[(ngModel)]="data.appointment.indications"
+		placeholder="Indicaciones"></textarea>
 	</mat-form-field>
 </form>

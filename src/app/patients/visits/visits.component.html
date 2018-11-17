@@ -19,16 +19,16 @@
 			</button>
 		</mat-list-item>
 	</mat-list>
-	<div style="position: relative;">
-		<button type="button" mat-fab class="new-visit-button" (click)="visitInFormReset(); visitFormOpen = true" [disabled]="visitFormOpen">
-			<mat-icon aria-label="Agregar una nueva visita">add</mat-icon>
+	<mat-action-row>
+		<button type="button" mat-raised-button (click)="visitInFormReset(); visitFormOpen = true" [disabled]="visitFormOpen" color="accent">
+			<mat-icon>add</mat-icon> Agregar una nueva visita
 		</button>
-	</div>
+  </mat-action-row>
 </mat-expansion-panel>
 <mat-expansion-panel [expanded]="visitFormOpen" [hideToggle]="true" [disabled]="true">
 	<mat-expansion-panel-header collapsedHeight="64px">
 		<mat-panel-title *ngIf="!visitFormOpen">
-			Presione el botón circular con el símbolo +
+			Presione el botón "Agregar una nueva visita"
 		</mat-panel-title>
 		<mat-panel-title *ngIf="visitFormOpen && !visitInForm.id">
 			Ingrese los datos de la visita y presione Guardar

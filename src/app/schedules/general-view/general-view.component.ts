@@ -50,7 +50,8 @@ export class GeneralViewComponent implements OnInit {
       hour: moment().format('HH:mm'),
       patient: 'Lola',
       reminderWay: null,
-      reminderdata: null,
+      reminderData: null,
+      indications: 'Indicaciones de prueba',
     },
     {
       schedule: this.SCHEDULES[0],
@@ -59,7 +60,8 @@ export class GeneralViewComponent implements OnInit {
       hour: moment().format('HH:mm'),
       patient: 'Tini',
       reminderWay: null,
-      reminderdata: null,
+      reminderData: null,
+      indications: 'Indicaciones de prueba',
     },
     {
       schedule: this.SCHEDULES[1],
@@ -68,7 +70,8 @@ export class GeneralViewComponent implements OnInit {
       hour: moment().format('HH:mm'),
       patient: 'Pepe',
       reminderWay: null,
-      reminderdata: null,
+      reminderData: null,
+      indications: 'Indicaciones de prueba',
     },
     {
       schedule: this.SCHEDULES[1],
@@ -77,7 +80,8 @@ export class GeneralViewComponent implements OnInit {
       hour: moment().format('HH:mm'),
       patient: 'Lola',
       reminderWay: null,
-      reminderdata: null,
+      reminderData: null,
+      indications: 'Indicaciones de prueba',
     },
     {
       schedule: this.SCHEDULES[0],
@@ -86,7 +90,8 @@ export class GeneralViewComponent implements OnInit {
       hour: moment().format('HH:mm'),
       patient: 'Tini',
       reminderWay: null,
-      reminderdata: null,
+      reminderData: null,
+      indications: 'Indicaciones de prueba',
     },
     {
       schedule: this.SCHEDULES[1],
@@ -95,7 +100,8 @@ export class GeneralViewComponent implements OnInit {
       hour: moment().format('HH:mm'),
       patient: 'Pepe',
       reminderWay: null,
-      reminderdata: null,
+      reminderData: null,
+      indications: 'Indicaciones de prueba',
     },
   ];
 

@@ -9,6 +9,7 @@ import { ImageDialogComponent } from './image-dialog.component';
 import { Patient } from './../../classes/patient';
 import { PatientService } from './../patient.service';
 import { Visit } from './../../classes/visit';
+import * as moment from 'moment';
 
 const APIVERSIONURL: string = environment.url + '/v1';
 
@@ -23,7 +24,7 @@ export class VisitsComponent implements OnInit {
   files: FileList = null;
   formClass = 'wide';
   @Input() patient: Patient;
-  today: Date = new Date();
+  today = new Date();
   uploadingFiles = false;
   visitInForm: Visit = new Visit();
   visitFormOpen = false;
