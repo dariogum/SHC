@@ -30,7 +30,7 @@
 
 <div class="main-card">
 	<mat-spinner *ngIf="!patient"></mat-spinner>
-	<mat-accordion [multi]="true" *ngIf="patient" displayMode="flat">
+	<mat-accordion [multi]="true" *ngIf="patient">
 		<mat-expansion-panel [expanded]="newPatient">
 			<mat-expansion-panel-header [class.bolder]="biggerFont">
 				<mat-panel-title>

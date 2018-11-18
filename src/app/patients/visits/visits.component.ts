@@ -3,6 +3,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { NgForm } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
 
+import { ConfigService } from './../../auth/config.service';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
 import { environment } from './../../../environments/environment';
 import { ImageDialogComponent } from './image-dialog.component';
@@ -21,18 +22,20 @@ const APIVERSIONURL: string = environment.url + '/v1';
 export class VisitsComponent implements OnInit {
 
   biggerFont = false;
+  currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
   files: FileList = null;
   formClass = 'wide';
   @Input() patient: Patient;
   today = new Date();
   uploadingFiles = false;
-  visitInForm: Visit = new Visit();
   visitFormOpen = false;
+  visitInForm: Visit = undefined;
 
   @ViewChild('visitForm') public visitForm: NgForm;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
+    private configService: ConfigService,
     public dialog: MatDialog,
     private patientService: PatientService,
     public snackBar: MatSnackBar,
@@ -65,6 +68,8 @@ export class VisitsComponent implements OnInit {
         this.formClass = 'wide';
       }
     });
+
+    this.biggerFont = this.configService.getUserConfig(this.currentUser, 'biggerFont');
   }
 
   onVisitSubmit() {
@@ -107,7 +112,7 @@ export class VisitsComponent implements OnInit {
             this.patient.visits.splice(index, 1);
           }
           if (visit === this.visitInForm) {
-            this.visitInFormReset();
+            this.closeVisitForm();
           }
           const snackBarRef = this.snackBar.open('La visita fue eliminada correctamente', 'OK', {
             duration: 2500,
@@ -116,14 +121,17 @@ export class VisitsComponent implements OnInit {
       });
   }
 
-  visitInFormReset() {
-    /** This tasks order is important **/
+  newVisitInForm() {
     this.visitInForm = new Visit();
-    this.visitForm.reset();
-    this.files = null;
     this.visitInForm.date = this.today;
+    this.visitFormOpen = true;
   }
 
+  closeVisitForm(){
+    this.visitFormOpen = false;
+    this.visitInForm = undefined;
+    this.files = null;
+  }
 
   addFileToVisit(visit: Visit, files: any) {
     for (let i = 0; i < files.length; i++) {
@@ -136,7 +144,7 @@ export class VisitsComponent implements OnInit {
     const snackBarRef = this.snackBar.open('La visita fue registrada correctamente', 'OK', {
       duration: 2500,
     });
-    this.visitInFormReset();
+    this.closeVisitForm();
   }
 
   uploadFiles(visit: Visit, newVisit: boolean) {
