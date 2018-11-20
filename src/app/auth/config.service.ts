@@ -5,7 +5,7 @@ const CONFIG = [
     user: 1,
     attributes: {
       addressFields: true,
-      biggerFont: true,
+      biggerFont: false,
       cities: ['all'],
       countries: ['all'],
       multipleSocialSecurities: true,

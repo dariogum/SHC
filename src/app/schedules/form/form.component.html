@@ -22,26 +22,22 @@
 		<mat-chip color="warn" selected>Recordatorio no enviado</mat-chip>
 	</mat-chip-list>
 	<mat-form-field class="form-field">
-		<mat-select placeholder="Agenda" [(ngModel)]="data.appointment.schedule" name="schedule">
-			<mat-option *ngFor="let schedule of SCHEDULES" [value]="schedule">
+		<mat-select placeholder="Agenda" [(ngModel)]="data.appointment.schedule" name="schedule" [disabled]="true">
+			<mat-option *ngFor="let schedule of schedules" [value]="schedule">
 				{{schedule.name}}
 			</mat-option>
 		</mat-select>
 	</mat-form-field>
 	<mat-form-field class="date-field">
-		<input matInput [matDatepicker]="pickerDate" placeholder="Fecha" [(ngModel)]="data.appointment.date" name="date">
+		<input matInput [matDatepicker]="pickerDate" placeholder="Fecha" [(ngModel)]="data.appointment.date" name="date" readonly>
 		<mat-datepicker-toggle matSuffix [for]="pickerDate"></mat-datepicker-toggle>
 		<mat-datepicker touchUi #pickerDate calendarLabel="Fecha"></mat-datepicker>
 	</mat-form-field>
 	<mat-form-field class="hour-field">
-		<input matInput type="number" min="0" max="23" step="1" placeholder="Hora" [(ngModel)]="hour" name="hour" maxlength="2">
-	</mat-form-field>
-	<span>:</span>
-	<mat-form-field class="minutes-field">
-		<input matInput type="number" min="0" max="59" step="1" placeholder="Minutos" [(ngModel)]="minutes" name="minutes" maxlength="2">
+		<input matInput type="text" placeholder="Hora" [(ngModel)]="data.appointment.hour" name="hour" maxlength="5" readonly>
 	</mat-form-field>
 	<mat-form-field class="form-field">
-		<input matInput type="text" placeholder="Paciente" [(ngModel)]="data.appointment.patient" name="patient">
+		<input matInput type="text" placeholder="Paciente" [(ngModel)]="data.appointment.patient" name="patient" readonly>
 	</mat-form-field>
 	<mat-form-field class="form-field">
 		<input matInput type="text" placeholder="Profesional" [(ngModel)]="data.appointment.schedule.professional" name="professional">

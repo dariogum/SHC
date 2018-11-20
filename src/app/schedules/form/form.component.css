@@ -11,9 +11,8 @@
 .date-field {
 	width: calc(75% - 16px);
 }
-.hour-field,
-.minutes-field {
-	width: calc(12.5% - 18px);
+.hour-field {
+	width: calc(25% - 18px);
 }
 .mat-chip {
 	font-size: 12px;

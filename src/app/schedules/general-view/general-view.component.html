@@ -62,8 +62,8 @@
     </form>
     <mat-nav-list dense *ngFor="let list of lists" [ngClass]="viewType">
       <h3 mat-subheader>{{ list.name | titlecase }}</h3>
-      <mat-list-item *ngFor="let appointment of getAppointments(list.date)" [style.background]="appointment.schedule.color">
-        <a matLine (click)="openBottomSheet(appointment)">{{appointment.hour}} | {{appointment.patient}}</a>
+      <mat-list-item *ngFor="let appointment of getAppointments(list.date)" [style.background]="appointment.schedule.color" (click)="openBottomSheet(appointment)">
+        <p matLine>{{appointment.hour}} | {{appointment.patient}}</p>
         <button mat-icon-button [matMenuTriggerFor]="itemMenu">
           <mat-icon aria-label="Opciones">more_vert</mat-icon>
         </button>

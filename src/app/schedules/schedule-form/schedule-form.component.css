@@ -1,0 +1,42 @@
+.header-row {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.spacer {
+  flex: 1 1 auto;
+}
+.main-card {
+  margin: 16px;
+}
+.mat-form-field {
+  margin: 6px 8px;
+}
+.wide .form-field {
+  width: calc(25% - 16px);
+}
+.tablet .form-field {
+  width: calc(50% - 16px);
+}
+.handset .form-field {
+  width: calc(100% - 16px);
+}
+.mat-spinner {
+  margin: 32px auto 0;
+}
+.valign-bottom {
+  color: #ff4081;
+  vertical-align: bottom;
+}
+.bolder .mat-form-field {
+  font-weight: bold;
+  font-size: 18px;
+}
+.day-card {
+  display: inline-block;
+  margin: 6px 8px;
+  width: calc(25% - 48px);
+}
+.day-form-field {
+  width: 65px;
+}

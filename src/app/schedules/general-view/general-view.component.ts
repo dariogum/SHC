@@ -4,6 +4,7 @@ import { MatBottomSheet } from '@angular/material';
 
 import { ConfigService } from './../../auth/config.service';
 import { FormComponent } from './../form/form.component';
+import { SchedulesService } from './../schedules.service';
 import * as moment from 'moment';
 
 @Component({
@@ -12,98 +13,6 @@ import * as moment from 'moment';
   styleUrls: ['./general-view.component.css']
 })
 export class GeneralViewComponent implements OnInit {
-
-  SCHEDULES = [
-    {
-      id: 1,
-      name: 'Agenda 1',
-      professional: 1,
-      weekDays: [0, 1, 2, 3, 4, 5, 6],
-      periodicity: ['weekly'],
-      validity: {
-        start: moment('20180101'),
-        end: moment('20181231'),
-      },
-      interval: 20,
-      color: '#bbdefb',
-    },
-    {
-      id: 2,
-      name: 'Agenda 2',
-      professional: 2,
-      weekDays: [0, 1, 2, 3, 4, 5, 6],
-      periodicity: ['weekly'],
-      validity: {
-        start: moment('20180101'),
-        end: moment('20181231'),
-      },
-      interval: 30,
-      color: '#dcedc8',
-    },
-  ];
-
-  APPOINTMENTS = [
-    {
-      schedule: this.SCHEDULES[1],
-      id: 1,
-      date: moment(),
-      hour: moment().format('HH:mm'),
-      patient: 'Lola',
-      reminderWay: null,
-      reminderData: null,
-      indications: 'Indicaciones de prueba',
-    },
-    {
-      schedule: this.SCHEDULES[0],
-      id: 2,
-      date: moment(),
-      hour: moment().format('HH:mm'),
-      patient: 'Tini',
-      reminderWay: null,
-      reminderData: null,
-      indications: 'Indicaciones de prueba',
-    },
-    {
-      schedule: this.SCHEDULES[1],
-      id: 3,
-      date: moment(),
-      hour: moment().format('HH:mm'),
-      patient: 'Pepe',
-      reminderWay: null,
-      reminderData: null,
-      indications: 'Indicaciones de prueba',
-    },
-    {
-      schedule: this.SCHEDULES[1],
-      id: 1,
-      date: moment('20181110'),
-      hour: moment().format('HH:mm'),
-      patient: 'Lola',
-      reminderWay: null,
-      reminderData: null,
-      indications: 'Indicaciones de prueba',
-    },
-    {
-      schedule: this.SCHEDULES[0],
-      id: 2,
-      date: moment('20181110'),
-      hour: moment().format('HH:mm'),
-      patient: 'Tini',
-      reminderWay: null,
-      reminderData: null,
-      indications: 'Indicaciones de prueba',
-    },
-    {
-      schedule: this.SCHEDULES[1],
-      id: 3,
-      date: moment('20181120'),
-      hour: moment().format('HH:mm'),
-      patient: 'Pepe',
-      reminderWay: null,
-      reminderData: null,
-      indications: 'Indicaciones de prueba',
-    },
-  ];
 
   currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
   lists = [];
@@ -118,8 +27,9 @@ export class GeneralViewComponent implements OnInit {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private configService: ConfigService,
     private bottomSheet: MatBottomSheet,
+    private configService: ConfigService,
+    private schedulesService: SchedulesService,
   ) { }
 
   ngOnInit() {
@@ -163,7 +73,7 @@ export class GeneralViewComponent implements OnInit {
       }
     ];
 
-    this.getValidSchedules();
+    this.validSchedules = this.schedulesService.getValidSchedules(this.viewType);
   }
 
   openBottomSheet(appointment): void {
@@ -191,7 +101,7 @@ export class GeneralViewComponent implements OnInit {
         this.viewType = event.value;
         break;
     }
-    this.getValidSchedules();
+    this.validSchedules = this.schedulesService.getValidSchedules(this.viewType);
   }
 
   getDays(period) {
@@ -227,34 +137,8 @@ export class GeneralViewComponent implements OnInit {
     }
   }
 
-  getValidSchedules() {
-    this.validSchedules = [];
-    switch (this.viewType) {
-      case 'weekly':
-        this.validSchedules = this.SCHEDULES.filter(schedule =>
-          moment(schedule.validity.start) <= moment().startOf('isoWeek') &&
-          moment(schedule.validity.end) >= moment().endOf('isoWeek'));
-        break;
-      case 'monthly':
-        this.validSchedules = this.SCHEDULES.filter(schedule =>
-          moment(schedule.validity.start) <= moment().startOf('month') &&
-          moment(schedule.validity.end) >= moment().endOf('month'));
-        break;
-      default:
-        this.validSchedules = this.SCHEDULES.filter(schedule =>
-          moment(schedule.validity.start) <= moment(this.today) &&
-          moment(schedule.validity.end) >= moment(this.today));
-        break;
-    }
-  }
-
   getAppointments(date) {
-    return this.APPOINTMENTS.filter(appointment => {
-      const dateEval = appointment.date.format('DD/MM/YYYY') === date.format('DD/MM/YYYY');
-      const validScheduleEval = this.validSchedules.indexOf(appointment.schedule) >= 0;
-      const selectedScheduleEval = this.selectedSchedules.length > 0 ? this.selectedSchedules.indexOf(appointment.schedule) >= 0 : true;
-      return (dateEval && validScheduleEval && selectedScheduleEval);
-    });
+    return this.schedulesService.getAppointments(date, this.validSchedules, this.selectedSchedules);
   }
 
 }

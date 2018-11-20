@@ -1,0 +1,185 @@
+<mat-toolbar color="primary">
+	<mat-toolbar-row>
+		<a mat-icon-button routerLink="../">
+			<mat-icon aria-label="Listado de pacientes">arrow_back</mat-icon>
+		</a>
+		<span *ngIf="!schedule">Agenda</span>
+		<span *ngIf="schedule" class="header-row">
+			Agenda - {{schedule.name}}
+		</span>
+		<span class="spacer"></span>
+		<button mat-icon-button [matMenuTriggerFor]="menu">
+			<mat-icon aria-label="Opciones de la agenda">more_vert</mat-icon>
+		</button>
+		<mat-menu #menu="matMenu">
+			<button mat-menu-item>
+				<mat-icon>delete</mat-icon>
+				<span>Eliminar</span>
+			</button>
+		</mat-menu>
+	</mat-toolbar-row>
+</mat-toolbar>
+<mat-card class="main-card">
+	<mat-spinner *ngIf="!schedule"></mat-spinner>
+	<form method="post" [class]="formClass" [class.bolder]="biggerFont" #scheduleDataForm="ngForm">
+		<mat-form-field class="form-field">
+			<input matInput
+			type="text"
+			name="name"
+			[(ngModel)]="schedule.name"
+			placeholder="Nombre"
+			maxlength="256"
+			required
+			(blur)="updateSchedule($event)">
+		</mat-form-field>
+		<mat-form-field class="form-field">
+			<mat-select placeholder="Profesionales" [(ngModel)]="schedule.professionals" name="professionals" multiple>
+				<mat-option *ngFor="let professional of professionals" [value]="professional">
+					{{professional.lastname}} {{professional.name}}
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
+		<mat-form-field class="form-field">
+			<input matInput
+			name="start"
+			[(ngModel)]="schedule.validityStart"
+			placeholder="Inicio de vigencia"
+			[matDatepicker]="startPicker"
+			(dateChange)="updateSchedule($event)">
+			<mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+			<mat-datepicker touchUi #startPicker calendarLabel="Inicio de vigencia"></mat-datepicker>
+		</mat-form-field>
+		<mat-form-field class="form-field">
+			<input matInput
+			name="end"
+			[(ngModel)]="schedule.validityEnd"
+			placeholder="Fin de vigencia"
+			[matDatepicker]="endPicker"
+			(dateChange)="updateSchedule($event)">
+			<mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+			<mat-datepicker touchUi #endPicker calendarLabel="Fin de vigencia"></mat-datepicker>
+		</mat-form-field>
+		<mat-form-field class="form-field">
+			<input matInput
+			type="number"
+			name="appointmentInterval"
+			[(ngModel)]="schedule.appointmentInterval"
+			placeholder="Intervalo entre turnos"
+			maxlength="2"
+			min="1"
+			max="60"
+			required
+			(blur)="updateSchedule($event)">
+		</mat-form-field>
+		<mat-form-field class="form-field">
+			<input matInput
+			type="color"
+			name="color"
+			[(ngModel)]="schedule.color"
+			placeholder="Color"
+			(blur)="updateSchedule($event)">
+		</mat-form-field>
+		<div>
+			<mat-card class="day-card">
+				<mat-card-header>
+					<mat-card-title>
+						<mat-checkbox [(ngModel)]="schedule.weekDays.monday" name="monday">Lunes</mat-checkbox>
+					</mat-card-title>
+				</mat-card-header>
+				<mat-card-content>
+					<mat-form-field class="day-form-field">
+						<input matInput
+						type="number"
+						name="hour"
+						placeholder="Hora"
+						maxlength="2"
+						min="0"
+						max="23"
+						value="00">
+					</mat-form-field>
+					<span>:</span>
+					<mat-form-field class="day-form-field">
+						<input matInput
+						type="number"
+						name="minute"
+						placeholder="Minutos"
+						maxlength="2"
+						min="0"
+						max="59"
+						value="00">
+					</mat-form-field>
+					<mat-form-field class="day-form-field">
+						<input matInput
+						type="number"
+						name="hour"
+						placeholder="Hora"
+						maxlength="2"
+						min="0"
+						max="23"
+						value="00">
+					</mat-form-field>
+					<span>:</span>
+					<mat-form-field class="day-form-field">
+						<input matInput
+						type="number"
+						name="minute"
+						placeholder="Minutos"
+						maxlength="2"
+						min="0"
+						max="59"
+						value="00">
+					</mat-form-field>
+				</mat-card-content>
+			</mat-card>
+			<mat-card class="day-card">
+				<mat-card-header>
+					<mat-card-title>
+						<mat-checkbox [(ngModel)]="schedule.weekDays.tuesday" name="tuesday">Martes</mat-checkbox>
+					</mat-card-title>
+					<mat-card-content></mat-card-content>
+				</mat-card-header>
+			</mat-card>
+			<mat-card class="day-card">
+				<mat-card-header>
+					<mat-card-title>
+						<mat-checkbox [(ngModel)]="schedule.weekDays.wednesday" name="wednesday">Miércoles</mat-checkbox>
+					</mat-card-title>
+					<mat-card-content></mat-card-content>
+				</mat-card-header>
+			</mat-card>
+			<mat-card class="day-card">
+				<mat-card-header>
+					<mat-card-title>
+						<mat-checkbox [(ngModel)]="schedule.weekDays.thursday" name="thursday">Jueves</mat-checkbox>
+					</mat-card-title>
+					<mat-card-content></mat-card-content>
+				</mat-card-header>
+			</mat-card>
+			<mat-card class="day-card">
+				<mat-card-header>
+					<mat-card-title>
+						<mat-checkbox [(ngModel)]="schedule.weekDays.friday" name="friday">Viernes</mat-checkbox>
+					</mat-card-title>
+					<mat-card-content></mat-card-content>
+				</mat-card-header>
+			</mat-card>
+			<mat-card class="day-card">
+				<mat-card-header>
+					<mat-card-title>
+						<mat-checkbox [(ngModel)]="schedule.weekDays.saturday" name="saturday">Sábado</mat-checkbox>
+					</mat-card-title>
+					<mat-card-content></mat-card-content>
+				</mat-card-header>
+			</mat-card>
+			<mat-card class="day-card">
+				<mat-card-header>
+					<mat-card-title>
+						<mat-checkbox [(ngModel)]="schedule.weekDays.sunday" name="sunday">Domingo</mat-checkbox>
+					</mat-card-title>
+					<mat-card-content></mat-card-content>
+				</mat-card-header>
+			</mat-card>
+			<mat-checkbox class="form-field" [(ngModel)]="schedule.periodicity" name="periodicity">Repetir semanalmente</mat-checkbox>
+		</div>
+	</form>
+</mat-card>

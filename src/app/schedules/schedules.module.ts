@@ -6,6 +6,7 @@ import {
   MatButtonModule,
   MatButtonToggleModule,
   MatCardModule,
+  MatCheckboxModule,
   MatChipsModule,
   MatDatepickerModule,
   MatDividerModule,
@@ -15,6 +16,7 @@ import {
   MatInputModule,
   MatListModule,
   MatMenuModule,
+  MatProgressSpinnerModule,
   MatSelectModule,
   MatSlideToggleModule,
   MatToolbarModule,
@@ -22,9 +24,10 @@ import {
 import { SchedulesRoutingModule } from './schedules-routing.module';
 import { GeneralViewComponent } from './general-view/general-view.component';
 import { FormComponent } from './form/form.component';
+import { ScheduleFormComponent } from './schedule-form/schedule-form.component';
 
 @NgModule({
-  declarations: [GeneralViewComponent, FormComponent],
+  declarations: [GeneralViewComponent, FormComponent, ScheduleFormComponent],
   imports: [
     CommonModule,
     SchedulesRoutingModule,
@@ -33,6 +36,7 @@ import { FormComponent } from './form/form.component';
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
+    MatCheckboxModule,
     MatChipsModule,
     MatDatepickerModule,
     MatDividerModule,
@@ -42,6 +46,7 @@ import { FormComponent } from './form/form.component';
     MatInputModule,
     MatListModule,
     MatMenuModule,
+    MatProgressSpinnerModule,
     MatSelectModule,
     MatSlideToggleModule,
     MatToolbarModule,
