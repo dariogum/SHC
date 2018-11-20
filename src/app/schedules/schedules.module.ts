@@ -25,9 +25,10 @@ import { SchedulesRoutingModule } from './schedules-routing.module';
 import { GeneralViewComponent } from './general-view/general-view.component';
 import { FormComponent } from './form/form.component';
 import { ScheduleFormComponent } from './schedule-form/schedule-form.component';
+import { HourPickerComponent } from './../hour-picker/hour-picker.component';
 
 @NgModule({
-  declarations: [GeneralViewComponent, FormComponent, ScheduleFormComponent],
+  declarations: [GeneralViewComponent, FormComponent, ScheduleFormComponent, HourPickerComponent],
   imports: [
     CommonModule,
     SchedulesRoutingModule,

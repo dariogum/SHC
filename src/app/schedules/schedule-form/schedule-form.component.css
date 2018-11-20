@@ -35,8 +35,23 @@
 .day-card {
   display: inline-block;
   margin: 6px 8px;
-  width: calc(25% - 48px);
+  vertical-align: top;
+  width: calc(14% - 48px);
 }
-.day-form-field {
-  width: 65px;
+.copy-hours {
+  position: absolute;
+  right: 0;
+  top: 10px;
+}
+.hour-box {
+  padding: 12px 0 0;
+  position: relative;
+}
+.hour-box .remove-hour {
+  position: absolute;
+  right: -20px;
+  top: 50px;
+}
+/deep/ .mat-card-header-text {
+  margin: 0 !important;
 }

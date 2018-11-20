@@ -2,7 +2,7 @@ export class Schedule {
   id: number;
   name: string;
   professionals;
-  weekDays;
+  days;
   periodicity;
   appointmentInterval: number;
   validityStart: Date;

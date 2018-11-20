@@ -3,8 +3,10 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
+import { HourPickerComponent } from './../../hour-picker/hour-picker.component';
 import { SchedulesService } from './../schedules.service';
 import { Schedule } from './../../classes/schedule';
+import * as moment from 'moment';
 
 @Component({
 	selector: 'app-schedule-form',
@@ -12,6 +14,37 @@ import { Schedule } from './../../classes/schedule';
 	styleUrls: ['./schedule-form.component.css']
 })
 export class ScheduleFormComponent implements OnInit {
+
+	WEEKDAYS = [
+		{
+			id: 'monday',
+			name: 'Lunes',
+		},
+		{
+			id: 'tuesday',
+			name: 'Martes',
+		},
+		{
+			id: 'wednesday',
+			name: 'Miércoles',
+		},
+		{
+			id: 'thursday',
+			name: 'Jueves',
+		},
+		{
+			id: 'friday',
+			name: 'Viernes',
+		},
+		{
+			id: 'saturday',
+			name: 'Sábado',
+		},
+		{
+			id: 'sunday',
+			name: 'Domingo',
+		},
+	];
 
 	filteredProfessionals;
 	formClass = 'wide';
@@ -85,6 +118,23 @@ export class ScheduleFormComponent implements OnInit {
 
 	displayFn(schedule?: Schedule): string | undefined {
 		return schedule ? schedule.name : undefined;
+	}
+
+	addHour(day) {
+		day.hours.push({
+			start: moment().set({'hour': 0, 'minute': 0}),
+      end: moment().set({'hour': 0, 'minute': 0}),
+		});
+	}
+
+	removeHour(day, hour) {
+		day.hours = day.hours.filter(filteredHour => filteredHour !== hour);
+	}
+
+	applyHoursToAllDays(days, hours) {
+		for (var i = days.length - 1; i >= 0; i--) {
+			days[i].hours = hours;
+		}
 	}
 
 }

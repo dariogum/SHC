@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Schedule } from './../classes/schedule';
 
+import { Schedule } from './../classes/schedule';
 import * as moment from 'moment';
 
 const PROFESSIONALS = [
@@ -22,15 +22,99 @@ const SCHEDULES = [
       id: 1,
       name: 'Agenda 1',
       professionals: [PROFESSIONALS[0]],
-      weekDays: {
-        monday: true,
-        tuesday: true,
-        wednesday: true,
-        thursday: true,
-        friday: true,
-        saturday: true,
-        sunday: true,
-      },
+      days: [
+        {
+          active: true,
+          hours: [
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+        {
+          active: true,
+          hours:[
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+        {
+          active: true,
+          hours: [
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+        {
+          active: true,
+          hours: [
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+        {
+          active: true,
+          hours: [
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+        {
+          active: true,
+          hours: [
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+        {
+          active: true,
+          hours: [
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+      ],
       periodicity: false,
       validityStart: new Date(2018,0,1),
       validityEnd: new Date(2018,11,31),
@@ -41,15 +125,99 @@ const SCHEDULES = [
       id: 2,
       name: 'Agenda 2',
       professionals: [PROFESSIONALS[0], PROFESSIONALS[1]],
-      weekDays: {
-        monday: true,
-        tuesday: true,
-        wednesday: true,
-        thursday: true,
-        friday: true,
-        saturday: true,
-        sunday: true,
-      },
+      days: [
+        {
+          active: true,
+          hours: [
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+        {
+          active: true,
+          hours:[
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+        {
+          active: true,
+          hours: [
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+        {
+          active: true,
+          hours: [
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+        {
+          active: true,
+          hours: [
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+        {
+          active: true,
+          hours: [
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+        {
+          active: true,
+          hours: [
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+      ],
       periodicity: true,
       validityStart: new Date(2018,0,1),
       validityEnd: new Date(2018,11,31),
