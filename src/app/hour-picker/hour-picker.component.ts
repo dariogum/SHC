@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import * as moment from 'moment';
 
 @Component({
@@ -6,21 +6,25 @@ import * as moment from 'moment';
   templateUrl: './hour-picker.component.html',
   styleUrls: ['./hour-picker.component.css']
 })
-export class HourPickerComponent implements OnInit {
+export class HourPickerComponent {
 
-  @Input() hourAndMinutes;
-  hour;
-  minutes;
-
-  constructor() { }
-
-  ngOnInit() {
-    this.hour = this.hourAndMinutes.hours();
-    this.minutes = this.hourAndMinutes.minutes();
+  private _hour;
+  private _minutes;
+ 
+  @Input()
+  set hourAndMinutes(hourAndMinutes) {
+    if(hourAndMinutes){
+      this._hour = hourAndMinutes.hours();
+      this._minutes = hourAndMinutes.minutes();
+    }
+  }
+ 
+  get hourAndMinutes() { 
+    return moment().set({'hour': this._hour, 'minute': this._minutes});
   }
 
+  @Output() hourAndMinutesSetted = new EventEmitter<any>();
   updateHourAndMinutes() {
-    this.hourAndMinutes = moment().set({'hour': this.hour, 'minute': this.minutes});
+    this.hourAndMinutesSetted.emit(moment().set({'hour': this._hour, 'minute': this._minutes}));
   }
-
 }

@@ -49,7 +49,7 @@ export class ScheduleFormComponent implements OnInit {
 	filteredProfessionals;
 	formClass = 'wide';
 	professionals;
-	schedule: Schedule = new Schedule();
+	schedule: Schedule;
 	@ViewChild('scheduleDataForm') public scheduleDataForm: NgForm;
 
 	constructor(
@@ -122,8 +122,8 @@ export class ScheduleFormComponent implements OnInit {
 
 	addHour(day) {
 		day.hours.push({
-			start: moment().set({'hour': 0, 'minute': 0}),
-      end: moment().set({'hour': 0, 'minute': 0}),
+			start: null,
+			end: null
 		});
 	}
 
@@ -132,9 +132,38 @@ export class ScheduleFormComponent implements OnInit {
 	}
 
 	applyHoursToAllDays(days, hours) {
-		for (var i = days.length - 1; i >= 0; i--) {
+		for (let i = days.length - 1; i >= 0; i--) {
 			days[i].hours = hours;
 		}
+	}
+
+	compareDates(a, b) {
+		if (a.date < b.date)
+			return -1;
+		if (a.date > b.date)
+			return 1;
+		return 0;
+	}
+
+	selectDay(event) {
+		for (let i = this.schedule.selectedDays.length - 1; i >= 0; i--) {
+			if (this.schedule.selectedDays[i].date === event.value.format('YYYY-MM-DD')) {
+				return false;
+			}
+		}
+		this.schedule.selectedDays.push(
+			{
+				date: event.value.format('YYYY-MM-DD'),
+				name: event.value.format('dddd DD/MM/YYYY'),
+				active: true,
+				hours: []
+			}
+		);
+		this.schedule.selectedDays.sort(this.compareDates);
+	}
+
+	removeDay(day) {
+		this.schedule.selectedDays = this.schedule.selectedDays.filter(filteredDay => filteredDay !== day);
 	}
 
 }

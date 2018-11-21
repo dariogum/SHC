@@ -38,7 +38,8 @@
   vertical-align: top;
   width: calc(14% - 48px);
 }
-.copy-hours {
+.copy-hours,
+.remove-day {
   position: absolute;
   right: 0;
   top: 10px;

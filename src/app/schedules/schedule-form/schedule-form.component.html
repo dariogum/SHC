@@ -33,7 +33,7 @@
       (blur)="updateSchedule($event)">
     </mat-form-field>
     <mat-form-field class="form-field">
-      <mat-select placeholder="Profesionales" [(ngModel)]="schedule.professionals" name="professionals" multiple>
+      <mat-select placeholder="Profesionales" [(ngModel)]="schedule.professionals" name="professionals" multiple required>
         <mat-option *ngFor="let professional of professionals" [value]="professional">
           {{professional.lastname}} {{professional.name}}
         </mat-option>
@@ -45,9 +45,11 @@
       [(ngModel)]="schedule.validityStart"
       placeholder="Inicio de vigencia"
       [matDatepicker]="startPicker"
+      disabled
+      required
       (dateChange)="updateSchedule($event)">
       <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
-      <mat-datepicker touchUi #startPicker calendarLabel="Inicio de vigencia"></mat-datepicker>
+      <mat-datepicker touchUi #startPicker calendarLabel="Inicio de vigencia" disabled="false"></mat-datepicker>
     </mat-form-field>
     <mat-form-field class="form-field">
       <input matInput
@@ -55,9 +57,10 @@
       [(ngModel)]="schedule.validityEnd"
       placeholder="Fin de vigencia"
       [matDatepicker]="endPicker"
+      disabled
       (dateChange)="updateSchedule($event)">
       <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
-      <mat-datepicker touchUi #endPicker calendarLabel="Fin de vigencia"></mat-datepicker>
+      <mat-datepicker touchUi #endPicker calendarLabel="Fin de vigencia" disabled="false"></mat-datepicker>
     </mat-form-field>
     <mat-form-field class="form-field">
       <input matInput
@@ -79,35 +82,91 @@
       placeholder="Color"
       (blur)="updateSchedule($event)">
     </mat-form-field>
-    <div>
+    <mat-form-field class="form-field">
+      <mat-select #periodicity placeholder="Periodicidad" [(ngModel)]="schedule.periodicity" name="periodicity" required>
+        <mat-option value="1">Semanalmente</mat-option>
+        <mat-option value="2">Días específicos</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="form-field" *ngIf="schedule.periodicity === '2'">
+        <input matInput
+        name="dayPicker"
+        placeholder="Seleccione un día para agregarlo"
+        [matDatepicker]="dayPicker"
+        disabled
+        (dateChange)="selectDay($event)">
+        <mat-datepicker-toggle matSuffix [for]="dayPicker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #dayPicker calendarLabel="Seleccione un día para agregarlo" disabled="false"></mat-datepicker>
+      </mat-form-field>
 
+    <div *ngIf="schedule.periodicity === '1'">
       <mat-card class="day-card" *ngFor="let day of WEEKDAYS; let i = index;">
         <mat-card-header>
           <mat-card-title>
             <mat-checkbox [(ngModel)]="schedule.days[i].active" name="day.id">{{day.name}}</mat-checkbox>
           </mat-card-title>
-          <button mat-icon-button class="copy-hours" color="primary" (click)="applyHoursToAllDays(schedule.days, schedule.days[i].hours)">
-            <mat-icon aria-label="Copiar los horarios a todos los días">done_all</mat-icon>
-          </button>
         </mat-card-header>
         <mat-card-content>
           <div class="hour-box" *ngFor="let hour of schedule.days[i].hours">
             <button mat-icon-button class="remove-hour" color="warn" (click)="removeHour(schedule.days[i], hour)">
               <mat-icon aria-label="Quitar este horario">remove_circle</mat-icon>
             </button>
-            <span class="mat-caption">Desde</span>
-            <app-hour-picker [hourAndMinutes]="hour.start"></app-hour-picker>
-            <span class="mat-caption">Hasta</span>
-            <app-hour-picker [hourAndMinutes]="hour.end"></app-hour-picker>
+            <div>
+              <span class="mat-caption">Desde</span>
+              <app-hour-picker [hourAndMinutes]="hour.start" (hourAndMinutesSetted)="hour.start = $event"></app-hour-picker>
+            </div>
+            <div>
+              <span class="mat-caption">Hasta</span>
+              <app-hour-picker [hourAndMinutes]="hour.end" (hourAndMinutesSetted)="hour.end = $event"></app-hour-picker>
+            </div>
           </div>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-stroked-button color="primary" (click)="addHour(schedule.days[i])">
-            Agregar un horario
+          <button mat-button color="primary" (click)="addHour(schedule.days[i])">
+            <mat-icon>add</mat-icon><mat-icon>timelapse</mat-icon>
+          </button>
+          <button mat-button color="accent" (click)="applyHoursToAllDays(schedule.days, schedule.days[i].hours)">
+            <mat-icon>sync</mat-icon><mat-icon>timelapse</mat-icon>
           </button>
         </mat-card-actions>
       </mat-card>
-
     </div>
+
+    <div *ngIf="schedule.periodicity === '2'">
+      <mat-card class="day-card" *ngFor="let day of schedule.selectedDays; let i = index;">
+        <mat-card-header>
+          <mat-card-title>
+            {{day.name | titlecase}}
+          </mat-card-title>
+          <button mat-icon-button class="remove-day" color="warn" (click)="removeDay(day)">
+            <mat-icon aria-label="Quitar este día">clear</mat-icon>
+          </button>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="hour-box" *ngFor="let hour of day.hours">
+            <button mat-icon-button class="remove-hour" color="warn" (click)="removeHour(day, hour)">
+              <mat-icon aria-label="Quitar este horario">remove_circle</mat-icon>
+            </button>
+            <div>
+              <span class="mat-caption">Desde</span>
+              <app-hour-picker [hourAndMinutes]="hour.start" (hourAndMinutesSetted)="hour.start = $event"></app-hour-picker>
+            </div>
+            <div>
+              <span class="mat-caption">Hasta</span>
+              <app-hour-picker [hourAndMinutes]="hour.end" (hourAndMinutesSetted)="hour.end = $event"></app-hour-picker>
+            </div>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button color="primary" (click)="addHour(day)">
+            <mat-icon>add</mat-icon><mat-icon>timelapse</mat-icon>
+          </button>
+          <button mat-button color="accent" (click)="applyHoursToAllDays(schedule.selectedDays, day.hours)">
+            <mat-icon>sync</mat-icon><mat-icon>timelapse</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
   </form>
 </mat-card>

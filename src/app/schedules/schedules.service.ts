@@ -115,11 +115,12 @@ const SCHEDULES = [
           ]
         },
       ],
-      periodicity: false,
+      periodicity: '1',
       validityStart: new Date(2018,0,1),
       validityEnd: new Date(2018,11,31),
       appointmentInterval: 20,
       color: '#bbdefb',
+      selectedDays: [],
     },
     {
       id: 2,
@@ -218,11 +219,12 @@ const SCHEDULES = [
           ]
         },
       ],
-      periodicity: true,
+      periodicity: '2',
       validityStart: new Date(2018,0,1),
       validityEnd: new Date(2018,11,31),
       appointmentInterval: 30,
       color: '#dcedc8',
+      selectedDays: [],
     },
   ];
 

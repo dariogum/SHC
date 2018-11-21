@@ -68,9 +68,10 @@
 					placeholder="Fecha de nacimiento"
 					[matDatepicker]="picker"
 					[max]="today"
+					disabled
 					(dateChange)="updatePatient($event)">
 					<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-					<mat-datepicker touchUi #picker calendarLabel="Fecha de nacimiento"></mat-datepicker>
+					<mat-datepicker touchUi #picker calendarLabel="Fecha de nacimiento" disabled="false"></mat-datepicker>
 				</mat-form-field>
 				<mat-form-field class="form-field">
 					<mat-select

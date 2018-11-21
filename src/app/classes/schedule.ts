@@ -8,4 +8,5 @@ export class Schedule {
   validityStart: Date;
   validityEnd: Date;
   color: string;
+  selectedDays;
 }

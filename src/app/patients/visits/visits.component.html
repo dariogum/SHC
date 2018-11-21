@@ -49,9 +49,10 @@
 					[max]="today"
 					[min]="patient.birthday"
 					required
+					disabled
 					(dateChange)="updateVisit($event)">
 					<mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
-					<mat-datepicker touchUi #datepicker calendarLabel="Fecha"></mat-datepicker>
+					<mat-datepicker touchUi #datepicker calendarLabel="Fecha" disabled="false"></mat-datepicker>
 				</mat-form-field>
 				<mat-form-field class="visit-form-field">
 					<input matInput
