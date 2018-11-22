@@ -11,13 +11,13 @@
 		</span>
 		<span class="spacer"></span>
 		<button mat-icon-button (click)="toggleAccordion()" *ngIf="!folded">
-			<mat-icon aria-label="Cerrar todos los paneles">unfold_less</mat-icon>
+			<mat-icon aria-label="Cerrar todos los paneles" matTooltip="Cerrar todos los paneles">unfold_less</mat-icon>
 		</button>
 		<button mat-icon-button (click)="toggleAccordion()" *ngIf="folded">
-			<mat-icon aria-label="Abrir todos los paneles">unfold_more</mat-icon>
+			<mat-icon aria-label="Abrir todos los paneles" matTooltip="Abrir todos los paneles">unfold_more</mat-icon>
 		</button>
 		<button mat-icon-button [matMenuTriggerFor]="menu">
-			<mat-icon aria-label="Opciones del paciente">more_vert</mat-icon>
+			<mat-icon aria-label="Opciones del paciente" matTooltip="Opciones del paciente">more_vert</mat-icon>
 		</button>
 		<mat-menu #menu="matMenu">
 			<button mat-menu-item (click)="openConfirmationPatientDialog()">

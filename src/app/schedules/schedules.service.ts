@@ -318,13 +318,53 @@ export class SchedulesService {
     }
   }
 
+  compareHours(a, b) {
+    if (a.hour < b.hour)
+      return -1;
+    if (a.hour > b.hour)
+      return 1;
+    return 0;
+  }
+
   getAppointments(date, validSchedules, selectedSchedules) {
-    return APPOINTMENTS.filter(appointment => {
+    let appointmentsList = APPOINTMENTS.filter(appointment => {
       const dateEval = appointment.date.format('DD/MM/YYYY') === date.format('DD/MM/YYYY');
       const validScheduleEval = validSchedules.indexOf(appointment.schedule) >= 0;
       const selectedScheduleEval = selectedSchedules.length > 0 ? selectedSchedules.indexOf(appointment.schedule) >= 0 : true;
       return (dateEval && validScheduleEval && selectedScheduleEval);
     });
+    let appointmentsSpots = this.getAppointmentsSpots(date, validSchedules, selectedSchedules);
+    return appointmentsList.concat(appointmentsSpots).sort(this.compareHours);
+  }
+
+  getAppointmentsSpots(date, validSchedules, selectedSchedules) {
+    let weekDay = date.weekday();
+    let spots = [];
+    for (let schedule of validSchedules) {
+      if (schedule.periodicity === '1') {
+        if (schedule.days[weekDay].active) {
+          let spotHour;
+          let endHour;
+          for (let hour of schedule.days[weekDay].hours) {
+            spotHour = hour.start;
+            while (spotHour < hour.end) {
+              spots.push({
+                schedule: schedule,
+                id: 3,
+                date: date,
+                hour: spotHour.format('HH:mm'),
+                patient: null,
+                reminderWay: null,
+                reminderData: null,
+                indications: null,
+              });
+              spotHour = spotHour.add(schedule.appointmentInterval, 'm');
+            }
+          }
+        }
+      }
+    }
+    return spots;
   }
 
   getProfessionals() {

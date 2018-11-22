@@ -20,6 +20,7 @@ import {
   MatSelectModule,
   MatSlideToggleModule,
   MatToolbarModule,
+  MatTooltipModule,
 } from '@angular/material';
 import { SchedulesRoutingModule } from './schedules-routing.module';
 import { GeneralViewComponent } from './general-view/general-view.component';
@@ -51,6 +52,7 @@ import { HourPickerComponent } from './../hour-picker/hour-picker.component';
     MatSelectModule,
     MatSlideToggleModule,
     MatToolbarModule,
+    MatTooltipModule,
   ],
   entryComponents: [
     FormComponent

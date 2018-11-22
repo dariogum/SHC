@@ -22,6 +22,7 @@ import {
     MatSnackBarModule,
     MatStepperModule,
     MatToolbarModule,
+    MatTooltipModule,
 } from '@angular/material';
 
 import { AgePipe, AgeUpPipe } from './age.pipe';
@@ -59,6 +60,7 @@ import { VisitsComponent } from './visits/visits.component';
     MatSelectModule,
     MatSnackBarModule,
     MatToolbarModule,
+    MatTooltipModule,
   ],
   declarations: [
     AgePipe,

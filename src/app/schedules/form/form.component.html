@@ -16,10 +16,10 @@
 </mat-toolbar>
 <form method="post">
 	<mat-chip-list>
-		<mat-chip color="primary" selected>Reprogramado</mat-chip>
-		<mat-chip color="primary" selected>Confirmado</mat-chip>
-		<mat-chip color="warn" selected>No impreso</mat-chip>
-		<mat-chip color="warn" selected>Recordatorio no enviado</mat-chip>
+		<mat-chip color="primary" selected matTooltip="El turno ha sido reprogramado">Reprogramado</mat-chip>
+		<mat-chip color="primary" selected matTooltip="El turno está confirmado">Confirmado</mat-chip>
+		<mat-chip color="warn" selected matTooltip="No fue impreso el ticket del turno">No impreso</mat-chip>
+		<mat-chip color="warn" selected matTooltip="No fue enviado el recoratorio del turno">Recordatorio no enviado</mat-chip>
 	</mat-chip-list>
 	<mat-form-field class="form-field">
 		<mat-select placeholder="Agenda" [(ngModel)]="data.appointment.schedule" name="schedule" [disabled]="true">

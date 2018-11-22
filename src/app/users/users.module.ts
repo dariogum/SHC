@@ -22,6 +22,7 @@ import {
   MatProgressSpinnerModule,
   MatSnackBarModule,
   MatToolbarModule,
+  MatTooltipModule,
 } from '@angular/material';
 
 import { UsersRoutingModule } from './users-routing.module';
@@ -55,6 +56,7 @@ import { NewUserDialogComponent } from './list/new-user-dialog.component';
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatToolbarModule,
+    MatTooltipModule,
   ],
   declarations: [
     ConfirmationUserDialogComponent,

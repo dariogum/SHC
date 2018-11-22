@@ -24,7 +24,6 @@ export class GeneralViewComponent implements OnInit {
   validSchedules = [];
   viewType = 'daily';
 
-
   constructor(
     private breakpointObserver: BreakpointObserver,
     private bottomSheet: MatBottomSheet,
@@ -62,6 +61,8 @@ export class GeneralViewComponent implements OnInit {
       }
     });
 
+    this.validSchedules = this.schedulesService.getValidSchedules(this.viewType);
+
     moment.locale('es');
     this.todayName = moment().format('dddd DD/MM/YYYY');
     this.today = moment();
@@ -69,11 +70,9 @@ export class GeneralViewComponent implements OnInit {
       {
         name: this.todayName,
         date: this.today,
-        appointments: [],
+        appointments: this.getAppointments(this.today),
       }
     ];
-
-    this.validSchedules = this.schedulesService.getValidSchedules(this.viewType);
   }
 
   openBottomSheet(appointment): void {
@@ -83,58 +82,39 @@ export class GeneralViewComponent implements OnInit {
   }
 
   changeTypeOfView(event) {
+    this.viewType = event.value;
+    this.validSchedules = this.schedulesService.getValidSchedules(this.viewType);
     switch (event.value) {
       case 'weekly':
-        this.lists = this.getDays('isoWeek');
-        this.viewType = event.value;
+        this.lists = this.getDays('week');
         break;
       case 'monthly':
         this.lists = this.getDays('month');
-        this.viewType = event.value;
         break;
       default:
         this.lists = [{
           name: this.todayName,
           date: this.today,
-          appointments: [],
+          appointments: this.getAppointments(this.today),
         }];
-        this.viewType = event.value;
         break;
     }
-    this.validSchedules = this.schedulesService.getValidSchedules(this.viewType);
   }
 
   getDays(period) {
-    const startOfWeek = moment().startOf(period);
-    const endOfWeek = moment().endOf(period);
+    const start = moment().startOf(period);
+    const end = moment().endOf(period);
     const days = [];
-    let day = startOfWeek;
-    while (day <= endOfWeek) {
+    let day = start;
+    while (day <= end) {
       days.push({
-        name: day.format('dddd DD/MM/YYYY'),
+        name: day.format('ddd DD/MM/YYYY'),
         date: day,
-        appointments: [],
+        appointments: this.getAppointments(day),
       });
       day = day.clone().add(1, 'd');
     }
     return days;
-  }
-
-  changeTypeOfAppointments(event) {
-    switch (event.value) {
-      case 'available':
-
-        break;
-      case 'free':
-
-        break;
-      case 'programmed':
-
-        break;
-      default:
-
-        break;
-    }
   }
 
   getAppointments(date) {

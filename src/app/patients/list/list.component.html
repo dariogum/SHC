@@ -2,10 +2,10 @@
 	<mat-toolbar-row>
 		<span>Listado de pacientes</span>
 		<span class="spacer"></span>
-		<button mat-icon-button (click)="openNewPatientDialog()">
+		<button mat-icon-button (click)="openNewPatientDialog()" matTooltip="Agregar un nuevo paciente">
 			<mat-icon aria-label="Crear un nuevo paciente">add</mat-icon>
 		</button>
-		<button mat-icon-button [matMenuTriggerFor]="menu">
+		<button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Menú">
 			<mat-icon aria-label="Opciones">more_vert</mat-icon>
 		</button>
 		<mat-menu #menu="matMenu">
@@ -33,7 +33,7 @@
 		<form method="post">
 			<mat-form-field class="full-width">
 				<input matInput #searchInput type="text" placeholder="Buscar un paciente por apellido y/o nombre..." (keyup)="search(searchInput.value)">
-				<mat-icon class="matSuffixButton" matSuffix (click)="ngOnInit()" *ngIf="searchInput.value.length">clear</mat-icon>
+				<mat-icon class="matSuffixButton" matSuffix (click)="ngOnInit()" *ngIf="searchInput.value.length" matTooltip="Limpiar la búsqueda">clear</mat-icon>
 				<mat-hint align="start">Ingrese al menos 3 caracteres y espere</mat-hint>
 			</mat-form-field>
 		</form>

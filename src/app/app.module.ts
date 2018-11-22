@@ -16,7 +16,8 @@ import {
   MatMenuModule,
   MatNativeDateModule,
   MatSnackBarModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatTooltipModule
 } from '@angular/material';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -54,7 +55,8 @@ import { StatsComponent } from './stats/stats.component';
     MatMenuModule,
     MatNativeDateModule,
     MatSnackBarModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatTooltipModule
   ],
   entryComponents: [
     StatsComponent,

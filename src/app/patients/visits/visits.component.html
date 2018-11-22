@@ -11,10 +11,10 @@
 			<p matLine><b>Peso</b>: {{visit.weight}} kg | <b>Talla</b>: {{visit.height}} cm | <b>Perímetro encefálico</b>: {{visit.perimeter}} cm | <b>T.A.</b>: {{visit.bloodPressure}}</p>
 			<p matLine><b>Diagnóstico</b>: {{visit.diagnosis}}</p>
 			<p matLine><b>Tratamiento</b>: {{visit.treatment}}</p>
-			<button mat-icon-button color="primary" (click)="visitInForm = visit; visitFormOpen = true">
+			<button mat-icon-button color="primary" (click)="visitInForm = visit; visitFormOpen = true" matTooltip="Editar la visita">
 				<mat-icon>edit</mat-icon>
 			</button>
-			<button mat-icon-button color="warn" (click)="openConfirmationDialog(visit)">
+			<button mat-icon-button color="warn" (click)="openConfirmationDialog(visit)" matTooltip="Eliminar la visita">
 				<mat-icon>delete</mat-icon>
 			</button>
 		</mat-list-item>
