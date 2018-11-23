@@ -2,294 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 import { Schedule } from './../classes/schedule';
+import { APPOINTMENTS } from './../catalogs/appointments';
+import { SCHEDULES, PROFESSIONALS } from './../catalogs/schedules';
 import * as moment from 'moment';
-
-const PROFESSIONALS = [
-    {
-      id: 1,
-      name: 'Roberto',
-      lastname: 'Loprete'
-    },
-    {
-      id: 2,
-      name: 'Natalie',
-      lastname: 'Costrosa'
-    },
-  ];
-
-const SCHEDULES = [
-    {
-      appointmentInterval: 20,
-      color: '#bbdefb',
-      id: 1,
-      name: 'Pediatría',
-      periodicity: '1',
-      professionals: [PROFESSIONALS[0]],
-      selectedDays: [],
-      validityEnd: new Date(2018,11,31),
-      validityStart: new Date(2018,0,1),
-      weekDays: [
-        {
-          active: true,
-          hours: [
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-        {
-          active: true,
-          hours:[
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-        {
-          active: true,
-          hours: [
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-        {
-          active: true,
-          hours: [
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-        {
-          active: true,
-          hours: [
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-        {
-          active: true,
-          hours: [
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-        {
-          active: true,
-          hours: [
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-      ],
-    },
-    {
-      appointmentInterval: 30,
-      color: '#dcedc8',
-      id: 2,
-      name: 'Traumatología',
-      periodicity: '2',
-      professionals: [PROFESSIONALS[0], PROFESSIONALS[1]],
-      selectedDays: [],
-      validityEnd: new Date(2018,11,31),
-      validityStart: new Date(2018,0,1),
-      weekDays: [
-        {
-          active: true,
-          hours: [
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-        {
-          active: true,
-          hours:[
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-        {
-          active: true,
-          hours: [
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-        {
-          active: true,
-          hours: [
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-        {
-          active: true,
-          hours: [
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-        {
-          active: true,
-          hours: [
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-        {
-          active: true,
-          hours: [
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-      ],
-    },
-  ];
-
-const APPOINTMENTS = [
-    {
-      schedule: SCHEDULES[1],
-      id: 1,
-      date: moment(),
-      hour: moment().format('HH:mm'),
-      patient: 'Lola',
-      reminderWay: null,
-      reminderData: null,
-      indications: 'Indicaciones de prueba',
-    },
-    {
-      schedule: SCHEDULES[0],
-      id: 2,
-      date: moment(),
-      hour: moment().format('HH:mm'),
-      patient: 'Tini',
-      reminderWay: null,
-      reminderData: null,
-      indications: 'Indicaciones de prueba',
-    },
-    {
-      schedule: SCHEDULES[1],
-      id: 3,
-      date: moment(),
-      hour: moment().format('HH:mm'),
-      patient: 'Pepe',
-      reminderWay: null,
-      reminderData: null,
-      indications: 'Indicaciones de prueba',
-    },
-    {
-      schedule: SCHEDULES[1],
-      id: 1,
-      date: moment('20181110'),
-      hour: moment().format('HH:mm'),
-      patient: 'Lola',
-      reminderWay: null,
-      reminderData: null,
-      indications: 'Indicaciones de prueba',
-    },
-    {
-      schedule: SCHEDULES[0],
-      id: 2,
-      date: moment('20181110'),
-      hour: moment().format('HH:mm'),
-      patient: 'Tini',
-      reminderWay: null,
-      reminderData: null,
-      indications: 'Indicaciones de prueba',
-    },
-    {
-      schedule: SCHEDULES[1],
-      id: 3,
-      date: moment('20181120'),
-      hour: moment().format('HH:mm'),
-      patient: 'Sonia',
-      reminderWay: null,
-      reminderData: null,
-      indications: 'Indicaciones de prueba',
-    },
-  ];
 
 @Injectable({
   providedIn: 'root'
@@ -319,45 +34,47 @@ export class SchedulesService {
   }
 
   compareHours(a, b) {
-    if (a.hour < b.hour)
+    if (a.hour < b.hour) {
       return -1;
-    if (a.hour > b.hour)
+    }
+    if (a.hour > b.hour) {
       return 1;
+    }
     return 0;
   }
 
   getAppointments(date, validSchedules, selectedSchedules) {
-    let appointmentsList = APPOINTMENTS.filter(appointment => {
-      const dateEval = appointment.date.format('DD/MM/YYYY') === date.format('DD/MM/YYYY');
+    const appointmentsList = APPOINTMENTS.filter(appointment => {
+      const dateEval = appointment.date.format('YYYYMMDD') === date.format('YYYYMMDD');
       const validScheduleEval = validSchedules.indexOf(appointment.schedule) >= 0;
       const selectedScheduleEval = selectedSchedules.length > 0 ? selectedSchedules.indexOf(appointment.schedule) >= 0 : true;
       return (dateEval && validScheduleEval && selectedScheduleEval);
     });
-    let appointmentsSpots = this.getAppointmentsSpots(date, validSchedules, selectedSchedules);
-    return appointmentsList.concat(appointmentsSpots).sort(this.compareHours);
+    return appointmentsList.concat(this.getAppointmentsSpots(date, validSchedules, appointmentsList)).sort(this.compareHours);
   }
 
-  getAppointmentsSpots(date, validSchedules, selectedSchedules) {
-    let weekDay = date.weekday();
-    let spots = [];
-    for (let schedule of validSchedules) {
+  getAppointmentsSpots(date, validSchedules, appointmentsList) {
+    const weekDay = date.weekday();
+    const spots = [];
+    for (const schedule of validSchedules) {
       let day;
       if (schedule.periodicity === '1') {
         day = schedule.weekDays[weekDay];
       } else {
-        for (let daySelected of schedule.selectedDays) {
-          if(daySelected.date.format('YYYYMMDD') === date.format('YYYYMMDD')){
+        for (const daySelected of schedule.selectedDays) {
+          if (daySelected.date.format('YYYYMMDD') === date.format('YYYYMMDD')) {
             day = daySelected;
+            break;
           }
         }
       }
       if (day && day.active) {
+        let spot;
         let spotHour;
-        let endHour;
-        for (let hour of day.hours) {
-          spotHour = hour.start;
+        for (const hour of day.hours) {
+          spotHour = hour.start.clone();
           while (spotHour < hour.end) {
-            spots.push({
+            spot = {
               date: date,
               hour: spotHour.format('HH:mm'),
               id: 3,
@@ -366,7 +83,16 @@ export class SchedulesService {
               reminderData: null,
               reminderWay: null,
               schedule: schedule,
+            }
+            let filteredAppointments = appointmentsList.filter(appointment => {
+              const a = appointment.date.format('YYYYMMDD') === spot.date.format('YYYYMMDD');
+              const b = appointment.hour === spot.hour;
+              const c = appointment.schedule === spot.schedule;
+              return (a && b && c);
             });
+            if (filteredAppointments.length === 0) {
+              spots.push(spot);
+            }
             spotHour = spotHour.add(schedule.appointmentInterval, 'm');
           }
         }

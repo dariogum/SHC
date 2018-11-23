@@ -127,7 +127,7 @@ export class VisitsComponent implements OnInit {
     this.visitFormOpen = true;
   }
 
-  closeVisitForm(){
+  closeVisitForm() {
     this.visitFormOpen = false;
     this.visitInForm = undefined;
     this.files = null;

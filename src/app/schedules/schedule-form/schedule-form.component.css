@@ -36,7 +36,7 @@
   display: inline-block;
   margin: 6px 8px;
   vertical-align: top;
-  width: calc(14% - 48px);
+  width: calc(14.25% - 48px);
 }
 .copy-hours,
 .remove-day {

@@ -365,12 +365,11 @@
 						<span matSuffix>semanas</span>
 					</mat-form-field>
 					<mat-form-field class="comment-field">
-						<input matInput
-						type="text"
+						<textarea matInput
 						name="comments"
 						[(ngModel)]="patient.comments"
 						placeholder="Comentario"
-						(blur)="updatePatient($event)">
+						(blur)="updatePatient($event)"></textarea>
 					</mat-form-field>
 				</div>
 				<div>

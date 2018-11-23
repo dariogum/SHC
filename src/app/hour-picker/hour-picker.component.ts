@@ -10,21 +10,21 @@ export class HourPickerComponent {
 
   private _hour;
   private _minutes;
- 
+
   @Input()
   set hourAndMinutes(hourAndMinutes) {
-    if(hourAndMinutes){
+    if (hourAndMinutes) {
       this._hour = hourAndMinutes.hours();
       this._minutes = hourAndMinutes.minutes();
     }
   }
- 
-  get hourAndMinutes() { 
-    return moment().set({'hour': this._hour, 'minute': this._minutes});
+
+  get hourAndMinutes() {
+    return moment().set({ 'hour': this._hour, 'minute': this._minutes });
   }
 
   @Output() hourAndMinutesSetted = new EventEmitter<any>();
   updateHourAndMinutes() {
-    this.hourAndMinutesSetted.emit(moment().set({'hour': this._hour, 'minute': this._minutes}));
+    this.hourAndMinutesSetted.emit(moment().set({ 'hour': this._hour, 'minute': this._minutes }));
   }
 }

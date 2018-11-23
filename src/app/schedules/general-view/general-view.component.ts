@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatBottomSheet } from '@angular/material';
+import { MatDatepicker } from '@angular/material/datepicker';
 
 import { ConfigService } from './../../auth/config.service';
 import { FormComponent } from './../form/form.component';
@@ -14,12 +15,16 @@ import * as moment from 'moment';
 })
 export class GeneralViewComponent implements OnInit {
 
+  calendarView = 'month';
   currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
   lists = [];
+  loading = false;
   screenType = 'wide';
   selectedSchedules = [];
-  today;
-  todayName;
+  selectedDay;
+  selectedDayName;
+  selectedMonth;
+  selectedMonthName;
   userRole: string;
   validSchedules = [];
   viewType = 'daily';
@@ -32,6 +37,7 @@ export class GeneralViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    moment.locale('es');
     this.userRole = this.configService.getUserConfig(this.currentUser, 'role');
 
     this.breakpointObserver.observe([
@@ -62,17 +68,7 @@ export class GeneralViewComponent implements OnInit {
     });
 
     this.validSchedules = this.schedulesService.getValidSchedules(this.viewType);
-
-    moment.locale('es');
-    this.today = moment();
-    this.todayName = this.today.format('dddd DD/MM/YYYY');
-    this.lists = [
-      {
-        appointments: this.getAppointments(this.today),
-        date: this.today,
-        name: this.todayName,
-      }
-    ];
+    this.changeTypeOfView({ value: this.viewType });
   }
 
   openBottomSheet(appointment): void {
@@ -81,7 +77,14 @@ export class GeneralViewComponent implements OnInit {
     });
   }
 
+  chosenMonthHandler(normlizedMonth: any, datepicker: MatDatepicker<any>) {
+    datepicker.close();
+    this.selectedMonth = normlizedMonth.month();
+    this.changeTypeOfView({ value: this.viewType });
+  }
+
   changeTypeOfView(event) {
+    this.loading = true;
     this.viewType = event.value;
     this.validSchedules = this.schedulesService.getValidSchedules(this.viewType);
     switch (event.value) {
@@ -89,23 +92,40 @@ export class GeneralViewComponent implements OnInit {
         this.lists = this.getDays('week');
         break;
       case 'monthly':
+        if (this.selectedMonth === undefined) {
+          this.selectedMonth = moment().month();
+        }
+        this.selectedMonthName = moment().month(this.selectedMonth).format('MMMM');
+        this.calendarView = 'year';
         this.lists = this.getDays('month');
         break;
       default:
+        if (!this.selectedDay) {
+          this.selectedDay = moment();
+        }
+        this.selectedDayName = this.selectedDay.format('dddd DD/MM/YYYY');
         this.lists = [{
-          appointments: this.getAppointments(this.today),
-          date: this.today,
-          name: this.todayName,
+          appointments: this.getAppointments(this.selectedDay),
+          date: this.selectedDay,
+          name: this.selectedDayName,
         }];
         break;
     }
+    this.loading = false;
   }
 
   getDays(period) {
-    const start = moment().startOf(period);
-    const end = moment().endOf(period);
-    let days = [];
+    let start;
+    let end;
+    if (period === 'month') {
+      start = moment().month(this.selectedMonth).startOf(period);
+      end = moment().month(this.selectedMonth).endOf(period);
+    } else {
+      start = moment().startOf(period);
+      end = moment().endOf(period);
+    }
     let day = start;
+    const days = [];
     while (day <= end) {
       days.push({
         appointments: this.getAppointments(day),
