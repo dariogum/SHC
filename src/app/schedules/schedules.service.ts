@@ -19,114 +19,16 @@ const PROFESSIONALS = [
 
 const SCHEDULES = [
     {
-      id: 1,
-      name: 'Agenda 1',
-      professionals: [PROFESSIONALS[0]],
-      days: [
-        {
-          active: true,
-          hours: [
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-        {
-          active: true,
-          hours:[
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-        {
-          active: true,
-          hours: [
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-        {
-          active: true,
-          hours: [
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-        {
-          active: true,
-          hours: [
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-        {
-          active: true,
-          hours: [
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-        {
-          active: true,
-          hours: [
-            {
-              start: moment().set({'hour': 8, 'minute': 30}),
-              end: moment().set({'hour': 12, 'minute': 45}),
-            },
-            {
-              start: moment().set({'hour': 16, 'minute': 30}),
-              end: moment().set({'hour': 19, 'minute': 30}),
-            }
-          ]
-        },
-      ],
-      periodicity: '1',
-      validityStart: new Date(2018,0,1),
-      validityEnd: new Date(2018,11,31),
       appointmentInterval: 20,
       color: '#bbdefb',
+      id: 1,
+      name: 'Pediatría',
+      periodicity: '1',
+      professionals: [PROFESSIONALS[0]],
       selectedDays: [],
-    },
-    {
-      id: 2,
-      name: 'Agenda 2',
-      professionals: [PROFESSIONALS[0], PROFESSIONALS[1]],
-      days: [
+      validityEnd: new Date(2018,11,31),
+      validityStart: new Date(2018,0,1),
+      weekDays: [
         {
           active: true,
           hours: [
@@ -219,12 +121,110 @@ const SCHEDULES = [
           ]
         },
       ],
-      periodicity: '2',
-      validityStart: new Date(2018,0,1),
-      validityEnd: new Date(2018,11,31),
+    },
+    {
       appointmentInterval: 30,
       color: '#dcedc8',
+      id: 2,
+      name: 'Traumatología',
+      periodicity: '2',
+      professionals: [PROFESSIONALS[0], PROFESSIONALS[1]],
       selectedDays: [],
+      validityEnd: new Date(2018,11,31),
+      validityStart: new Date(2018,0,1),
+      weekDays: [
+        {
+          active: true,
+          hours: [
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+        {
+          active: true,
+          hours:[
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+        {
+          active: true,
+          hours: [
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+        {
+          active: true,
+          hours: [
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+        {
+          active: true,
+          hours: [
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+        {
+          active: true,
+          hours: [
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+        {
+          active: true,
+          hours: [
+            {
+              start: moment().set({'hour': 8, 'minute': 30}),
+              end: moment().set({'hour': 12, 'minute': 45}),
+            },
+            {
+              start: moment().set({'hour': 16, 'minute': 30}),
+              end: moment().set({'hour': 19, 'minute': 30}),
+            }
+          ]
+        },
+      ],
     },
   ];
 
@@ -341,25 +341,33 @@ export class SchedulesService {
     let weekDay = date.weekday();
     let spots = [];
     for (let schedule of validSchedules) {
+      let day;
       if (schedule.periodicity === '1') {
-        if (schedule.days[weekDay].active) {
-          let spotHour;
-          let endHour;
-          for (let hour of schedule.days[weekDay].hours) {
-            spotHour = hour.start;
-            while (spotHour < hour.end) {
-              spots.push({
-                schedule: schedule,
-                id: 3,
-                date: date,
-                hour: spotHour.format('HH:mm'),
-                patient: null,
-                reminderWay: null,
-                reminderData: null,
-                indications: null,
-              });
-              spotHour = spotHour.add(schedule.appointmentInterval, 'm');
-            }
+        day = schedule.weekDays[weekDay];
+      } else {
+        for (let daySelected of schedule.selectedDays) {
+          if(daySelected.date.format('YYYYMMDD') === date.format('YYYYMMDD')){
+            day = daySelected;
+          }
+        }
+      }
+      if (day && day.active) {
+        let spotHour;
+        let endHour;
+        for (let hour of day.hours) {
+          spotHour = hour.start;
+          while (spotHour < hour.end) {
+            spots.push({
+              date: date,
+              hour: spotHour.format('HH:mm'),
+              id: 3,
+              indications: null,
+              patient: null,
+              reminderData: null,
+              reminderWay: null,
+              schedule: schedule,
+            });
+            spotHour = spotHour.add(schedule.appointmentInterval, 'm');
           }
         }
       }

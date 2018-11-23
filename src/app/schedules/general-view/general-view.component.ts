@@ -18,8 +18,8 @@ export class GeneralViewComponent implements OnInit {
   lists = [];
   screenType = 'wide';
   selectedSchedules = [];
-  todayName;
   today;
+  todayName;
   userRole: string;
   validSchedules = [];
   viewType = 'daily';
@@ -64,13 +64,13 @@ export class GeneralViewComponent implements OnInit {
     this.validSchedules = this.schedulesService.getValidSchedules(this.viewType);
 
     moment.locale('es');
-    this.todayName = moment().format('dddd DD/MM/YYYY');
     this.today = moment();
+    this.todayName = this.today.format('dddd DD/MM/YYYY');
     this.lists = [
       {
-        name: this.todayName,
-        date: this.today,
         appointments: this.getAppointments(this.today),
+        date: this.today,
+        name: this.todayName,
       }
     ];
   }
@@ -93,9 +93,9 @@ export class GeneralViewComponent implements OnInit {
         break;
       default:
         this.lists = [{
-          name: this.todayName,
-          date: this.today,
           appointments: this.getAppointments(this.today),
+          date: this.today,
+          name: this.todayName,
         }];
         break;
     }
@@ -104,13 +104,13 @@ export class GeneralViewComponent implements OnInit {
   getDays(period) {
     const start = moment().startOf(period);
     const end = moment().endOf(period);
-    const days = [];
+    let days = [];
     let day = start;
     while (day <= end) {
       days.push({
-        name: day.format('ddd DD/MM/YYYY'),
-        date: day,
         appointments: this.getAppointments(day),
+        date: day,
+        name: day.format('ddd DD/MM/YYYY'),
       });
       day = day.clone().add(1, 'd');
     }
