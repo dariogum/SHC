@@ -22,7 +22,7 @@ export class FormComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.schedules = this.schedulesService.getValidSchedules('monthly');
+    this.schedules = this.schedulesService.getValidSchedules('monthly', moment());
   }
 
 }

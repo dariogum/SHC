@@ -28,8 +28,13 @@
   <mat-card-content>
     <form method="post" [ngClass]="screenType">
       <mat-form-field class="form-field">
-        <mat-select placeholder="Seleccionar agenda/s" [(ngModel)]="selectedSchedules" name="selectedSchedules" multiple>
-          <mat-option *ngFor="let schedule of validSchedules" [value]="schedule">
+        <mat-select
+        [(ngModel)]="selectedSchedules"
+        (selectionChange)="changeView(false, false)"
+        multiple
+        name="selectedSchedules"
+        placeholder="Seleccionar agenda/s">
+          <mat-option *ngFor="let schedule of schedules" [value]="schedule">
             {{schedule.name}}
           </mat-option>
         </mat-select>
@@ -42,10 +47,10 @@
       <mat-form-field class="form-field">
         <input matInput #searchProffesional type="text" placeholder="Buscar un profesional">
         <mat-icon class="matSuffixButton" matSuffix (click)="ngOnInit()" *ngIf="searchProffesional.value.length">clear</mat-icon>
-        <mat-hint align="start">Ingrese al menos 3 caracteres y seleccione un paciente del listado</mat-hint>
+        <mat-hint align="start">Ingrese al menos 3 caracteres y seleccione un profesional del listado</mat-hint>
       </mat-form-field>
       <div class="view-type-group">
-        <mat-button-toggle-group appearance="legacy" [(ngModel)]="viewType" name="viewType" (change)="changeTypeOfView($event)">
+        <mat-button-toggle-group appearance="legacy" [(ngModel)]="view" name="view" (change)="changeView(false, false)">
           <mat-button-toggle value="daily" matTooltip="Vista diaria">
             <mat-icon>view_day</mat-icon>
           </mat-button-toggle>
@@ -57,37 +62,27 @@
           </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
-      <mat-form-field class="form-field" *ngIf="viewType === 'daily'">
+      <mat-form-field class="form-field">
         <input matInput
-        name="selectedDay"
-        [(ngModel)]="selectedDay"
-        placeholder="Seleccionar un día"
-        [matDatepicker]="todayPicker"
+        placeholder="Seleccionar un día/mes"
+        [(ngModel)]="day"
+        [matDatepicker]="dayPicker"
+        (dateChange)="changeView(false, false)"
         disabled
-        (dateChange)="changeTypeOfView({value: viewType})">
-        <mat-datepicker-toggle matSuffix [for]="todayPicker"></mat-datepicker-toggle>
-        <mat-datepicker touchUi #todayPicker
+        name="day">
+        <mat-datepicker-toggle matSuffix [for]="dayPicker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #dayPicker
+        [startView]="startView"
+        (monthSelected)="changeView($event, dayPicker)"
         calendarLabel="Seleccionar un día"
         disabled="false"></mat-datepicker>
       </mat-form-field>
-      <span class="month-selector" *ngIf="viewType === 'monthly'">Mes seleccionado: {{selectedMonthName | titlecase}}</span>
-      <mat-form-field class="month-field" *ngIf="viewType === 'monthly'">
-        <input matInput
-        placeholder="Seleccionar un mes"
-        [matDatepicker]="monthPicker"
-        disabled>
-        <mat-datepicker-toggle matSuffix [for]="monthPicker"></mat-datepicker-toggle>
-        <mat-datepicker touchUi #monthPicker
-        calendarLabel="Seleccionar un mes"
-        startView="year"
-        (monthSelected)="chosenMonthHandler($event, monthPicker)"
-        disabled="false"></mat-datepicker>
-      </mat-form-field>
+      <span class="month-selector" *ngIf="view === 'monthly'">Mes seleccionado: {{monthName | titlecase}}</span>
     </form>
     <mat-spinner *ngIf="loading"></mat-spinner>
-    <mat-nav-list dense *ngFor="let list of lists" [ngClass]="[viewType, screenType]">
-      <h3 mat-subheader>{{ list.name | titlecase }}</h3>
-      <mat-list-item *ngFor="let appointment of list.appointments" [style.background]="appointment.schedule.color" (click)="openBottomSheet(appointment)" [class.occupied]="appointment.patient">
+    <mat-nav-list dense *ngFor="let day of days" [ngClass]="[view, screenType]">
+      <h3 mat-subheader>{{ day.name | titlecase }}</h3>
+      <mat-list-item *ngFor="let appointment of day.appointments" [style.background]="appointment.schedule.color" (click)="openBottomSheet(appointment)" [class.occupied]="appointment.patient">
         <p>{{appointment.hour}} | {{appointment.patient}}</p>
       </mat-list-item>
     </mat-nav-list>

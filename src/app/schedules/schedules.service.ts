@@ -13,22 +13,22 @@ export class SchedulesService {
 
   constructor() { }
 
-  getValidSchedules(viewType) {
-    switch (viewType) {
+  getValidSchedules(view, day) {
+    switch (view) {
       case 'weekly':
         return SCHEDULES.filter(schedule =>
-          moment(schedule.validityStart) <= moment().startOf('isoWeek') &&
-          moment(schedule.validityEnd) >= moment().endOf('isoWeek'));
+          moment(schedule.validityStart) <= day.startOf('week') &&
+          moment(schedule.validityEnd) >= day.endOf('week'));
         break;
       case 'monthly':
         return SCHEDULES.filter(schedule =>
-          moment(schedule.validityStart) <= moment().startOf('month') &&
-          moment(schedule.validityEnd) >= moment().endOf('month'));
+          moment(schedule.validityStart) <= day.startOf('month') &&
+          moment(schedule.validityEnd) >= day.endOf('month'));
         break;
       default:
         return SCHEDULES.filter(schedule =>
-          moment(schedule.validityStart) <= moment(moment()) &&
-          moment(schedule.validityEnd) >= moment(moment()));
+          moment(schedule.validityStart) <= day &&
+          moment(schedule.validityEnd) >= day);
         break;
     }
   }
@@ -50,50 +50,52 @@ export class SchedulesService {
       const selectedScheduleEval = selectedSchedules.length > 0 ? selectedSchedules.indexOf(appointment.schedule) >= 0 : true;
       return (dateEval && validScheduleEval && selectedScheduleEval);
     });
-    return appointmentsList.concat(this.getAppointmentsSpots(date, validSchedules, appointmentsList)).sort(this.compareHours);
+    return appointmentsList.concat(this.getAppointmentsSpots(date, validSchedules, selectedSchedules, appointmentsList)).sort(this.compareHours);
   }
 
-  getAppointmentsSpots(date, validSchedules, appointmentsList) {
+  getAppointmentsSpots(date, validSchedules, selectedSchedules, appointmentsList) {
     const weekDay = date.weekday();
     const spots = [];
     for (const schedule of validSchedules) {
-      let day;
-      if (schedule.periodicity === '1') {
-        day = schedule.weekDays[weekDay];
-      } else {
-        for (const daySelected of schedule.selectedDays) {
-          if (daySelected.date.format('YYYYMMDD') === date.format('YYYYMMDD')) {
-            day = daySelected;
-            break;
+      if (selectedSchedules.length === 0 || selectedSchedules.indexOf(schedule) > -1) {
+        let day;
+        if (schedule.periodicity === '1') {
+          day = schedule.weekDays[weekDay];
+        } else {
+          for (const daySelected of schedule.selectedDays) {
+            if (daySelected.date.format('YYYYMMDD') === date.format('YYYYMMDD')) {
+              day = daySelected;
+              break;
+            }
           }
         }
-      }
-      if (day && day.active) {
-        let spot;
-        let spotHour;
-        for (const hour of day.hours) {
-          spotHour = hour.start.clone();
-          while (spotHour < hour.end) {
-            spot = {
-              date: date,
-              hour: spotHour.format('HH:mm'),
-              id: 3,
-              indications: null,
-              patient: null,
-              reminderData: null,
-              reminderWay: null,
-              schedule: schedule,
+        if (day && day.active) {
+          let spot;
+          let spotHour;
+          for (const hour of day.hours) {
+            spotHour = hour.start.clone();
+            while (spotHour < hour.end) {
+              spot = {
+                date: date,
+                hour: spotHour.format('HH:mm'),
+                id: 3,
+                indications: null,
+                patient: null,
+                reminderData: null,
+                reminderWay: null,
+                schedule: schedule,
+              }
+              let filteredAppointments = appointmentsList.filter(appointment => {
+                const a = appointment.date.format('YYYYMMDD') === spot.date.format('YYYYMMDD');
+                const b = appointment.hour === spot.hour;
+                const c = appointment.schedule === spot.schedule;
+                return (a && b && c);
+              });
+              if (filteredAppointments.length === 0) {
+                spots.push(spot);
+              }
+              spotHour = spotHour.add(schedule.appointmentInterval, 'm');
             }
-            let filteredAppointments = appointmentsList.filter(appointment => {
-              const a = appointment.date.format('YYYYMMDD') === spot.date.format('YYYYMMDD');
-              const b = appointment.hour === spot.hour;
-              const c = appointment.schedule === spot.schedule;
-              return (a && b && c);
-            });
-            if (filteredAppointments.length === 0) {
-              spots.push(spot);
-            }
-            spotHour = spotHour.add(schedule.appointmentInterval, 'm');
           }
         }
       }

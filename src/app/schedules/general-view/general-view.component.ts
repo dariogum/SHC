@@ -15,19 +15,17 @@ import * as moment from 'moment';
 })
 export class GeneralViewComponent implements OnInit {
 
-  calendarView = 'month';
   currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
-  lists = [];
+  day;
+  days = [];
   loading = false;
+  monthName;
   screenType = 'wide';
+  schedules = [];
   selectedSchedules = [];
-  selectedDay;
-  selectedDayName;
-  selectedMonth;
-  selectedMonthName;
+  startView = 'month';
   userRole: string;
-  validSchedules = [];
-  viewType = 'daily';
+  view = 'daily';
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -67,8 +65,8 @@ export class GeneralViewComponent implements OnInit {
       }
     });
 
-    this.validSchedules = this.schedulesService.getValidSchedules(this.viewType);
-    this.changeTypeOfView({ value: this.viewType });
+    this.day = moment();
+    this.changeView(false, false);
   }
 
   openBottomSheet(appointment): void {
@@ -77,68 +75,48 @@ export class GeneralViewComponent implements OnInit {
     });
   }
 
-  chosenMonthHandler(normlizedMonth: any, datepicker: MatDatepicker<any>) {
-    datepicker.close();
-    this.selectedMonth = normlizedMonth.month();
-    this.changeTypeOfView({ value: this.viewType });
-  }
-
-  changeTypeOfView(event) {
-    this.loading = true;
-    this.viewType = event.value;
-    this.validSchedules = this.schedulesService.getValidSchedules(this.viewType);
-    switch (event.value) {
-      case 'weekly':
-        this.lists = this.getDays('week');
+  changeView(event, dayPicker) {
+    let firstDay;
+    let lastDay;
+    switch (this.view) {
+      case "weekly":
+        this.startView = 'month';
+        firstDay = this.day.clone().startOf('week');
+        lastDay = this.day.clone().endOf('week');
         break;
-      case 'monthly':
-        if (this.selectedMonth === undefined) {
-          this.selectedMonth = moment().month();
-        }
-        this.selectedMonthName = moment().month(this.selectedMonth).format('MMMM');
-        this.calendarView = 'year';
-        this.lists = this.getDays('month');
+      case "monthly":
+        if (dayPicker) dayPicker.close();
+        if (event) this.day = event;
+        this.startView = 'year';
+        firstDay = this.day.clone().startOf('month');
+        lastDay = this.day.clone().endOf('month');
+        this.monthName = this.day.format('MMMM')
         break;
       default:
-        if (!this.selectedDay) {
-          this.selectedDay = moment();
-        }
-        this.selectedDayName = this.selectedDay.format('dddd DD/MM/YYYY');
-        this.lists = [{
-          appointments: this.getAppointments(this.selectedDay),
-          date: this.selectedDay,
-          name: this.selectedDayName,
-        }];
+        this.startView = 'month';
+        firstDay = this.day.clone();
+        lastDay = this.day.clone();
         break;
     }
-    this.loading = false;
+    this.setDays(firstDay, lastDay);
   }
 
-  getDays(period) {
-    let start;
-    let end;
-    if (period === 'month') {
-      start = moment().month(this.selectedMonth).startOf(period);
-      end = moment().month(this.selectedMonth).endOf(period);
-    } else {
-      start = moment().startOf(period);
-      end = moment().endOf(period);
+  setDays(firstDay, lastDay) {
+    this.days = [];
+    this.schedules = this.schedulesService.getValidSchedules(this.view, this.day);
+    while (firstDay <= lastDay) {
+      let day = {
+        appointments: this.getAppointments(firstDay),
+        date: firstDay,
+        name: firstDay.format('ddd DD/MM/YYYY'),
+      };
+      this.days.push(day);
+      firstDay = firstDay.add(1, 'd');
     }
-    let day = start;
-    const days = [];
-    while (day <= end) {
-      days.push({
-        appointments: this.getAppointments(day),
-        date: day,
-        name: day.format('ddd DD/MM/YYYY'),
-      });
-      day = day.clone().add(1, 'd');
-    }
-    return days;
   }
 
   getAppointments(date) {
-    return this.schedulesService.getAppointments(date, this.validSchedules, this.selectedSchedules);
+    return this.schedulesService.getAppointments(date, this.schedules, this.selectedSchedules);
   }
 
 }
