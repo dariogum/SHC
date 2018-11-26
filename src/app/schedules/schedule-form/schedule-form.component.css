@@ -53,6 +53,9 @@
   right: -20px;
   top: 50px;
 }
+.centered {
+  text-align: center;
+}
 /deep/ .mat-card-header-text {
   margin: 0 !important;
 }

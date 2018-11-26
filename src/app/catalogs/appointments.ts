@@ -8,7 +8,7 @@ export const APPOINTMENTS: Appointment[] = [
     id: 1,
     date: moment(),
     hour: moment().set({ 'hour': 9, 'minute': 30 }).format('HH:mm'),
-    patient: 'Lola',
+    patient: 5100,
     professional: PROFESSIONALS[0],
     reminderWay: null,
     reminderData: null,

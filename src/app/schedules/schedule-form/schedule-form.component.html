@@ -121,7 +121,7 @@
             </div>
           </div>
         </mat-card-content>
-        <mat-card-actions>
+        <mat-card-actions class="centered">
           <button mat-button color="primary" (click)="addHour(schedule.weekDays[i])" matTooltip="Agregar un horario">
             <mat-icon>add</mat-icon>
           </button>
@@ -136,7 +136,7 @@
       <mat-card class="day-card" *ngFor="let day of schedule.selectedDays; let i = index;">
         <mat-card-header>
           <mat-card-title>
-            {{day.name | titlecase}}
+            <span class="mat-body-strong">{{day.name | titlecase}}</span>
           </mat-card-title>
           <button mat-icon-button class="remove-day" color="warn" (click)="removeDay(day)" matTooltip="Quitar este día">
             <mat-icon aria-label="Quitar este día">clear</mat-icon>
@@ -157,7 +157,7 @@
             </div>
           </div>
         </mat-card-content>
-        <mat-card-actions>
+        <mat-card-actions class="centered">
           <button mat-button color="primary" (click)="addHour(day)" matTooltip="Agregar un horario">
             <mat-icon>add</mat-icon>
           </button>

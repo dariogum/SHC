@@ -149,13 +149,13 @@ export class ScheduleFormComponent implements OnInit {
 
   selectDay(event) {
     for (let i = this.schedule.selectedDays.length - 1; i >= 0; i--) {
-      if (this.schedule.selectedDays[i].date === event.value.format('YYYY-MM-DD')) {
+      if (this.schedule.selectedDays[i].date.format('YYYYMMDD') === event.value.format('YYYYMMDD')) {
         return false;
       }
     }
     this.schedule.selectedDays.push(
       {
-        date: event.value.format('YYYY-MM-DD'),
+        date: event.value,
         name: event.value.format('dddd DD/MM/YYYY'),
         active: true,
         hours: []

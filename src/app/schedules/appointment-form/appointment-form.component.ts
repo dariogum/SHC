@@ -6,17 +6,17 @@ import * as moment from 'moment';
 
 @Component({
   selector: 'app-form',
-  templateUrl: './form.component.html',
-  styleUrls: ['./form.component.css']
+  templateUrl: './appointment-form.component.html',
+  styleUrls: ['./appointment-form.component.css']
 })
-export class FormComponent implements OnInit {
+export class AppointmentFormComponent implements OnInit {
 
   hour = 0;
   minutes = 0;
   schedules = [];
 
   constructor(
-    private bottomSheetRef: MatBottomSheetRef<FormComponent>,
+    private bottomSheetRef: MatBottomSheetRef<AppointmentFormComponent>,
     private schedulesService: SchedulesService,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
   ) { }

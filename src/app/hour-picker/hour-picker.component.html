@@ -5,7 +5,8 @@
   max="23"
   placeholder="Hs."
   maxlength="2"
-  (input)="updateHourAndMinutes()">
+  (input)="updateHourAndMinutes()"
+  required>
 </mat-form-field>
 <span class="separator">:</span>
 <mat-form-field class="minutes-picker">
@@ -15,5 +16,6 @@
   max="59"
   placeholder="Min."
   maxlength="2"
-  (input)="updateHourAndMinutes()">
+  (input)="updateHourAndMinutes()"
+  required>
 </mat-form-field>

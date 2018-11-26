@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatBottomSheet } from '@angular/material';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { Observable, of, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, map, filter, tap } from 'rxjs/operators';
 
 import { ConfigService } from './../../auth/config.service';
-import { FormComponent } from './../form/form.component';
+import { AppointmentFormComponent } from './../appointment-form/appointment-form.component';
+import { Patient } from './../../classes/patient';
+import { PatientService } from './../../patients/patient.service';
 import { SchedulesService } from './../schedules.service';
 import * as moment from 'moment';
 
@@ -20,17 +24,24 @@ export class GeneralViewComponent implements OnInit {
   days = [];
   loading = false;
   monthName;
+  selectedPatient: Patient;
+  patients: Observable<Patient[]>;
   screenType = 'wide';
   schedules = [];
+  searchPatientsTerms = new Subject<string>();
   selectedSchedules = [];
   startView = 'month';
   userRole: string;
   view = 'daily';
+  withoutFilters = true;
+
+  @ViewChild('patientSearchBox') patientSearchBox: ElementRef; 
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private bottomSheet: MatBottomSheet,
     private configService: ConfigService,
+    private patientService: PatientService,
     private schedulesService: SchedulesService,
   ) { }
 
@@ -67,10 +78,17 @@ export class GeneralViewComponent implements OnInit {
 
     this.day = moment();
     this.changeView(false, false);
+
+    this.patients = this.searchPatientsTerms.pipe(
+      debounceTime(300),
+      filter(term => term.length > 2),
+      distinctUntilChanged(),
+      switchMap((term: string) => this.patientService.searchPatients(term)),
+    );
   }
 
   openBottomSheet(appointment): void {
-    this.bottomSheet.open(FormComponent, {
+    this.bottomSheet.open(AppointmentFormComponent, {
       data: { appointment: appointment },
     });
   }
@@ -90,7 +108,7 @@ export class GeneralViewComponent implements OnInit {
         this.startView = 'year';
         firstDay = this.day.clone().startOf('month');
         lastDay = this.day.clone().endOf('month');
-        this.monthName = this.day.format('MMMM')
+        this.monthName = this.day.clone().format('MMMM')
         break;
       default:
         this.startView = 'month';
@@ -103,12 +121,12 @@ export class GeneralViewComponent implements OnInit {
 
   setDays(firstDay, lastDay) {
     this.days = [];
-    this.schedules = this.schedulesService.getValidSchedules(this.view, this.day);
+    this.schedules = this.schedulesService.getValidSchedules(this.view, this.day.clone());
     while (firstDay <= lastDay) {
       let day = {
         appointments: this.getAppointments(firstDay),
-        date: firstDay,
-        name: firstDay.format('ddd DD/MM/YYYY'),
+        date: firstDay.clone(),
+        name: firstDay.clone().format('ddd DD/MM/YYYY'),
       };
       this.days.push(day);
       firstDay = firstDay.add(1, 'd');
@@ -119,4 +137,28 @@ export class GeneralViewComponent implements OnInit {
     return this.schedulesService.getAppointments(date, this.schedules, this.selectedSchedules);
   }
 
+  displayFn(patient?: Patient): string | undefined {
+    return patient ? patient.lastname + ' ' + patient.name : undefined;
+  }
+
+  searchPatients(term) {
+    if (typeof (term) === 'string') {
+      this.withoutFilters = true;
+      this.searchPatientsTerms.next(term);
+    } else {
+      this.filterAppointmentsByPatient(term);
+    }
+  }
+
+  filterAppointmentsByPatient(patient) {
+    this.withoutFilters = false;
+    for(let day of this.days) {
+      day.filteredAppointments = day.appointments.filter(appointment => appointment.patient === patient.id);
+    }
+  }
+
+  clearPatient() {
+    this.withoutFilters = true;
+    this.patientSearchBox.nativeElement.value = '';
+  }
 }
