@@ -9,6 +9,7 @@ import { ConfigService } from './../../auth/config.service';
 import { AppointmentFormComponent } from './../appointment-form/appointment-form.component';
 import { Patient } from './../../classes/patient';
 import { PatientService } from './../../patients/patient.service';
+import { Schedule } from './../../classes/schedule';
 import { SchedulesService } from './../schedules.service';
 import * as moment from 'moment';
 
@@ -27,7 +28,7 @@ export class GeneralViewComponent implements OnInit {
   selectedPatient: Patient;
   patients: Observable<Patient[]>;
   screenType = 'wide';
-  schedules = [];
+  schedules: Observable<Schedule[]>;
   searchPatientsTerms = new Subject<string>();
   selectedSchedules = [];
   startView = 'month';

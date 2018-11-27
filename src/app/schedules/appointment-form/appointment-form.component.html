@@ -23,7 +23,7 @@
 	</mat-chip-list>
 	<mat-form-field class="form-field">
 		<mat-select placeholder="Agenda" [(ngModel)]="data.appointment.schedule" name="schedule" [disabled]="true">
-			<mat-option *ngFor="let schedule of schedules" [value]="schedule">
+			<mat-option *ngFor="let schedule of schedules | async" [value]="schedule">
 				{{schedule.name}}
 			</mat-option>
 		</mat-select>

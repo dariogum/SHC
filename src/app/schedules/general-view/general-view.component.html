@@ -37,7 +37,7 @@
         multiple
         name="selectedSchedules"
         placeholder="Seleccionar agenda/s">
-          <mat-option *ngFor="let schedule of schedules" [value]="schedule">
+          <mat-option *ngFor="let schedule of schedules | async" [value]="schedule">
             {{schedule.name}}
           </mat-option>
         </mat-select>
@@ -98,7 +98,7 @@
     <mat-nav-list dense *ngFor="let day of days" [ngClass]="[view, screenType]">
       <h3 mat-subheader>{{ day.name | titlecase }}</h3>
       <div *ngIf="withoutFilters">
-        <mat-list-item *ngFor="let appointment of day.appointments" [style.background]="appointment.schedule.color" (click)="openBottomSheet(appointment)" [class.occupied]="appointment.patient">
+        <mat-list-item *ngFor="let appointment of day.appointments | async" [style.background]="appointment.schedule.color" (click)="openBottomSheet(appointment)" [class.occupied]="appointment.patient">
           <p>{{appointment.hour}} | {{appointment.patient}}</p>
         </mat-list-item>
       </div>
