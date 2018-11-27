@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, forkJoin } from 'rxjs';
 import { catchError, tap, map, filter } from 'rxjs/operators';
 
 import { environment } from './../../environments/environment';
 import { Appointment } from './../classes/appointment';
 import { Schedule } from './../classes/schedule';
 import { Patient } from './../classes/patient';
+import { PatientService } from './../patients/patient.service';
 import { User } from './../classes/user';
+import { UserService } from './../users/user.service';
 import { SCHEDULES, PROFESSIONALS } from './../catalogs/schedules';
 import * as moment from 'moment';
 
@@ -28,29 +30,36 @@ export class SchedulesService {
 
   constructor(
     private http: HttpClient,
+    private userService: UserService,
+    private patientService: PatientService,
   ) { }
 
   parseAppointment(data): Appointment {
-    let appointment: Appointment;
-    let patient: Patient;
-    let professional: User;
-    let schedule: Observable<Schedule> = this.getSchedule(data.attributes.schedule);
+    let patient = this.patientService.getPatient(data.attributes.patient);
+    let professional = this.userService.getUser(data.attributes.professional);
+    let schedule = this.getSchedule(data.attributes.schedule);
 
-    appointment = {
+    let appointment: Appointment = {
       confirmed: data.attributes.confirmed,
       date: data.attributes.date,
-      hour: data.attributes.hour,
+      hour: data.attributes.hour.substring(0, data.attributes.hour.length - 3),
       id: data.id,
       indications: data.attributes.indications,
-      patient: patient,
+      patient: null,
       printed: data.attributes.printed,
-      professional: professional,
+      professional: null,
       reminderData: data.attributes.reminderData,
       reminderSent: data.attributes.reminderSent,
       reminderWay: data.attributes.reminderWay,
       reprogrammed: data.attributes.reprogrammed,
-      schedule: schedule,
+      schedule: null,
     };
+
+    forkJoin([patient, professional, schedule]).subscribe(results => {
+      appointment.patient = results[0];
+      appointment.professional = results[1];
+      appointment.schedule = results[2];
+    });
 
     return appointment;
   }
@@ -131,20 +140,33 @@ export class SchedulesService {
 
   getAppointments(date, validSchedules, selectedSchedules) {
     let formattedDate = date.clone().format('YYYY-MM-DD');
-    return this.http.get<any>(`${APIAPPOINTMENTSURL}?date:${formattedDate}`)
+    let schedules = '';
+    if (selectedSchedules.length) {
+      for (let schedule of selectedSchedules) {
+        schedules += schedule.id + ',';
+      }
+    } else {
+      for (let schedule of validSchedules) {
+        schedules += schedule.id + ',';
+      }
+    }
+    schedules = schedules.substring(0, schedules.length - 1);
+    return this.http.get<any>(`${APIAPPOINTMENTSURL}/bySchedules/${formattedDate}/${schedules}`)
       .pipe(
-        map(response => this.parseAppointments(response.data)),
+        map(response => {
+          let appointmentList = this.parseAppointments(response.data);
+          return appointmentList.concat(
+            this.getAppointmentsSpots(date, validSchedules, selectedSchedules, appointmentList))
+            .sort(this.compareHours);
+        }),
         catchError(this.handleError<Appointment[]>('getAppointments', []))
       );
-  /*
-  const validScheduleEval = validSchedules.indexOf(appointment.schedule) >= 0;
-  const selectedScheduleEval = selectedSchedules.length > 0 ? selectedSchedules.indexOf(appointment.schedule) >= 0 : true;
-
-  return appointmentsList.concat(this.getAppointmentsSpots(date, validSchedules, selectedSchedules, appointmentsList)).sort(this.compareHours);
-  */
+    /*
+    return appointmentsList.concat(this.getAppointmentsSpots(date, validSchedules, selectedSchedules, appointmentsList)).sort(this.compareHours);
+    */
   }
 
-  getAppointmentsSpots(date, validSchedules, selectedSchedules, appointmentsList) {
+  getAppointmentsSpots(date, validSchedules, selectedSchedules, appointmentList) {
     const weekDay = date.weekday();
     const spots = [];
     for (const schedule of validSchedules) {
@@ -176,7 +198,7 @@ export class SchedulesService {
                 reminderWay: null,
                 schedule: schedule,
               }
-              let filteredAppointments = appointmentsList.filter(appointment => {
+              let filteredAppointments = appointmentList.filter(appointment => {
                 const a = appointment.date.format('YYYYMMDD') === spot.date.format('YYYYMMDD');
                 const b = appointment.hour === spot.hour;
                 const c = appointment.schedule === spot.schedule;

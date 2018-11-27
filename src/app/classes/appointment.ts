@@ -1,5 +1,4 @@
 import { Schedule } from './schedule';
-import { Observable} from 'rxjs';
 
 export class Appointment {
   confirmed: boolean;
@@ -14,5 +13,5 @@ export class Appointment {
   reminderSent: boolean;
   reminderWay: any;
   reprogrammed: boolean;
-  schedule: Observable<Schedule>;
+  schedule: Schedule;
 }

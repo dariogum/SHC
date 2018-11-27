@@ -6,6 +6,7 @@ import { Observable, of, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map, filter, tap } from 'rxjs/operators';
 
 import { ConfigService } from './../../auth/config.service';
+import { Appointment } from './../../classes/appointment';
 import { AppointmentFormComponent } from './../appointment-form/appointment-form.component';
 import { Patient } from './../../classes/patient';
 import { PatientService } from './../../patients/patient.service';
@@ -28,7 +29,7 @@ export class GeneralViewComponent implements OnInit {
   selectedPatient: Patient;
   patients: Observable<Patient[]>;
   screenType = 'wide';
-  schedules: Observable<Schedule[]>;
+  schedules: Schedule[];
   searchPatientsTerms = new Subject<string>();
   selectedSchedules = [];
   startView = 'month';
@@ -36,7 +37,7 @@ export class GeneralViewComponent implements OnInit {
   view = 'daily';
   withoutFilters = true;
 
-  @ViewChild('patientSearchBox') patientSearchBox: ElementRef; 
+  @ViewChild('patientSearchBox') patientSearchBox: ElementRef;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -122,20 +123,18 @@ export class GeneralViewComponent implements OnInit {
 
   setDays(firstDay, lastDay) {
     this.days = [];
-    this.schedules = this.schedulesService.getValidSchedules(this.view, this.day.clone());
-    while (firstDay <= lastDay) {
-      let day = {
-        appointments: this.getAppointments(firstDay),
-        date: firstDay.clone(),
-        name: firstDay.clone().format('ddd DD/MM/YYYY'),
-      };
-      this.days.push(day);
-      firstDay = firstDay.add(1, 'd');
-    }
-  }
-
-  getAppointments(date) {
-    return this.schedulesService.getAppointments(date, this.schedules, this.selectedSchedules);
+    this.schedulesService.getValidSchedules(this.view, this.day.clone()).subscribe(schedules => {
+      this.schedules = schedules;
+      while (firstDay <= lastDay) {
+        let day = {
+          appointments: this.schedulesService.getAppointments(firstDay, this.schedules, this.selectedSchedules),
+          date: firstDay.clone(),
+          name: firstDay.clone().format('ddd DD/MM/YYYY'),
+        };
+        this.days.push(day);
+        firstDay = firstDay.add(1, 'd');
+      }
+    });
   }
 
   displayFn(patient?: Patient): string | undefined {
@@ -153,8 +152,11 @@ export class GeneralViewComponent implements OnInit {
 
   filterAppointmentsByPatient(patient) {
     this.withoutFilters = false;
-    for(let day of this.days) {
-      day.filteredAppointments = day.appointments.filter(appointment => appointment.patient === patient.id);
+    for (let day of this.days) {
+      day.filteredAppointments = day.appointments.map(appointments => {
+        let ap = appointments.filter(appointment => appointment.patient === patient);
+        return (ap.length > 0) ? ap[0] : null;
+      });
     }
   }
 
