@@ -93,7 +93,7 @@ export class ScheduleFormComponent implements OnInit {
   getSchedule(): void {
     const id = +this.route.snapshot.paramMap.get('id');
     this.schedulesService.getSchedule(id)
-      .subscribe(schedule => { this.schedule = schedule; });
+      .subscribe(schedule => this.schedule = schedule);
   }
 
   getProfessionals() {

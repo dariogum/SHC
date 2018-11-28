@@ -102,6 +102,34 @@ export class SchedulesService {
     return schedules;
   }
 
+  compareHours(a, b) {
+    if (a.hour < b.hour) {
+      return -1;
+    }
+    if (a.hour > b.hour) {
+      return 1;
+    }
+    return 0;
+  }
+
+  parseDays(days) {
+    for(let day of days) {
+      day.name = moment(day.date).format('ddd DD/MM/YYYY');
+      day.relationships.appointments.sort(this.compareHours);
+    }
+    return days;
+  }
+
+  getDays(firstDay, lastDay) {
+    firstDay = firstDay.format('YYYY-MM-DD');
+    lastDay = lastDay.format('YYYY-MM-DD');
+    return this.http.get<any>(`${APISCHEDULESURL}/${firstDay}/${lastDay}`)
+      .pipe(
+        map(days => this.parseDays(days.data)),
+        catchError(this.handleError<Schedule[]>('getValidSchedules', []))
+      );
+  }
+
   getValidSchedules(view, day): Observable<Schedule[]> {
     let start;
     let end;
@@ -128,16 +156,6 @@ export class SchedulesService {
       );
   }
 
-  compareHours(a, b) {
-    if (a.hour < b.hour) {
-      return -1;
-    }
-    if (a.hour > b.hour) {
-      return 1;
-    }
-    return 0;
-  }
-
   getAppointments(date, validSchedules, selectedSchedules) {
     let formattedDate = date.clone().format('YYYY-MM-DD');
     let schedules = '';
@@ -151,7 +169,7 @@ export class SchedulesService {
       }
     }
     schedules = schedules.substring(0, schedules.length - 1);
-    return this.http.get<any>(`${APIAPPOINTMENTSURL}/bySchedules/${formattedDate}/${schedules}`)
+    return this.http.get<any>(`${APIAPPOINTMENTSURL}/${formattedDate}/${schedules}`)
       .pipe(
         map(response => {
           let appointmentList = this.parseAppointments(response.data);

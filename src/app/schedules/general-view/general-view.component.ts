@@ -23,7 +23,7 @@ export class GeneralViewComponent implements OnInit {
 
   currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
   day;
-  days = [];
+  days;
   loading = false;
   monthName;
   selectedPatient: Patient;
@@ -118,22 +118,13 @@ export class GeneralViewComponent implements OnInit {
         lastDay = this.day.clone();
         break;
     }
-    this.setDays(firstDay, lastDay);
+    this.getDays(firstDay, lastDay);
   }
 
-  setDays(firstDay, lastDay) {
+  getDays(firstDay, lastDay) {
     this.days = [];
-    this.schedulesService.getValidSchedules(this.view, this.day.clone()).subscribe(schedules => {
-      this.schedules = schedules;
-      while (firstDay <= lastDay) {
-        let day = {
-          appointments: this.schedulesService.getAppointments(firstDay, this.schedules, this.selectedSchedules),
-          date: firstDay.clone(),
-          name: firstDay.clone().format('ddd DD/MM/YYYY'),
-        };
-        this.days.push(day);
-        firstDay = firstDay.add(1, 'd');
-      }
+    return this.schedulesService.getDays(firstDay, lastDay).subscribe(days => {
+      this.days = days;
     });
   }
 
