@@ -33,7 +33,7 @@ export class FormComponent implements OnInit {
   currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
   filteredSocialsecurities: SocialSecurity[];
   folded = false;
-  formClass = 'wide';
+  screenType = 'wide';
   genders;
   multipleSocialSecurities;
   newPatient = false;
@@ -61,7 +61,7 @@ export class FormComponent implements OnInit {
       Breakpoints.HandsetPortrait
     ]).subscribe(result => {
       if (result.matches) {
-        this.formClass = 'handset';
+        this.screenType = 'handset';
       }
     });
 
@@ -70,7 +70,7 @@ export class FormComponent implements OnInit {
       Breakpoints.TabletPortrait,
     ]).subscribe(result => {
       if (result.matches) {
-        this.formClass = 'tablet';
+        this.screenType = 'tablet';
       }
     });
 
@@ -80,7 +80,7 @@ export class FormComponent implements OnInit {
       Breakpoints.WebLandscape,
     ]).subscribe(result => {
       if (result.matches) {
-        this.formClass = 'wide';
+        this.screenType = 'wide';
       }
     });
 

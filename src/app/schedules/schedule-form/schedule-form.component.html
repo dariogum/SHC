@@ -21,7 +21,7 @@
 </mat-toolbar>
 <mat-card class="main-card">
   <mat-spinner *ngIf="!schedule"></mat-spinner>
-  <form method="post" [class]="formClass" [class.bolder]="biggerFont" #scheduleDataForm="ngForm">
+  <form method="post" [class]="screenType" [class.bolder]="biggerFont" #scheduleDataForm="ngForm">
     <mat-form-field class="form-field">
       <input matInput
       type="text"

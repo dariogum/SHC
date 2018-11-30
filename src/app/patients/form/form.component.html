@@ -40,7 +40,7 @@
 					{{ today | ageUp:patient.birthday }}
 				</mat-panel-description>
 			</mat-expansion-panel-header>
-			<form method="post" [class]="formClass" [class.bolder]="biggerFont" #patientDataForm="ngForm">
+			<form method="post" [class]="screenType" [class.bolder]="biggerFont" #patientDataForm="ngForm">
 				<mat-form-field class="form-field">
 					<input matInput
 					type="text"
@@ -329,7 +329,7 @@
 					<span *ngIf="patient.comments">Sí <i class="material-icons valign-bottom">warning</i></span>
 				</mat-panel-description>
 			</mat-expansion-panel-header>
-			<form method="post" [class]="formClass" [class.bolder]="biggerFont" #patientBackgroundForm="ngForm">
+			<form method="post" [class]="screenType" [class.bolder]="biggerFont" #patientBackgroundForm="ngForm">
 				<div>
 					<mat-form-field class="apgar-field">
 						<input matInput

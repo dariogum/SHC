@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { NgForm, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { HourPickerComponent } from './../../hour-picker/hour-picker.component';
 import { SchedulesService } from './../schedules.service';
@@ -15,39 +16,8 @@ import * as moment from 'moment';
 })
 export class ScheduleFormComponent implements OnInit {
 
-  WEEKDAYS = [
-    {
-      id: 'monday',
-      name: 'Lunes',
-    },
-    {
-      id: 'tuesday',
-      name: 'Martes',
-    },
-    {
-      id: 'wednesday',
-      name: 'Miércoles',
-    },
-    {
-      id: 'thursday',
-      name: 'Jueves',
-    },
-    {
-      id: 'friday',
-      name: 'Viernes',
-    },
-    {
-      id: 'saturday',
-      name: 'Sábado',
-    },
-    {
-      id: 'sunday',
-      name: 'Domingo',
-    },
-  ];
-
   filteredProfessionals;
-  formClass = 'wide';
+  screenType = 'wide';
   professionals;
   schedule: Schedule;
   @ViewChild('scheduleDataForm') public scheduleDataForm: NgForm;
@@ -56,6 +26,8 @@ export class ScheduleFormComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private schedulesService: SchedulesService,
     private route: ActivatedRoute,
+    private router: Router,
+    public snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -63,7 +35,7 @@ export class ScheduleFormComponent implements OnInit {
       Breakpoints.HandsetPortrait
     ]).subscribe(result => {
       if (result.matches) {
-        this.formClass = 'handset';
+        this.screenType = 'handset';
       }
     });
 
@@ -72,7 +44,7 @@ export class ScheduleFormComponent implements OnInit {
       Breakpoints.TabletPortrait,
     ]).subscribe(result => {
       if (result.matches) {
-        this.formClass = 'tablet';
+        this.screenType = 'tablet';
       }
     });
 
@@ -82,7 +54,7 @@ export class ScheduleFormComponent implements OnInit {
       Breakpoints.WebLandscape,
     ]).subscribe(result => {
       if (result.matches) {
-        this.formClass = 'wide';
+        this.screenType = 'wide';
       }
     });
 
@@ -166,6 +138,15 @@ export class ScheduleFormComponent implements OnInit {
 
   removeDay(day) {
     this.schedule.selectedDays = this.schedule.selectedDays.filter(filteredDay => filteredDay !== day);
+  }
+
+  deleteSchedule() {
+    this.schedulesService.deleteSchedule(this.schedule.id).subscribe(confirmation => {
+      const snackBarRef = this.snackBar.open('Agenda eliminada correctamente', 'OK', {
+        duration: 2500,
+      });
+      this.router.navigate(['schedules']);
+    });
   }
 
 }

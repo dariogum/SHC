@@ -5,17 +5,16 @@ import { catchError, tap, map, filter } from 'rxjs/operators';
 
 import { environment } from './../../environments/environment';
 import { Appointment } from './../classes/appointment';
-import { Schedule } from './../classes/schedule';
 import { Patient } from './../classes/patient';
 import { PatientService } from './../patients/patient.service';
+import { Schedule } from './../classes/schedule';
 import { User } from './../classes/user';
 import { UserService } from './../users/user.service';
-import { SCHEDULES, PROFESSIONALS } from './../catalogs/schedules';
 import * as moment from 'moment';
 
 const APIVERSIONURL = environment.url + '/v1';
-const APISCHEDULESURL = APIVERSIONURL + '/schedules';
 const APIAPPOINTMENTSURL = APIVERSIONURL + '/appointments';
+const APISCHEDULESURL = APIVERSIONURL + '/schedules';
 
 const HTTPOPTIONS = {
   headers: new HttpHeaders({
@@ -30,14 +29,14 @@ export class SchedulesService {
 
   constructor(
     private http: HttpClient,
-    private userService: UserService,
     private patientService: PatientService,
+    private userService: UserService,
   ) { }
 
   parseAppointment(data): Appointment {
-    let patient = this.patientService.getPatient(data.attributes.patient);
-    let professional = this.userService.getUser(data.attributes.professional);
-    let schedule = this.getSchedule(data.attributes.schedule);
+    let patient = this.patientService.parsePatient(data.relationships.patient);
+    let professional = this.userService.parseUser(data.relationships.professional);
+    let schedule = this.parseSchedule(data.relationships.schedule);
 
     let appointment: Appointment = {
       confirmed: data.attributes.confirmed,
@@ -45,21 +44,15 @@ export class SchedulesService {
       hour: data.attributes.hour.substring(0, data.attributes.hour.length - 3),
       id: data.id,
       indications: data.attributes.indications,
-      patient: null,
+      patient: patient,
       printed: data.attributes.printed,
-      professional: null,
+      professional: professional,
       reminderData: data.attributes.reminderData,
       reminderSent: data.attributes.reminderSent,
       reminderWay: data.attributes.reminderWay,
       reprogrammed: data.attributes.reprogrammed,
-      schedule: null,
+      schedule: schedule,
     };
-
-    forkJoin([patient, professional, schedule]).subscribe(results => {
-      appointment.patient = results[0];
-      appointment.professional = results[1];
-      appointment.schedule = results[2];
-    });
 
     return appointment;
   }
@@ -75,19 +68,19 @@ export class SchedulesService {
 
   parseSchedule(data): Schedule {
     let schedule: Schedule;
-    const days = [];
+    let days = this.parseScheduleDays(data.relationships.days);
+    let professionals = this.userService.parseUsers(data.relationships.professionals);
 
     schedule = {
       appointmentInterval: data.attributes.appointmentInterval,
       color: data.attributes.color,
       id: data.id,
+      days: days,
       name: data.attributes.name,
       periodicity: data.attributes.periodicity,
-      professionals: [],
-      selectedDays: [],
+      professionals: professionals,
       validityEnd: data.attributes.validityEnd,
       validityStart: data.attributes.validityStart,
-      weekDays: days,
     };
 
     return schedule;
@@ -102,6 +95,19 @@ export class SchedulesService {
     return schedules;
   }
 
+  parseScheduleDays(periodicity, daysData) {
+    let daysNames = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+    let days = [];
+    for(let day of daysData) {
+      if(periodicity === 2) {
+        day.name = moment(day.date).format('ddd DD/MM/YYYY');
+      } else {
+        day.name = daysNames[day.weekDay];
+      }
+    }
+    return days;
+  }
+
   compareHours(a, b) {
     if (a.hour < b.hour) {
       return -1;
@@ -113,7 +119,7 @@ export class SchedulesService {
   }
 
   parseDays(days) {
-    for(let day of days) {
+    for (let day of days) {
       day.name = moment(day.date).format('ddd DD/MM/YYYY');
       day.relationships.appointments.sort(this.compareHours);
     }
@@ -235,7 +241,7 @@ export class SchedulesService {
   }
 
   getProfessionals() {
-    return PROFESSIONALS;
+    return [];
   }
 
   getSchedule(id): Observable<Schedule> {
@@ -257,5 +263,14 @@ export class SchedulesService {
       console.error(`${operation} failed: ${error.message}`);
       return of(result as T);
     };
+  }
+
+  deleteSchedule(scheduleId: number): Observable<any> {
+    const url = `${APISCHEDULESURL}/${scheduleId}`;
+
+    return this.http.delete<any>(url, HTTPOPTIONS)
+      .pipe(
+        catchError(this.handleError<any>('deleteSchedule'))
+      );
   }
 }

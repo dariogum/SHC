@@ -38,7 +38,7 @@
 		</mat-panel-title>
 	</mat-expansion-panel-header>
 	<div class="visit-form" *ngIf="visitInForm">
-		<form method="post" [class]="formClass" [class.bolder]="biggerFont" #visitForm="ngForm" (ngSubmit)="onVisitSubmit()" enctype="multipart/form-data">
+		<form method="post" [class]="screenType" [class.bolder]="biggerFont" #visitForm="ngForm" (ngSubmit)="onVisitSubmit()" enctype="multipart/form-data">
 			<div>
 				<mat-form-field class="visit-form-field">
 					<input matInput

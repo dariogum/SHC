@@ -20,7 +20,7 @@ import { UserService } from './../user.service';
 export class FormComponent implements OnInit {
 
   folded = false;
-  formClass = 'wide';
+  screenType = 'wide';
   user: User;
 
   @ViewChild(MatAccordion) accordion: MatAccordion;
@@ -40,7 +40,7 @@ export class FormComponent implements OnInit {
       Breakpoints.HandsetPortrait
     ]).subscribe(result => {
       if (result.matches) {
-        this.formClass = 'handset';
+        this.screenType = 'handset';
       }
     });
 
@@ -49,7 +49,7 @@ export class FormComponent implements OnInit {
       Breakpoints.TabletPortrait,
     ]).subscribe(result => {
       if (result.matches) {
-        this.formClass = 'tablet';
+        this.screenType = 'tablet';
       }
     });
 
@@ -59,7 +59,7 @@ export class FormComponent implements OnInit {
       Breakpoints.WebLandscape,
     ]).subscribe(result => {
       if (result.matches) {
-        this.formClass = 'wide';
+        this.screenType = 'wide';
       }
     });
   this.getUser();

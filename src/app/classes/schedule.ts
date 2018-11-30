@@ -2,11 +2,10 @@ export class Schedule {
   appointmentInterval: number;
   color: string;
   id: number;
+  days;
   name: string;
-  periodicity;
+  periodicity: number;
   professionals;
-  selectedDays;
   validityEnd: Date;
   validityStart: Date;
-  weekDays;
 }

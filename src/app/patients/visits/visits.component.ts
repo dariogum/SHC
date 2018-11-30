@@ -24,7 +24,7 @@ export class VisitsComponent implements OnInit {
   biggerFont = false;
   currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
   files: FileList = null;
-  formClass = 'wide';
+  screenType = 'wide';
   @Input() patient: Patient;
   today = new Date();
   uploadingFiles = false;
@@ -46,7 +46,7 @@ export class VisitsComponent implements OnInit {
       Breakpoints.HandsetPortrait
     ]).subscribe(result => {
       if (result.matches) {
-        this.formClass = 'handset';
+        this.screenType = 'handset';
       }
     });
 
@@ -55,7 +55,7 @@ export class VisitsComponent implements OnInit {
       Breakpoints.TabletPortrait,
     ]).subscribe(result => {
       if (result.matches) {
-        this.formClass = 'tablet';
+        this.screenType = 'tablet';
       }
     });
 
@@ -65,7 +65,7 @@ export class VisitsComponent implements OnInit {
       Breakpoints.WebLandscape,
     ]).subscribe(result => {
       if (result.matches) {
-        this.formClass = 'wide';
+        this.screenType = 'wide';
       }
     });
 
