@@ -23,7 +23,6 @@ export class GeneralViewComponent implements OnInit {
 
   currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
   day;
-  days;
   loading = false;
   monthName;
   selectedPatient: Patient;
@@ -31,7 +30,7 @@ export class GeneralViewComponent implements OnInit {
   screenType = 'wide';
   schedules: Schedule[];
   searchPatientsTerms = new Subject<string>();
-  selectedSchedules = [];
+  selectedSchedule: Schedule;
   startView = 'month';
   userRole: string;
   view = 'daily';
@@ -78,8 +77,9 @@ export class GeneralViewComponent implements OnInit {
       }
     });
 
+    this.readSchedules();
+
     this.day = moment();
-    this.changeView(false, false);
 
     this.patients = this.searchPatientsTerms.pipe(
       debounceTime(300),
@@ -118,13 +118,19 @@ export class GeneralViewComponent implements OnInit {
         lastDay = this.day.clone();
         break;
     }
-    this.getDays(firstDay, lastDay);
+    this.readScheduleDays(firstDay, lastDay);
   }
 
-  getDays(firstDay, lastDay) {
-    this.days = [];
-    return this.schedulesService.getDays(firstDay, lastDay).subscribe(days => {
-      this.days = days;
+  readSchedules() {
+    return this.schedulesService.readSchedules().subscribe(schedules => {
+      this.schedules = schedules;
+    });
+  }
+
+  readScheduleDays(firstDay, lastDay) {
+    return this.schedulesService.readScheduleDays(this.selectedSchedule.id, firstDay, lastDay)
+    .subscribe(days => {
+      this.selectedSchedule.days = days;
     });
   }
 
@@ -143,7 +149,7 @@ export class GeneralViewComponent implements OnInit {
 
   filterAppointmentsByPatient(patient) {
     this.withoutFilters = false;
-    for (let day of this.days) {
+    for (let day of this.selectedSchedule.days) {
       day.filteredAppointments = day.appointments.map(appointments => {
         let ap = appointments.filter(appointment => appointment.patient === patient);
         return (ap.length > 0) ? ap[0] : null;
@@ -154,5 +160,9 @@ export class GeneralViewComponent implements OnInit {
   clearPatient() {
     this.withoutFilters = true;
     this.patientSearchBox.nativeElement.value = '';
+  }
+
+  filterAppointmentsBySchedule() {
+    return true;
   }
 }

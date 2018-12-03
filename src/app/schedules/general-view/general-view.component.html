@@ -32,10 +32,9 @@
     <form method="post" [ngClass]="screenType">
       <mat-form-field class="form-field">
         <mat-select
-        [(ngModel)]="selectedSchedules"
-        (selectionChange)="changeView(false, false)"
-        multiple
-        name="selectedSchedules"
+        [(ngModel)]="selectedSchedule"
+        (selectionChange)="changeView(false,false)"
+        name="selectedSchedule"
         placeholder="Seleccionar agenda/s">
           <mat-option *ngFor="let schedule of schedules" [value]="schedule">
             {{schedule.name}}
@@ -95,22 +94,24 @@
       <span class="month-selector" *ngIf="view === 'monthly'">Mes seleccionado: {{monthName | titlecase}}</span>
     </form>
     <mat-spinner *ngIf="loading"></mat-spinner>
-    <mat-nav-list dense *ngFor="let day of days" [ngClass]="[view, screenType]">
-      <h3 mat-subheader>{{ day.name | titlecase }}</h3>
-      <div *ngIf="withoutFilters">
-        <mat-list-item *ngFor="let appointment of day.relationships.appointments" [style.background]="appointment.color" (click)="openBottomSheet(appointment)" [class.occupied]="appointment.patient">
-          <p>{{appointment.hour}} | 
-            <span *ngIf="appointment.patient">{{appointment.patient.data.attributes.lastname}} {{appointment.patient.data.attributes.name}}</span>
-          </p>
-        </mat-list-item>
-      </div>
-      <div *ngIf="!withoutFilters">
-        <mat-list-item *ngFor="let appointment of day.filteredAppointments" [style.background]="appointment.schedule?.color" (click)="openBottomSheet(appointment)" [class.occupied]="appointment.patient">
-          <p>{{appointment.hour}} | 
-            <span *ngIf="appointment.patient">{{appointment.patient.data.attributes.lastname}} {{appointment.patient.data.attributes.name}}</span>
-          </p>
-        </mat-list-item>
-      </div>
-    </mat-nav-list>
+    <div *ngIf="selectedSchedule">
+      <mat-nav-list dense *ngFor="let day of selectedSchedule.days" [ngClass]="[view, screenType]">
+        <h3 mat-subheader>{{ day.name | titlecase }}</h3>
+        <div *ngIf="withoutFilters">
+          <mat-list-item *ngFor="let appointment of day.appointments" [style.background]="appointment.color" (click)="openBottomSheet(appointment)" [class.occupied]="appointment.patient">
+            <p>{{appointment.hour}} | 
+              <span *ngIf="appointment.patient">{{appointment.patient.data.attributes.lastname}} {{appointment.patient.data.attributes.name}}</span>
+            </p>
+          </mat-list-item>
+        </div>
+        <div *ngIf="!withoutFilters">
+          <mat-list-item *ngFor="let appointment of day.filteredAppointments" [style.background]="appointment.schedule?.color" (click)="openBottomSheet(appointment)" [class.occupied]="appointment.patient">
+            <p>{{appointment.hour}} | 
+              <span *ngIf="appointment.patient">{{appointment.patient.data.attributes.lastname}} {{appointment.patient.data.attributes.name}}</span>
+            </p>
+          </mat-list-item>
+        </div>
+      </mat-nav-list>
+    </div>
   </mat-card-content>
 </mat-card>

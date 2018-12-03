@@ -33,81 +33,6 @@ export class SchedulesService {
     private userService: UserService,
   ) { }
 
-  parseAppointment(data): Appointment {
-    let patient = this.patientService.parsePatient(data.relationships.patient);
-    let professional = this.userService.parseUser(data.relationships.professional);
-    let schedule = this.parseSchedule(data.relationships.schedule);
-
-    let appointment: Appointment = {
-      confirmed: data.attributes.confirmed,
-      date: data.attributes.date,
-      hour: data.attributes.hour.substring(0, data.attributes.hour.length - 3),
-      id: data.id,
-      indications: data.attributes.indications,
-      patient: patient,
-      printed: data.attributes.printed,
-      professional: professional,
-      reminderData: data.attributes.reminderData,
-      reminderSent: data.attributes.reminderSent,
-      reminderWay: data.attributes.reminderWay,
-      reprogrammed: data.attributes.reprogrammed,
-      schedule: schedule,
-    };
-
-    return appointment;
-  }
-
-  parseAppointments(data) {
-    const appointments: Appointment[] = [];
-    for (let i = 0; i < data.length; i++) {
-      appointments[i] = this.parseAppointment(data[i]);
-    }
-
-    return appointments;
-  }
-
-  parseSchedule(data): Schedule {
-    let schedule: Schedule;
-    let days = this.parseScheduleDays(data.relationships.days);
-    let professionals = this.userService.parseUsers(data.relationships.professionals);
-
-    schedule = {
-      appointmentInterval: data.attributes.appointmentInterval,
-      color: data.attributes.color,
-      id: data.id,
-      days: days,
-      name: data.attributes.name,
-      periodicity: data.attributes.periodicity,
-      professionals: professionals,
-      validityEnd: data.attributes.validityEnd,
-      validityStart: data.attributes.validityStart,
-    };
-
-    return schedule;
-  }
-
-  parseSchedules(data) {
-    const schedules: Schedule[] = [];
-    for (let i = 0; i < data.length; i++) {
-      schedules[i] = this.parseSchedule(data[i]);
-    }
-
-    return schedules;
-  }
-
-  parseScheduleDays(periodicity, daysData) {
-    let daysNames = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
-    let days = [];
-    for(let day of daysData) {
-      if(periodicity === 2) {
-        day.name = moment(day.date).format('ddd DD/MM/YYYY');
-      } else {
-        day.name = daysNames[day.weekDay];
-      }
-    }
-    return days;
-  }
-
   compareHours(a, b) {
     if (a.hour < b.hour) {
       return -1;
@@ -118,144 +43,276 @@ export class SchedulesService {
     return 0;
   }
 
-  parseDays(days) {
-    for (let day of days) {
-      day.name = moment(day.date).format('ddd DD/MM/YYYY');
-      day.relationships.appointments.sort(this.compareHours);
-    }
-    return days;
-  }
-
-  getDays(firstDay, lastDay) {
-    firstDay = firstDay.format('YYYY-MM-DD');
-    lastDay = lastDay.format('YYYY-MM-DD');
-    return this.http.get<any>(`${APISCHEDULESURL}/${firstDay}/${lastDay}`)
-      .pipe(
-        map(days => this.parseDays(days.data)),
-        catchError(this.handleError<Schedule[]>('getValidSchedules', []))
-      );
-  }
-
-  getValidSchedules(view, day): Observable<Schedule[]> {
-    let start;
-    let end;
-    switch (view) {
-      case 'weekly':
-        start = day.clone().startOf('week');
-        end = day.clone().endOf('week');
-        break;
-      case 'monthly':
-        start = day.clone().startOf('month');
-        end = day.clone().endOf('month');
-        break;
-      default:
-        start = day.clone();
-        end = day.clone();
-        break;
-    }
-    start = start.format('YYYY-MM-DD');
-    end = end.format('YYYY-MM-DD');
-    return this.http.get<any>(`${APISCHEDULESURL}/${start}/${end}`)
-      .pipe(
-        map(response => this.parseSchedules(response.data)),
-        catchError(this.handleError<Schedule[]>('getValidSchedules', []))
-      );
-  }
-
-  getAppointments(date, validSchedules, selectedSchedules) {
-    let formattedDate = date.clone().format('YYYY-MM-DD');
-    let schedules = '';
-    if (selectedSchedules.length) {
-      for (let schedule of selectedSchedules) {
-        schedules += schedule.id + ',';
-      }
-    } else {
-      for (let schedule of validSchedules) {
-        schedules += schedule.id + ',';
-      }
-    }
-    schedules = schedules.substring(0, schedules.length - 1);
-    return this.http.get<any>(`${APIAPPOINTMENTSURL}/${formattedDate}/${schedules}`)
-      .pipe(
-        map(response => {
-          let appointmentList = this.parseAppointments(response.data);
-          return appointmentList.concat(
-            this.getAppointmentsSpots(date, validSchedules, selectedSchedules, appointmentList))
-            .sort(this.compareHours);
-        }),
-        catchError(this.handleError<Appointment[]>('getAppointments', []))
-      );
-    /*
-    return appointmentsList.concat(this.getAppointmentsSpots(date, validSchedules, selectedSchedules, appointmentsList)).sort(this.compareHours);
-    */
-  }
-
-  getAppointmentsSpots(date, validSchedules, selectedSchedules, appointmentList) {
-    const weekDay = date.weekday();
-    const spots = [];
-    for (const schedule of validSchedules) {
-      if (selectedSchedules.length === 0 || selectedSchedules.indexOf(schedule) > -1) {
-        let day;
-        if (schedule.periodicity === '1') {
-          day = schedule.weekDays[weekDay];
-        } else {
-          for (const daySelected of schedule.selectedDays) {
-            if (daySelected.date.format('YYYYMMDD') === date.format('YYYYMMDD')) {
-              day = daySelected;
-              break;
-            }
-          }
-        }
-        if (day && day.active) {
-          let spot;
-          let spotHour;
-          for (const hour of day.hours) {
-            spotHour = hour.start.clone();
-            while (spotHour < hour.end) {
-              spot = {
-                date: date,
-                hour: spotHour.format('HH:mm'),
-                id: 3,
-                indications: null,
-                patient: null,
-                reminderData: null,
-                reminderWay: null,
-                schedule: schedule,
-              }
-              let filteredAppointments = appointmentList.filter(appointment => {
-                const a = appointment.date.format('YYYYMMDD') === spot.date.format('YYYYMMDD');
-                const b = appointment.hour === spot.hour;
-                const c = appointment.schedule === spot.schedule;
-                return (a && b && c);
-              });
-              if (filteredAppointments.length === 0) {
-                spots.push(spot);
-              }
-              spotHour = spotHour.add(schedule.appointmentInterval, 'm');
-            }
-          }
+  createSchedule(schedule: Schedule): Observable<Schedule> {
+    const data = {
+      'data': {
+        'type': 'schedule',
+        'attributes': {
+          'name': schedule.name,
+          'periodicity': schedule.periodicity,
+          'validityStart': schedule.validityStart,
         }
       }
-    }
-    return spots;
+    };
+
+    return this.http.post<any>(APISCHEDULESURL, data, HTTPOPTIONS)
+      .pipe(
+        map(response => this.parseSchedule(response.data)),
+        catchError(this.handleError<Schedule>('addSchedule'))
+      );
   }
 
-  getProfessionals() {
-    return [];
-  }
-
-  getSchedule(id): Observable<Schedule> {
-    const url = `${APISCHEDULESURL}/${id}`;
-
-    return this.http.get<any>(url)
+  readSchedule(id): Observable<Schedule> {
+    return this.http.get<any>(`${APISCHEDULESURL}/${id}`)
       .pipe(
         map(response => this.parseSchedule(response.data)),
         catchError(this.handleError<Schedule>(`getSchedule id=${id}`))
       );
   }
 
-  updateSchedule(schedule): Observable<any> {
-    return of(true);
+  readSchedules(): Observable<Schedule[]> {
+    return this.http.get<any>(`${APISCHEDULESURL}?sort=name`)
+      .pipe(
+        map(response => this.parseSchedules(response.data)),
+        catchError(this.handleError<Schedule[]>('getSchedules', []))
+      );
+  }
+
+  updateSchedule(schedule: Schedule): Observable<Schedule> {
+    const data = {
+      'data': {
+        'type': 'schedule',
+        'id': schedule.id,
+        'attributes': {
+          'appointmentInterval': schedule.appointmentInterval,
+          'color': schedule.color,
+          'days': schedule.days,
+          'name': schedule.name,
+          'periodicity': schedule.periodicity,
+          'professionals': schedule.professionals,
+          'validityStart': schedule.validityStart,
+          'validityEnd': schedule.validityEnd,
+        }
+      }
+    };
+
+    return this.http.patch<any>(`${APISCHEDULESURL}/${schedule.id}`, data, HTTPOPTIONS)
+      .pipe(
+        map(response => response.data),
+        catchError(this.handleError<any>('updatePatient'))
+      );
+  }
+
+  deleteSchedule(scheduleId) {
+    return this.http.delete<any>(`${APISCHEDULESURL}/${scheduleId}`, HTTPOPTIONS)
+      .pipe(catchError(this.handleError<any>('deleteSchedule')));
+  }
+
+  parseSchedules(data): Schedule[] {
+    const schedules: Schedule[] = [];
+    for (let schedule of data) {
+      schedules.push(this.parseSchedule(schedule));
+    }
+    return schedules;
+  }
+
+  parseSchedule(data): Schedule {
+    let days = [];
+    let professionals = [];
+    if(data.relationships && data.relationships.professionals.length){
+      professionals = this.userService.parseUsers(data.relationships.professionals);
+    }
+    if(data.relationships && data.relationships.days.length){
+      days = this.parseDays(data.relationships.days);
+    }
+    const schedule: Schedule = {
+      appointmentInterval: data.attributes.appointmentInterval,
+      color: data.attributes.color,
+      days: days,
+      id: data.id,
+      name: data.attributes.name,
+      periodicity: data.attributes.periodicity,
+      professionals: professionals,
+      validityEnd: data.attributes.validityEnd,
+      validityStart: data.attributes.validityStart,
+    }
+    return schedule;
+  }
+
+  readScheduleDays(scheduleId, firstDay, lastDay): Observable<any[]> {
+    firstDay = firstDay.format('YYYY-MM-DD');
+    lastDay = lastDay.format('YYYY-MM-DD');
+    return this.http.get<any>(`${APISCHEDULESURL}/${scheduleId}/${firstDay}/${lastDay}`)
+      .pipe(
+        map(response => this.parseDays(response.data)),
+        catchError(this.handleError<Schedule[]>('getSchedulesDays', []))
+      );
+  }
+
+  parseDays(data) {
+    const days = [];
+    for (let day of data) {
+      days.push(this.parseDay(day));
+    }
+    return days;
+  }
+
+  parseDay(data) {
+    let dayNames = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingos'];
+    let dayName;
+    let date = null;
+    if (data.attributes.date) {
+      date = moment(data.attributes.date);
+      dayName = moment(data.attributes.date).format('ddd DD/MM/YYYY');
+    } else {
+      dayName = dayNames[data.attributes.weekDay];
+    }
+    return {
+      active: data.attributes.active,
+      appointments: this.parseAppointments(data.relationships.appointments),
+      date: date,
+      id: data.id,
+      name: dayName,
+      weekDay: data.attributes.weekDay,
+    };
+  }
+
+  parseHours(data) {
+    const hours = [];
+    for (let hour of data) {
+      hours.push(this.parseHour(hour));
+    }
+    return hours;
+  }
+
+  parseHour(data) {
+    const hour = {
+      end: data.attributes.end,
+      id: data.id,
+      start: data.attributes.start,
+    };
+    return hour;
+  }
+
+  createAppointment(appointment): Observable<Appointment> {
+    const data = {
+      'data': {
+        'type': 'appointment',
+        'attributes': {
+          'confirmed': appointment.confirmed,
+          'date': appointment.date.format('YYYY-MM-DD'),
+          'indications': appointment.indications,
+          'hour': appointment.hour,
+          'patient': appointment.patient.id,
+          'printed': appointment.printed,
+          'professional': appointment.professional.id,
+          'reminderData': appointment.reminderData;
+          'reminderSent': appointment.reminderSent;
+          'reminderWay': appointment.reminderWay;
+          'reprogrammed': appointment.reprogrammed;
+          'schedule': appointment.schedule.id;
+        }
+      }
+    };
+
+    return this.http.post<any>(APISCHEDULESURL, data, HTTPOPTIONS)
+      .pipe(
+        map(response => this.parseAppointment(response.data)),
+        catchError(this.handleError<Appointment>('addSchedule'))
+      );
+  }
+
+  readAppointment(id): Observable<Appointment> {
+    return this.http.get<any>(`${APIAPPOINTMENTSURL}/${id}`)
+      .pipe(
+        map(response => this.parseAppointment(response.data)),
+        catchError(this.handleError<Appointment>(`getAppointment id=${id}`))
+      );
+  }
+
+  readAppointments(): Observable<Appointment[]> {
+    return this.http.get<any>(`${APIAPPOINTMENTSURL}`)
+      .pipe(
+        map(response => this.parseAppointments(response.data)),
+        catchError(this.handleError<Appointment[]>('getAppointments', []))
+      );
+  }
+
+  updateAppointment(appointment: Appointment): Observable<Appointment> {
+    const data = {
+      'data': {
+        'type': 'appointment',
+        'id': appointment.id,
+        'attributes': {
+          'confirmed': appointment.confirmed,
+          'date': appointment.date.format('YYYY-MM-DD'),
+          'indications': appointment.indications,
+          'hour': appointment.hour,
+          'patient': appointment.patient.id,
+          'printed': appointment.printed,
+          'professional': appointment.professional.id,
+          'reminderData': appointment.reminderData;
+          'reminderSent': appointment.reminderSent;
+          'reminderWay': appointment.reminderWay;
+          'reprogrammed': appointment.reprogrammed;
+          'schedule': appointment.schedule.id;
+        }
+      }
+    };
+
+    return this.http.patch<any>(`${APIAPPOINTMENTSURL}/${appointment.id}`, data, HTTPOPTIONS)
+      .pipe(
+        map(response => response.data),
+        catchError(this.handleError<any>('updatePatient'))
+      );
+  }
+
+  deleteAppointments(appointmentId) {
+    return this.http.delete<any>(`${APIAPPOINTMENTSURL}/${appointmentId}`, HTTPOPTIONS)
+      .pipe(catchError(this.handleError<any>('deleteAppointment')));
+  }
+
+  sendAppointmentReminder() {
+    return true;
+  }
+
+  parseAppointments(data): Appointment[] {
+    const appointments: Appointment[] = [];
+    for (let appointment of data) {
+      appointments.push(this.parseAppointment(appointment));
+    }
+    return appointments;
+  }
+
+  parseAppointment(data): Appointment {
+    let patient = null;
+    let professional = null;
+    if (data.patient) {
+      patient = this.patientService.parsePatient(data.relationships.patient);
+    }
+    if (data.professional) {
+      professional = this.userService.parseUser(data.relationships.professional);
+    }
+    const appointment: Appointment = {
+      confirmed: data.attributes.confirmed,
+      date: data.attributes.date,
+      id: data.id,
+      indications: data.attributes.indications,
+      hour: data.attributes.hour,
+      patient: patient,
+      printed: data.attributes.printed,
+      professional: professional,
+      reminderData: data.attributes.reminderData,
+      reminderSent: data.attributes.reminderSent,
+      reminderWay: data.attributes.reminderWay,
+      reprogrammed: data.attributes.reprogrammed,
+      schedule: data.attributes.schedule,
+    };
+    return appointment;
+  }
+
+  readPofessionals(): Observable<User[]> {
+    return this.userService.getUsers();
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
@@ -263,14 +320,5 @@ export class SchedulesService {
       console.error(`${operation} failed: ${error.message}`);
       return of(result as T);
     };
-  }
-
-  deleteSchedule(scheduleId: number): Observable<any> {
-    const url = `${APISCHEDULESURL}/${scheduleId}`;
-
-    return this.http.delete<any>(url, HTTPOPTIONS)
-      .pipe(
-        catchError(this.handleError<any>('deleteSchedule'))
-      );
   }
 }
