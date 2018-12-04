@@ -22,9 +22,9 @@
 		<mat-chip *ngIf="!data.appointment.reminderSent" color="warn" selected matTooltip="No fue enviado el recoratorio del turno">Recordatorio no enviado</mat-chip>
 	</mat-chip-list>
 	<mat-form-field class="form-field">
-		<mat-select placeholder="Agenda" [(ngModel)]="data.appointment.schedule" name="schedule" [disabled]="true">
-			<mat-option *ngFor="let schedule of schedules | async" [value]="schedule">
-				{{schedule.name}}
+		<mat-select placeholder="Agenda" [(ngModel)]="data.selectedSchedule" name="schedule" [disabled]="true">
+			<mat-option [value]="data.selectedSchedule">
+				{{data.selectedSchedule.name}}
 			</mat-option>
 		</mat-select>
 	</mat-form-field>

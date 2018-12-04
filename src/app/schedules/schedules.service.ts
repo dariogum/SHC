@@ -158,7 +158,7 @@ export class SchedulesService {
   }
 
   parseDay(data) {
-    let dayNames = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingos'];
+    let dayNames = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
     let dayName;
     let date = null;
     if (data.attributes.date) {
@@ -206,11 +206,11 @@ export class SchedulesService {
           'patient': appointment.patient.id,
           'printed': appointment.printed,
           'professional': appointment.professional.id,
-          'reminderData': appointment.reminderData;
-          'reminderSent': appointment.reminderSent;
-          'reminderWay': appointment.reminderWay;
-          'reprogrammed': appointment.reprogrammed;
-          'schedule': appointment.schedule.id;
+          'reminderData': appointment.reminderData,
+          'reminderSent': appointment.reminderSent,
+          'reminderWay': appointment.reminderWay,
+          'reprogrammed': appointment.reprogrammed,
+          'schedule': appointment.schedule.id,
         }
       }
     };
@@ -251,11 +251,11 @@ export class SchedulesService {
           'patient': appointment.patient.id,
           'printed': appointment.printed,
           'professional': appointment.professional.id,
-          'reminderData': appointment.reminderData;
-          'reminderSent': appointment.reminderSent;
-          'reminderWay': appointment.reminderWay;
-          'reprogrammed': appointment.reprogrammed;
-          'schedule': appointment.schedule.id;
+          'reminderData': appointment.reminderData,
+          'reminderSent': appointment.reminderSent,
+          'reminderWay': appointment.reminderWay,
+          'reprogrammed': appointment.reprogrammed,
+          'schedule': appointment.schedule.id,
         }
       }
     };
@@ -287,11 +287,11 @@ export class SchedulesService {
   parseAppointment(data): Appointment {
     let patient = null;
     let professional = null;
-    if (data.patient) {
-      patient = this.patientService.parsePatient(data.relationships.patient);
+    if (data.attributes.patient) {
+      patient = this.patientService.parsePatient(data.relationships.patient.data);
     }
-    if (data.professional) {
-      professional = this.userService.parseUser(data.relationships.professional);
+    if (data.attributes.professional) {
+      professional = this.userService.parseUser(data.relationships.professional.data);
     }
     const appointment: Appointment = {
       confirmed: data.attributes.confirmed,

@@ -64,12 +64,12 @@ export class ScheduleFormComponent implements OnInit {
 
   getSchedule(): void {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.schedulesService.getSchedule(id)
+    this.schedulesService.readSchedule(id)
       .subscribe(schedule => this.schedule = schedule);
   }
 
   getProfessionals() {
-    this.professionals = this.schedulesService.getProfessionals();
+    this.professionals = this.schedulesService.readPofessionals();
   }
 
   updateSchedule(event) {
@@ -120,12 +120,12 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   selectDay(event) {
-    for (let i = this.schedule.selectedDays.length - 1; i >= 0; i--) {
-      if (this.schedule.selectedDays[i].date.format('YYYYMMDD') === event.value.format('YYYYMMDD')) {
+    for (let i = this.schedule.days.length - 1; i >= 0; i--) {
+      if (this.schedule.days[i].date.format('YYYYMMDD') === event.value.format('YYYYMMDD')) {
         return false;
       }
     }
-    this.schedule.selectedDays.push(
+    this.schedule.days.push(
       {
         date: event.value,
         name: event.value.format('dddd DD/MM/YYYY'),
@@ -133,11 +133,11 @@ export class ScheduleFormComponent implements OnInit {
         hours: []
       }
     );
-    this.schedule.selectedDays.sort(this.compareDates);
+    this.schedule.days.sort(this.compareDates);
   }
 
   removeDay(day) {
-    this.schedule.selectedDays = this.schedule.selectedDays.filter(filteredDay => filteredDay !== day);
+    this.schedule.days = this.schedule.days.filter(filteredDay => filteredDay !== day);
   }
 
   deleteSchedule() {

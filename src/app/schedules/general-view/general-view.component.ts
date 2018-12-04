@@ -89,9 +89,12 @@ export class GeneralViewComponent implements OnInit {
     );
   }
 
-  openBottomSheet(appointment): void {
+  openBottomSheet(selectedSchedule, appointment): void {
     this.bottomSheet.open(AppointmentFormComponent, {
-      data: { appointment: appointment },
+      data: {
+        selectedSchedule: selectedSchedule,
+        appointment: appointment,
+      },
     });
   }
 
@@ -162,7 +165,4 @@ export class GeneralViewComponent implements OnInit {
     this.patientSearchBox.nativeElement.value = '';
   }
 
-  filterAppointmentsBySchedule() {
-    return true;
-  }
 }

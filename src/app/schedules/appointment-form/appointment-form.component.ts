@@ -20,7 +20,6 @@ export class AppointmentFormComponent implements OnInit {
   minutes = 0;
   patients: Observable<Patient[]>;
   searchPatientsTerms = new Subject<string>();
-  schedules: Observable<Schedule[]>;
 
   @ViewChild('patientSearchBox') patientSearchBox: ElementRef;
 
@@ -32,7 +31,6 @@ export class AppointmentFormComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.schedules = this.schedulesService.getValidSchedules('monthly', moment());
     this.patients = this.searchPatientsTerms.pipe(
       debounceTime(300),
       filter(term => term.length > 2),

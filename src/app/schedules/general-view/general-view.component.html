@@ -98,16 +98,16 @@
       <mat-nav-list dense *ngFor="let day of selectedSchedule.days" [ngClass]="[view, screenType]">
         <h3 mat-subheader>{{ day.name | titlecase }}</h3>
         <div *ngIf="withoutFilters">
-          <mat-list-item *ngFor="let appointment of day.appointments" [style.background]="appointment.color" (click)="openBottomSheet(appointment)" [class.occupied]="appointment.patient">
+          <mat-list-item *ngFor="let appointment of day.appointments" [style.background]="selectedSchedule.color" (click)="openBottomSheet(selectedSchedule, appointment)" [class.occupied]="appointment.patient">
             <p>{{appointment.hour}} | 
-              <span *ngIf="appointment.patient">{{appointment.patient.data.attributes.lastname}} {{appointment.patient.data.attributes.name}}</span>
+              <span *ngIf="appointment.patient">{{appointment.patient.lastname}} {{appointment.patient.name}}</span>
             </p>
           </mat-list-item>
         </div>
         <div *ngIf="!withoutFilters">
-          <mat-list-item *ngFor="let appointment of day.filteredAppointments" [style.background]="appointment.schedule?.color" (click)="openBottomSheet(appointment)" [class.occupied]="appointment.patient">
+          <mat-list-item *ngFor="let appointment of day.filteredAppointments" [style.background]="appointment.schedule?.color" (click)="openBottomSheet(selectedSchedule, appointment)" [class.occupied]="appointment.patient">
             <p>{{appointment.hour}} | 
-              <span *ngIf="appointment.patient">{{appointment.patient.data.attributes.lastname}} {{appointment.patient.data.attributes.name}}</span>
+              <span *ngIf="appointment.patient">{{appointment.patient.lastname}} {{appointment.patient.name}}</span>
             </p>
           </mat-list-item>
         </div>
