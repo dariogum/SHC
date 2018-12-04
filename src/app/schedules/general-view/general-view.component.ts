@@ -102,18 +102,18 @@ export class GeneralViewComponent implements OnInit {
     let firstDay;
     let lastDay;
     switch (this.view) {
-      case "weekly":
+      case 'weekly':
         this.startView = 'month';
         firstDay = this.day.clone().startOf('week');
         lastDay = this.day.clone().endOf('week');
         break;
-      case "monthly":
-        if (dayPicker) dayPicker.close();
-        if (event) this.day = event;
+      case 'monthly':
+        if (dayPicker) { dayPicker.close(); }
+        if (event) { this.day = event; }
         this.startView = 'year';
         firstDay = this.day.clone().startOf('month');
         lastDay = this.day.clone().endOf('month');
-        this.monthName = this.day.clone().format('MMMM')
+        this.monthName = this.day.clone().format('MMMM');
         break;
       default:
         this.startView = 'month';
@@ -132,9 +132,9 @@ export class GeneralViewComponent implements OnInit {
 
   readScheduleDays(firstDay, lastDay) {
     return this.schedulesService.readScheduleDays(this.selectedSchedule.id, firstDay, lastDay)
-    .subscribe(days => {
-      this.selectedSchedule.days = days;
-    });
+      .subscribe(days => {
+        this.selectedSchedule.days = days;
+      });
   }
 
   displayFn(patient?: Patient): string | undefined {
@@ -152,9 +152,9 @@ export class GeneralViewComponent implements OnInit {
 
   filterAppointmentsByPatient(patient) {
     this.withoutFilters = false;
-    for (let day of this.selectedSchedule.days) {
+    for (const day of this.selectedSchedule.days) {
       day.filteredAppointments = day.appointments.map(appointments => {
-        let ap = appointments.filter(appointment => appointment.patient === patient);
+        const ap = appointments.filter(appointment => appointment.patient === patient);
         return (ap.length > 0) ? ap[0] : null;
       });
     }

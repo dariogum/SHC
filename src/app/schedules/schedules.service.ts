@@ -63,15 +63,15 @@ export class SchedulesService {
   }
 
   readSchedule(id): Observable<Schedule> {
-    return this.http.get<any>(`${APISCHEDULESURL}/${id}`)
+    return this.http.get<any>(`${ APISCHEDULESURL }/${ id }`)
       .pipe(
         map(response => this.parseSchedule(response.data)),
-        catchError(this.handleError<Schedule>(`getSchedule id=${id}`))
+        catchError(this.handleError<Schedule>(`getSchedule id=${ id }`))
       );
   }
 
   readSchedules(): Observable<Schedule[]> {
-    return this.http.get<any>(`${APISCHEDULESURL}?sort=name`)
+    return this.http.get<any>(`${ APISCHEDULESURL }?sort=name`)
       .pipe(
         map(response => this.parseSchedules(response.data)),
         catchError(this.handleError<Schedule[]>('getSchedules', []))
@@ -96,7 +96,7 @@ export class SchedulesService {
       }
     };
 
-    return this.http.patch<any>(`${APISCHEDULESURL}/${schedule.id}`, data, HTTPOPTIONS)
+    return this.http.patch<any>(`${ APISCHEDULESURL }/${ schedule.id }`, data, HTTPOPTIONS)
       .pipe(
         map(response => response.data),
         catchError(this.handleError<any>('updatePatient'))
@@ -104,13 +104,13 @@ export class SchedulesService {
   }
 
   deleteSchedule(scheduleId) {
-    return this.http.delete<any>(`${APISCHEDULESURL}/${scheduleId}`, HTTPOPTIONS)
+    return this.http.delete<any>(`${ APISCHEDULESURL }/${ scheduleId }`, HTTPOPTIONS)
       .pipe(catchError(this.handleError<any>('deleteSchedule')));
   }
 
   parseSchedules(data): Schedule[] {
     const schedules: Schedule[] = [];
-    for (let schedule of data) {
+    for (const schedule of data) {
       schedules.push(this.parseSchedule(schedule));
     }
     return schedules;
@@ -119,10 +119,10 @@ export class SchedulesService {
   parseSchedule(data): Schedule {
     let days = [];
     let professionals = [];
-    if(data.relationships && data.relationships.professionals.length){
+    if (data.relationships && data.relationships.professionals.length) {
       professionals = this.userService.parseUsers(data.relationships.professionals);
     }
-    if(data.relationships && data.relationships.days.length){
+    if (data.relationships && data.relationships.days.length) {
       days = this.parseDays(data.relationships.days);
     }
     const schedule: Schedule = {
@@ -135,14 +135,14 @@ export class SchedulesService {
       professionals: professionals,
       validityEnd: data.attributes.validityEnd,
       validityStart: data.attributes.validityStart,
-    }
+    };
     return schedule;
   }
 
   readScheduleDays(scheduleId, firstDay, lastDay): Observable<any[]> {
     firstDay = firstDay.format('YYYY-MM-DD');
     lastDay = lastDay.format('YYYY-MM-DD');
-    return this.http.get<any>(`${APISCHEDULESURL}/${scheduleId}/${firstDay}/${lastDay}`)
+    return this.http.get<any>(`${ APISCHEDULESURL }/${ scheduleId }/${ firstDay }/${ lastDay }`)
       .pipe(
         map(response => this.parseDays(response.data)),
         catchError(this.handleError<Schedule[]>('getSchedulesDays', []))
@@ -151,14 +151,14 @@ export class SchedulesService {
 
   parseDays(data) {
     const days = [];
-    for (let day of data) {
+    for (const day of data) {
       days.push(this.parseDay(day));
     }
     return days;
   }
 
   parseDay(data) {
-    let dayNames = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+    const dayNames = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
     let dayName;
     let date = null;
     if (data.attributes.date) {
@@ -179,7 +179,7 @@ export class SchedulesService {
 
   parseHours(data) {
     const hours = [];
-    for (let hour of data) {
+    for (const hour of data) {
       hours.push(this.parseHour(hour));
     }
     return hours;
@@ -223,15 +223,15 @@ export class SchedulesService {
   }
 
   readAppointment(id): Observable<Appointment> {
-    return this.http.get<any>(`${APIAPPOINTMENTSURL}/${id}`)
+    return this.http.get<any>(`${ APIAPPOINTMENTSURL }/${ id }`)
       .pipe(
         map(response => this.parseAppointment(response.data)),
-        catchError(this.handleError<Appointment>(`getAppointment id=${id}`))
+        catchError(this.handleError<Appointment>(`getAppointment id=${ id }`))
       );
   }
 
   readAppointments(): Observable<Appointment[]> {
-    return this.http.get<any>(`${APIAPPOINTMENTSURL}`)
+    return this.http.get<any>(`${ APIAPPOINTMENTSURL }`)
       .pipe(
         map(response => this.parseAppointments(response.data)),
         catchError(this.handleError<Appointment[]>('getAppointments', []))
@@ -260,7 +260,7 @@ export class SchedulesService {
       }
     };
 
-    return this.http.patch<any>(`${APIAPPOINTMENTSURL}/${appointment.id}`, data, HTTPOPTIONS)
+    return this.http.patch<any>(`${ APIAPPOINTMENTSURL }/${ appointment.id }`, data, HTTPOPTIONS)
       .pipe(
         map(response => response.data),
         catchError(this.handleError<any>('updatePatient'))
@@ -268,7 +268,7 @@ export class SchedulesService {
   }
 
   deleteAppointments(appointmentId) {
-    return this.http.delete<any>(`${APIAPPOINTMENTSURL}/${appointmentId}`, HTTPOPTIONS)
+    return this.http.delete<any>(`${ APIAPPOINTMENTSURL }/${ appointmentId }`, HTTPOPTIONS)
       .pipe(catchError(this.handleError<any>('deleteAppointment')));
   }
 
@@ -278,7 +278,7 @@ export class SchedulesService {
 
   parseAppointments(data): Appointment[] {
     const appointments: Appointment[] = [];
-    for (let appointment of data) {
+    for (const appointment of data) {
       appointments.push(this.parseAppointment(appointment));
     }
     return appointments;
@@ -317,7 +317,7 @@ export class SchedulesService {
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      console.error(`${operation} failed: ${error.message}`);
+      console.error(`${ operation } failed: ${ error.message }`);
       return of(result as T);
     };
   }

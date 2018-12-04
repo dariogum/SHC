@@ -46,8 +46,6 @@ export class AppointmentFormComponent implements OnInit {
   searchPatients(term) {
     if (typeof (term) === 'string') {
       this.searchPatientsTerms.next(term);
-    } else {
-      
     }
   }
 
