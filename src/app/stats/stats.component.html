@@ -1,14 +1,16 @@
 <mat-grid-list cols="2" rowHeight="2:1" gutterSize="4">
 	<mat-grid-tile>
 		<mat-form-field>
-			<input matInput [matDatepicker]="pickerStartDate" placeholder="Fecha de inicio" [max]="endDate" [(ngModel)]="startDate" (dateInput)="getNewPatients($event);getVisits();getVisitsByMonth();getVisitsBySocialSecurity();">
+			<input matInput [matDatepicker]="pickerStartDate" placeholder="Fecha de inicio" [max]="endDate" [(ngModel)]="startDate"
+			 (dateInput)="getNewPatients($event);getVisits();getVisitsByMonth();getVisitsBySocialSecurity();">
 			<mat-datepicker-toggle matSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
 			<mat-datepicker touchUi #pickerStartDate calendarLabel="Fecha de inicio"></mat-datepicker>
 		</mat-form-field>
 	</mat-grid-tile>
 	<mat-grid-tile>
 		<mat-form-field>
-			<input matInput [matDatepicker]="pickerEndDate" placeholder="Fecha de fin" [min]="startDate" [(ngModel)]="endDate" (dateInput)="getNewPatients($event);getVisits();getVisitsByMonth();getVisitsBySocialSecurity();">
+			<input matInput [matDatepicker]="pickerEndDate" placeholder="Fecha de fin" [min]="startDate" [(ngModel)]="endDate"
+			 (dateInput)="getNewPatients($event);getVisits();getVisitsByMonth();getVisitsBySocialSecurity();">
 			<mat-datepicker-toggle matSuffix [for]="pickerEndDate"></mat-datepicker-toggle>
 			<mat-datepicker touchUi #pickerEndDate calendarLabel="Fecha de fin"></mat-datepicker>
 		</mat-form-field>
@@ -18,7 +20,9 @@
 			<mat-card-header>
 				<mat-card-title>Nuevos pacientes</mat-card-title>
 			</mat-card-header>
-			<mat-card-content><h3>{{data[0]}}</h3></mat-card-content>
+			<mat-card-content>
+				<h3>{{data[0]}}</h3>
+			</mat-card-content>
 		</mat-card>
 	</mat-grid-tile>
 	<mat-grid-tile>
@@ -26,7 +30,9 @@
 			<mat-card-header>
 				<mat-card-title>Visitas totales</mat-card-title>
 			</mat-card-header>
-			<mat-card-content><h3>{{data[1]}}</h3></mat-card-content>
+			<mat-card-content>
+				<h3>{{data[1]}}</h3>
+			</mat-card-content>
 		</mat-card>
 	</mat-grid-tile>
 </mat-grid-list>

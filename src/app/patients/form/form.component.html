@@ -5,7 +5,7 @@
 		</a>
 		<span *ngIf="!patient">Historia Clínica</span>
 		<span *ngIf="patient" class="header-row">
-			NHC{{patient.id}} 
+			NHC{{patient.id}}
 			- {{patient.name}} {{patient.lastname}}
 			<i *ngIf="patient.oldId">- Legajo: {{patient.oldId}}</i>
 		</span>
@@ -42,43 +42,21 @@
 			</mat-expansion-panel-header>
 			<form method="post" [class]="screenType" [class.bolder]="biggerFont" #patientDataForm="ngForm">
 				<mat-form-field class="form-field">
-					<input matInput
-					type="text"
-					name="lastname"
-					[(ngModel)]="patient.lastname"
-					placeholder="Apellido/s"
-					maxlength="256"
-					required
-					(blur)="updatePatient($event)">
+					<input matInput type="text" name="lastname" [(ngModel)]="patient.lastname" placeholder="Apellido/s" maxlength="256"
+					 required (blur)="updatePatient($event)">
 				</mat-form-field>
 				<mat-form-field class="form-field">
-					<input matInput
-					type="text"
-					name="name"
-					[(ngModel)]="patient.name"
-					placeholder="Nombre/s"
-					maxlength="256"
-					required
-					(blur)="updatePatient($event)">
+					<input matInput type="text" name="name" [(ngModel)]="patient.name" placeholder="Nombre/s" maxlength="256" required
+					 (blur)="updatePatient($event)">
 				</mat-form-field>
 				<mat-form-field class="form-field">
-					<input matInput
-					name="birthday"
-					[(ngModel)]="patient.birthday"
-					placeholder="Fecha de nacimiento"
-					[matDatepicker]="picker"
-					[max]="today"
-					disabled
-					(dateChange)="updatePatient($event)">
+					<input matInput name="birthday" [(ngModel)]="patient.birthday" placeholder="Fecha de nacimiento" [matDatepicker]="picker"
+					 [max]="today" disabled (dateChange)="updatePatient($event)">
 					<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
 					<mat-datepicker touchUi #picker calendarLabel="Fecha de nacimiento" disabled="false"></mat-datepicker>
 				</mat-form-field>
 				<mat-form-field class="form-field">
-					<mat-select
-					name="gender"
-					[(ngModel)]="patient.gender"
-					placeholder="Sexo"
-					(selectionChange)="updatePatient($event)">
+					<mat-select name="gender" [(ngModel)]="patient.gender" placeholder="Sexo" (selectionChange)="updatePatient($event)">
 						<mat-option *ngFor="let gender of genders" [value]="gender">
 							{{gender.name}}
 						</mat-option>
@@ -86,233 +64,143 @@
 				</mat-form-field>
 				<div>
 					<mat-form-field class="form-field">
-						<mat-select
-						name="docType"
-						[(ngModel)]="patient.docType"
-						placeholder="Tipo de documento"
-						(selectionChange)="updatePatient($event)">
+						<mat-select name="docType" [(ngModel)]="patient.docType" placeholder="Tipo de documento" (selectionChange)="updatePatient($event)">
 							<mat-option [value]="1">D.N.I.</mat-option>
 						</mat-select>
 					</mat-form-field>
 					<mat-form-field class="form-field">
-						<input matInput
-						type="text"
-						name="doc"
-						[(ngModel)]="patient.doc"
-						placeholder="Número de documento"
-						maxlength="256"
-						(blur)="updatePatient($event)">
+						<input matInput type="text" name="doc" [(ngModel)]="patient.doc" placeholder="Número de documento" maxlength="256"
+						 (blur)="updatePatient($event)">
 						<mat-hint align="start">Ej: 33000999</mat-hint>
 					</mat-form-field>
 					<mat-form-field class="form-field">
-						<input matInput
-						type="tel"
-						name="phone1"
-						[(ngModel)]="patient.phone1"
-						placeholder="Teléfono 1"
-						maxlength="64"
-						(blur)="updatePatient($event)">
+						<input matInput type="tel" name="phone1" [(ngModel)]="patient.phone1" placeholder="Teléfono 1" maxlength="64"
+						 (blur)="updatePatient($event)">
 						<mat-icon matSuffix>phone</mat-icon>
 						<mat-hint align="start">Ej: 3424567814</mat-hint>
 					</mat-form-field>
 					<mat-form-field class="form-field">
-						<input matInput
-						type="tel"
-						name="phone2"
-						[(ngModel)]="patient.phone2"
-						placeholder="Teléfono 2"
-						maxlength="64"
-						(blur)="updatePatient($event)">
+						<input matInput type="tel" name="phone2" [(ngModel)]="patient.phone2" placeholder="Teléfono 2" maxlength="64"
+						 (blur)="updatePatient($event)">
 						<mat-icon matSuffix>phone</mat-icon>
 						<mat-hint align="start">Ej: 3424567814</mat-hint>
 					</mat-form-field>
 				</div>
 				<div>
 					<mat-form-field class="form-field">
-						<mat-select
-						name="country"
-						[(ngModel)]="patient.country"
-						placeholder="País"
-						(selectionChange)="updatePatient($event)"
-						(selectionChange)="filterStates($event)">
+						<mat-select name="country" [(ngModel)]="patient.country" placeholder="País" (selectionChange)="updatePatient($event)"
+						 (selectionChange)="filterStates($event)">
 							<mat-option *ngFor="let country of countries" [value]="country">
 								{{country.name}}
 							</mat-option>
 						</mat-select>
 					</mat-form-field>
 					<mat-form-field class="form-field">
-						<mat-select
-						name="state"
-						[(ngModel)]="patient.state"
-						placeholder="Provincia"
-						[disabled]="!patient.country"
-						(selectionChange)="updatePatient($event)"
-						(selectionChange)="filterCities($event)">
+						<mat-select name="state" [(ngModel)]="patient.state" placeholder="Provincia" [disabled]="!patient.country"
+						 (selectionChange)="updatePatient($event)" (selectionChange)="filterCities($event)">
 							<mat-option *ngFor="let state of states" [value]="state">
 								{{state.name}}
 							</mat-option>
 						</mat-select>
 					</mat-form-field>
 					<mat-form-field class="form-field">
-						<mat-select
-						name="city"
-						[(ngModel)]="patient.city"
-						placeholder="Localidad"
-						[disabled]="!patient.state"
-						(selectionChange)="updatePatient($event)">
+						<mat-select name="city" [(ngModel)]="patient.city" placeholder="Localidad" [disabled]="!patient.state"
+						 (selectionChange)="updatePatient($event)">
 							<mat-option *ngFor="let city of cities" [value]="city">
 								{{city.name}}
 							</mat-option>
 						</mat-select>
 					</mat-form-field>
 					<mat-form-field class="form-field">
-						<input matInput
-						type="text"
-						name="zipcode"
-						placeholder="Código postal"
-						[readonly]="true"
-						value="{{patient.city?.zipcode}}">
+						<input matInput type="text" name="zipcode" placeholder="Código postal" [readonly]="true" value="{{patient.city?.zipcode}}">
 					</mat-form-field>
 				</div>
 				<div *ngIf="addressFields">
 					<mat-form-field class="form-field">
-						<input matInput
-						type="text"
-						name="street"
-						[(ngModel)]="patient.street"
-						placeholder="Calle"
-						maxlength="256"
-						(blur)="updatePatient($event)">
+						<input matInput type="text" name="street" [(ngModel)]="patient.street" placeholder="Calle" maxlength="256" (blur)="updatePatient($event)">
 						<mat-icon matSuffix>edit_location</mat-icon>
 						<mat-hint align="start">Ej: Av. Domingo F. Sarmiento</mat-hint>
 					</mat-form-field>
 					<mat-form-field class="form-field">
-						<input matInput
-						type="number"
-						name="number"
-						[(ngModel)]="patient.number"
-						placeholder="Número"
-						(blur)="updatePatient($event)">
+						<input matInput type="number" name="number" [(ngModel)]="patient.number" placeholder="Número" (blur)="updatePatient($event)">
 						<mat-icon matSuffix>dialpad</mat-icon>
 						<mat-hint align="start">Ej: 5692</mat-hint>
 					</mat-form-field>
 					<mat-form-field class="form-field">
-						<input matInput
-						type="text"
-						name="floor"
-						[(ngModel)]="patient.floor"
-						placeholder="Piso"
-						maxlength="16"
-						(blur)="updatePatient($event)">
+						<input matInput type="text" name="floor" [(ngModel)]="patient.floor" placeholder="Piso" maxlength="16" (blur)="updatePatient($event)">
 						<mat-icon matSuffix>location_city</mat-icon>
 						<mat-hint align="start">Ej: 1</mat-hint>
 					</mat-form-field>
 					<mat-form-field class="form-field">
-						<input matInput
-						type="text"
-						name="apartment"
-						[(ngModel)]="patient.apartment"
-						placeholder="Departamento"
-						maxlength="16"
-						(blur)="updatePatient($event)">
+						<input matInput type="text" name="apartment" [(ngModel)]="patient.apartment" placeholder="Departamento" maxlength="16"
+						 (blur)="updatePatient($event)">
 						<mat-icon matSuffix>meeting_room</mat-icon>
 						<mat-hint align="start">Ej: D</mat-hint>
 					</mat-form-field>
 				</div>
 				<div class="social-security">
 					<mat-form-field class="form-field">
-						<input matInput
-						type="text"
-						name="socialSecurity1"
-						[(ngModel)]="patient.socialSecurity1"
-						placeholder="Obra Social 1"
-						[matAutocomplete]="socialSecurity1"
-						app-socialSecurityValidator
-						(ngModelChange)="filterSocialSecurities($event, 'socialSecurity1')">
+						<input matInput type="text" name="socialSecurity1" [(ngModel)]="patient.socialSecurity1" placeholder="Obra Social 1"
+						 [matAutocomplete]="socialSecurity1" app-socialSecurityValidator (ngModelChange)="filterSocialSecurities($event, 'socialSecurity1')">
 						<mat-autocomplete #socialSecurity1="matAutocomplete" [displayWith]="displayFn">
-						  <mat-option *ngFor="let socialsecurity of filteredSocialsecurities" [value]="socialsecurity">
-						    {{socialsecurity.name}}
-						  </mat-option>
+							<mat-option *ngFor="let socialsecurity of filteredSocialsecurities" [value]="socialsecurity">
+								{{socialsecurity.name}}
+							</mat-option>
 						</mat-autocomplete>
-						<mat-hint *ngIf="patient.socialSecurity1 && !patient.socialSecurity1?.accepted">No acordó valor de consulta ética!</mat-hint>
+						<mat-hint *ngIf="patient.socialSecurity1 && !patient.socialSecurity1?.accepted">No acordó valor de consulta
+							ética!</mat-hint>
 					</mat-form-field>
 					<mat-form-field class="form-field">
-						<input matInput
-						type="text"
-						name="socialSecurity1Number"
-						[(ngModel)]="patient.socialSecurity1Number"
-						placeholder="N° de afiliado"
-						maxlength="128"
-						[disabled]="!patient.socialSecurity1"
-						(blur)="updatePatient($event)">
+						<input matInput type="text" name="socialSecurity1Plan" [(ngModel)]="patient.socialSecurity1Plan" placeholder="Plan Obra Social 1"
+						 maxlength="256" [disabled]="!patient.socialSecurity1" (blur)="updatePatient($event)">
+					</mat-form-field>
+					<mat-form-field class="form-field">
+						<input matInput type="text" name="socialSecurity1Number" [(ngModel)]="patient.socialSecurity1Number" placeholder="N° de afiliado"
+						 maxlength="128" [disabled]="!patient.socialSecurity1" (blur)="updatePatient($event)">
 					</mat-form-field>
 					<mat-form-field class="form-field" *ngIf="multipleSocialSecurities">
-						<input matInput
-						type="text"
-						name="socialSecurity2"
-						[(ngModel)]="patient.socialSecurity2"
-						placeholder="Obra Social 2"
-						[matAutocomplete]="socialSecurity2"
-						(ngModelChange)="filterSocialSecurities($event, 'socialSecurity2')">
+						<input matInput type="text" name="socialSecurity2" [(ngModel)]="patient.socialSecurity2" placeholder="Obra Social 2"
+						 [matAutocomplete]="socialSecurity2" (ngModelChange)="filterSocialSecurities($event, 'socialSecurity2')">
 						<mat-autocomplete #socialSecurity2="matAutocomplete" [displayWith]="displayFn">
-						  <mat-option *ngFor="let socialsecurity of filteredSocialsecurities" [value]="socialsecurity">
-						    {{socialsecurity.name}}
-						  </mat-option>
+							<mat-option *ngFor="let socialsecurity of filteredSocialsecurities" [value]="socialsecurity">
+								{{socialsecurity.name}}
+							</mat-option>
 						</mat-autocomplete>
-						<mat-hint *ngIf="patient.socialSecurity2 && !patient.socialSecurity2?.accepted">No acordó valor de consulta ética!</mat-hint>
+						<mat-hint *ngIf="patient.socialSecurity2 && !patient.socialSecurity2?.accepted">No acordó valor de consulta
+							ética!</mat-hint>
+					</mat-form-field>
+					<mat-form-field class="form-field">
+						<input matInput type="text" name="socialSecurity2Plan" [(ngModel)]="patient.socialSecurity2Plan" placeholder="Plan Obra Social 2"
+						 maxlength="256" [disabled]="!patient.socialSecurity2" (blur)="updatePatient($event)">
 					</mat-form-field>
 					<mat-form-field class="form-field" *ngIf="multipleSocialSecurities">
-						<input matInput
-						type="text"
-						name="socialSecurity2Number"
-						[(ngModel)]="patient.socialSecurity2Number"
-						placeholder="N° de afiliado"
-						maxlength="128"
-						[disabled]="!patient.socialSecurity2"
-						(blur)="updatePatient($event)">
+						<input matInput type="text" name="socialSecurity2Number" [(ngModel)]="patient.socialSecurity2Number" placeholder="N° de afiliado"
+						 maxlength="128" [disabled]="!patient.socialSecurity2" (blur)="updatePatient($event)">
 					</mat-form-field>
 				</div>
 				<div>
 					<mat-form-field class="form-field">
-						<mat-select
-						name="birthType"
-						[(ngModel)]="patient.birthType"
-						placeholder="Tipo de Nacimiento"
-						(selectionChange)="updatePatient($event)">
+						<mat-select name="birthType" [(ngModel)]="patient.birthType" placeholder="Tipo de Nacimiento" (selectionChange)="updatePatient($event)">
 							<mat-option *ngFor="let birthtype of birthtypes" [value]="birthtype">
 								{{birthtype.name}}
 							</mat-option>
 						</mat-select>
 					</mat-form-field>
 					<mat-form-field class="form-field">
-						<input matInput
-						type="number"
-						name="weightNewborn"
-						[(ngModel)]="patient.weightNewborn"
-						placeholder="Peso del recién nacido"
-						min="0"
-						step="1"
-						(blur)="updatePatient($event)">
+						<input matInput type="number" name="weightNewborn" [(ngModel)]="patient.weightNewborn" placeholder="Peso del recién nacido"
+						 min="0" step="1" (blur)="updatePatient($event)">
 						<span matSuffix>g</span>
 						<mat-hint align="start">Ej: 3600</mat-hint>
 					</mat-form-field>
 					<mat-form-field class="form-field">
-						<mat-select
-						name="bloodType"
-						[(ngModel)]="patient.bloodType"
-						placeholder="Grupo sanguíneo"
-						(selectionChange)="updatePatient($event)">
+						<mat-select name="bloodType" [(ngModel)]="patient.bloodType" placeholder="Grupo sanguíneo" (selectionChange)="updatePatient($event)">
 							<mat-option *ngFor="let bloodtype of bloodtypes" [value]="bloodtype">
 								{{bloodtype.name}}
 							</mat-option>
 						</mat-select>
 					</mat-form-field>
 					<mat-form-field class="form-field">
-						<mat-select
-						name="rhFactor"
-						[(ngModel)]="patient.rhFactor"
-						placeholder="Factor RH"
-						(selectionChange)="updatePatient($event)">
+						<mat-select name="rhFactor" [(ngModel)]="patient.rhFactor" placeholder="Factor RH" (selectionChange)="updatePatient($event)">
 							<mat-option [value]="1">+ (Positivo)</mat-option>
 							<mat-option [value]="2">- (Negativo)</mat-option>
 						</mat-select>
@@ -332,74 +220,34 @@
 			<form method="post" [class]="screenType" [class.bolder]="biggerFont" #patientBackgroundForm="ngForm">
 				<div>
 					<mat-form-field class="apgar-field">
-						<input matInput
-						type="number"
-						name="apgar1"
-						[(ngModel)]="patient.apgar1"
-						placeholder="Test de Apgar 1 min."
-						max="10"
-						min="0"
-						step="1"
-						(blur)="updatePatient($event)">
+						<input matInput type="number" name="apgar1" [(ngModel)]="patient.apgar1" placeholder="Test de Apgar 1 min." max="10"
+						 min="0" step="1" (blur)="updatePatient($event)">
 					</mat-form-field>
 					<mat-form-field class="apgar-field">
-						<input matInput
-						type="number"
-						name="apgar2"
-						[(ngModel)]="patient.apgar2"
-						placeholder="Test de Apgar 5 min."
-						max="10"
-						min="0"
-						step="1"
-						(blur)="updatePatient($event)">
+						<input matInput type="number" name="apgar2" [(ngModel)]="patient.apgar2" placeholder="Test de Apgar 5 min." max="10"
+						 min="0" step="1" (blur)="updatePatient($event)">
 					</mat-form-field>
 					<mat-form-field class="form-field">
-						<input matInput
-						type="number"
-						name="gestationalAge"
-						[(ngModel)]="patient.gestationalAge"
-						placeholder="Edad gestacional"
-						min="0"
-						step="1"
-						(blur)="updatePatient($event)">
+						<input matInput type="number" name="gestationalAge" [(ngModel)]="patient.gestationalAge" placeholder="Edad gestacional"
+						 min="0" step="1" (blur)="updatePatient($event)">
 						<span matSuffix>semanas</span>
 					</mat-form-field>
 					<mat-form-field class="comment-field">
-						<textarea matInput
-						name="comments"
-						[(ngModel)]="patient.comments"
-						placeholder="Comentario"
-						(blur)="updatePatient($event)"></textarea>
+						<textarea matInput name="comments" [(ngModel)]="patient.comments" placeholder="Comentario" (blur)="updatePatient($event)"></textarea>
 					</mat-form-field>
 				</div>
 				<div>
 					<mat-form-field class="form-field">
-						<textarea matInput
-						name="father"
-						[(ngModel)]="patient.father"
-						placeholder="Padre"
-						(blur)="updatePatient($event)"></textarea>
+						<textarea matInput name="father" [(ngModel)]="patient.father" placeholder="Padre" (blur)="updatePatient($event)"></textarea>
 					</mat-form-field>
 					<mat-form-field class="form-field">
-						<textarea matInput
-						name="mother"
-						[(ngModel)]="patient.mother"
-						placeholder="Madre"
-						(blur)="updatePatient($event)"></textarea>
+						<textarea matInput name="mother" [(ngModel)]="patient.mother" placeholder="Madre" (blur)="updatePatient($event)"></textarea>
 					</mat-form-field>
 					<mat-form-field class="form-field">
-						<textarea matInput
-						name="brothers"
-						[(ngModel)]="patient.brothers"
-						placeholder="Hermanos"
-						(blur)="updatePatient($event)"></textarea>
+						<textarea matInput name="brothers" [(ngModel)]="patient.brothers" placeholder="Hermanos" (blur)="updatePatient($event)"></textarea>
 					</mat-form-field>
 					<mat-form-field class="form-field">
-						<textarea matInput
-						name="others"
-						[(ngModel)]="patient.others"
-						placeholder="Otros"
-						(blur)="updatePatient($event)"></textarea>
+						<textarea matInput name="others" [(ngModel)]="patient.others" placeholder="Otros" (blur)="updatePatient($event)"></textarea>
 					</mat-form-field>
 				</div>
 			</form>

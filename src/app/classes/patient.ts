@@ -26,8 +26,10 @@ export class Patient {
   floor: string;
   apartment: string;
   socialSecurity1: SocialSecurity;
+  socialSecurity1Plan: string;
   socialSecurity1Number: string;
   socialSecurity2: SocialSecurity;
+  socialSecurity2Plan: string;
   socialSecurity2Number: string;
   birthType: BirthType;
   weightNewborn: number;

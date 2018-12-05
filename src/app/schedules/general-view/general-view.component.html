@@ -31,25 +31,16 @@
   <mat-card-content>
     <form method="post" [ngClass]="screenType">
       <mat-form-field class="form-field">
-        <mat-select
-        [(ngModel)]="selectedSchedule"
-        (selectionChange)="changeView(false,false)"
-        name="selectedSchedule"
-        placeholder="Seleccionar agenda/s">
+        <mat-select [(ngModel)]="selectedSchedule" (selectionChange)="changeView(false,false)" name="selectedSchedule"
+          placeholder="Seleccionar agenda/s">
           <mat-option *ngFor="let schedule of schedules" [value]="schedule">
             {{schedule.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field class="form-field">
-        <input matInput
-        #patientSearchBox
-        type="text"
-        name="selectedPatient"
-        [(ngModel)]="selectedPatient"
-        placeholder="Buscar un paciente"
-        [matAutocomplete]="patientSelector"
-        (ngModelChange)="searchPatients($event)">
+        <input matInput #patientSearchBox type="text" name="selectedPatient" [(ngModel)]="selectedPatient" placeholder="Buscar un paciente"
+          [matAutocomplete]="patientSelector" (ngModelChange)="searchPatients($event)">
         <mat-autocomplete #patientSelector="matAutocomplete" [displayWith]="displayFn">
           <mat-option *ngFor="let patient of patients | async" [value]="patient">
             {{patient.lastname}} {{patient.name}}
@@ -77,19 +68,11 @@
         </mat-button-toggle-group>
       </div>
       <mat-form-field class="form-field">
-        <input matInput
-        placeholder="Seleccionar un día/mes"
-        [(ngModel)]="day"
-        [matDatepicker]="dayPicker"
-        (dateChange)="changeView(false, false)"
-        disabled
-        name="day">
+        <input matInput placeholder="Seleccionar un día/mes" [(ngModel)]="day" [matDatepicker]="dayPicker" (dateChange)="changeView(false, false)"
+          disabled name="day">
         <mat-datepicker-toggle matSuffix [for]="dayPicker"></mat-datepicker-toggle>
-        <mat-datepicker touchUi #dayPicker
-        [startView]="startView"
-        (monthSelected)="changeView($event, dayPicker)"
-        calendarLabel="Seleccionar un día"
-        disabled="false"></mat-datepicker>
+        <mat-datepicker touchUi #dayPicker [startView]="startView" (monthSelected)="changeView($event, dayPicker)"
+          calendarLabel="Seleccionar un día" disabled="false"></mat-datepicker>
       </mat-form-field>
       <span class="month-selector" *ngIf="view === 'monthly'">Mes seleccionado: {{monthName | titlecase}}</span>
     </form>
@@ -98,15 +81,17 @@
       <mat-nav-list dense *ngFor="let day of selectedSchedule.days" [ngClass]="[view, screenType]">
         <h3 mat-subheader>{{ day.name | titlecase }}</h3>
         <div *ngIf="withoutFilters">
-          <mat-list-item *ngFor="let appointment of day.appointments" [style.background]="selectedSchedule.color" (click)="openBottomSheet(selectedSchedule, appointment)" [class.occupied]="appointment.patient">
-            <p>{{appointment.hour}} | 
+          <mat-list-item *ngFor="let appointment of day.appointments" [style.background]="selectedSchedule.color"
+            (click)="openBottomSheet(selectedSchedule, appointment)" [class.occupied]="appointment.patient">
+            <p>{{appointment.hour}} |
               <span *ngIf="appointment.patient">{{appointment.patient.lastname}} {{appointment.patient.name}}</span>
             </p>
           </mat-list-item>
         </div>
         <div *ngIf="!withoutFilters">
-          <mat-list-item *ngFor="let appointment of day.filteredAppointments" [style.background]="appointment.schedule?.color" (click)="openBottomSheet(selectedSchedule, appointment)" [class.occupied]="appointment.patient">
-            <p>{{appointment.hour}} | 
+          <mat-list-item *ngFor="let appointment of day.filteredAppointments" [style.background]="appointment.schedule?.color"
+            (click)="openBottomSheet(selectedSchedule, appointment)" [class.occupied]="appointment.patient">
+            <p>{{appointment.hour}} |
               <span *ngIf="appointment.patient">{{appointment.patient.lastname}} {{appointment.patient.name}}</span>
             </p>
           </mat-list-item>

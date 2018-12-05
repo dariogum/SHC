@@ -7,11 +7,13 @@
 		<img mat-card-image src="assets/favicon/favicon-96x96.png" width="96" height="96" *ngIf="!handset">
 		<mat-card-content>
 			<mat-form-field class="full-width">
-				<input matInput type="email" placeholder="Email" [(ngModel)]="user.email" autocomplete="username email" name="email" required>
+				<input matInput type="email" placeholder="Email" [(ngModel)]="user.email" autocomplete="username email" name="email"
+				 required>
 				<mat-hint align="start"><strong>Por ejemplo: minombre@servidor.com</strong></mat-hint>
 			</mat-form-field>
 			<mat-form-field class="full-width">
-				<input matInput type="password" placeholder="Contraseña" [(ngModel)]="user.password" autocomplete="current-password" name="password" required>
+				<input matInput type="password" placeholder="Contraseña" [(ngModel)]="user.password" autocomplete="current-password"
+				 name="password" required>
 			</mat-form-field>
 		</mat-card-content>
 		<mat-card-actions class="text-center">

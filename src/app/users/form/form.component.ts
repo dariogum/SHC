@@ -62,7 +62,7 @@ export class FormComponent implements OnInit {
         this.screenType = 'wide';
       }
     });
-  this.getUser();
+    this.getUser();
   }
 
   toggleAccordion() {

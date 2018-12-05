@@ -1,21 +1,9 @@
 <mat-form-field class="hour-picker">
-  <input matInput type="number"
-  [(ngModel)]="_hour"
-  min="0"
-  max="23"
-  placeholder="Hs."
-  maxlength="2"
-  (input)="updateHourAndMinutes()"
-  required>
+  <input matInput type="number" [(ngModel)]="_hour" min="0" max="23" placeholder="Hs." maxlength="2" (input)="updateHourAndMinutes()"
+    required>
 </mat-form-field>
 <span class="separator">:</span>
 <mat-form-field class="minutes-picker">
-  <input matInput type="number"
-  [(ngModel)]="_minutes"
-  min="0"
-  max="59"
-  placeholder="Min."
-  maxlength="2"
-  (input)="updateHourAndMinutes()"
-  required>
+  <input matInput type="number" [(ngModel)]="_minutes" min="0" max="59" placeholder="Min." maxlength="2" (input)="updateHourAndMinutes()"
+    required>
 </mat-form-field>

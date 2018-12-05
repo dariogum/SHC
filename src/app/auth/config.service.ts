@@ -19,7 +19,7 @@ const CONFIG = [
     attributes: {
       addressFields: false,
       biggerFont: true,
-      cities: [4160, 18233, 10406, 8620, 11160, 13853, 14970, 18603, 20611, 21725, 21203],
+      cities: [4160, 18233, 10406, 8620, 11160, 13853, 14970, 18603, 20611, 21725, 21203, 13620, 13207, 5409, 10805],
       countries: ['all'],
       multipleSocialSecurities: false,
       role: 'medic',

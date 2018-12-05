@@ -1,17 +1,18 @@
 <form #userForm="ngForm" (ngSubmit)="addUser()">
 	<h2 mat-dialog-title>Nuevo paciente</h2>
 	<mat-dialog-content>
-	  <mat-form-field>
-	    <input matInput [(ngModel)]="user.lastname" placeholder="Apellido/s" name="lastname" id="lastname" required #lastname="ngModel">
-	    <mat-error *ngIf="lastname.valid || lastname.pristine">El apellido es requerido</mat-error>
-	  </mat-form-field>
-	  <mat-form-field>
-	    <input matInput [(ngModel)]="user.name" placeholder="Nombre/s" name="name" id="name" required #name="ngModel">
-	    <mat-error *ngIf="name.valid || name.pristine">El nombre es requerido</mat-error>
-	  </mat-form-field>
+		<mat-form-field>
+			<input matInput [(ngModel)]="user.lastname" placeholder="Apellido/s" name="lastname" id="lastname" required
+			 #lastname="ngModel">
+			<mat-error *ngIf="lastname.valid || lastname.pristine">El apellido es requerido</mat-error>
+		</mat-form-field>
+		<mat-form-field>
+			<input matInput [(ngModel)]="user.name" placeholder="Nombre/s" name="name" id="name" required #name="ngModel">
+			<mat-error *ngIf="name.valid || name.pristine">El nombre es requerido</mat-error>
+		</mat-form-field>
 	</mat-dialog-content>
 	<mat-dialog-actions>
-	  <button type="submit" mat-raised-button color="primary" [disabled]="!userForm.form.valid">Guardar</button>
-	  <button type="reset" mat-raised-button color="accent" mat-dialog-close>Cancelar</button>
+		<button type="submit" mat-raised-button color="primary" [disabled]="!userForm.form.valid">Guardar</button>
+		<button type="reset" mat-raised-button color="accent" mat-dialog-close>Cancelar</button>
 	</mat-dialog-actions>
 </form>

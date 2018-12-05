@@ -131,8 +131,10 @@ export class PatientService {
       floor: data.attributes.floor,
       apartment: data.attributes.apartment,
       socialSecurity1: socialSecurity1,
+      socialSecurity1Plan: data.attributes.socialSecurity1Plan,
       socialSecurity1Number: data.attributes.socialSecurity1Number,
       socialSecurity2: socialSecurity2,
+      socialSecurity2Plan: data.attributes.socialSecurity2Plan,
       socialSecurity2Number: data.attributes.socialSecurity2Number,
       birthType: birthtype,
       weightNewborn: data.attributes.weightNewborn,
@@ -162,7 +164,7 @@ export class PatientService {
   }
 
   getPatients(): Observable<Patient[]> {
-    return this.http.get<any>(`${APIPATIENTSURL}?sort=-modifiedAt&page=first`)
+    return this.http.get<any>(`${ APIPATIENTSURL }?sort=-modifiedAt&page=first`)
       .pipe(
         map(response => this.parsePatients(response.data)),
         catchError(this.handleError<Patient[]>('getPatients', []))
@@ -170,12 +172,12 @@ export class PatientService {
   }
 
   getPatient(id: number): Observable<Patient> {
-    const url = `${APIPATIENTSURL}/${id}`;
+    const url = `${ APIPATIENTSURL }/${ id }`;
 
     return this.http.get<any>(url)
       .pipe(
         map(response => this.parsePatient(response.data)),
-        catchError(this.handleError<Patient>(`getPatient id=${id}`))
+        catchError(this.handleError<Patient>(`getPatient id=${ id }`))
       );
   }
 
@@ -186,7 +188,7 @@ export class PatientService {
     terms = terms.toLowerCase();
     terms = encodeURI(terms);
 
-    return this.http.get<any>(`${APIPATIENTSURL}/search/${terms}`)
+    return this.http.get<any>(`${ APIPATIENTSURL }/search/${ terms }`)
       .pipe(
         map(response => this.parsePatients(response.data)),
         catchError(this.handleError<Patient[]>('searchpatients', []))
@@ -215,7 +217,7 @@ export class PatientService {
 
   updatePatient(patient: Patient): Observable<any> {
     const id = typeof patient === 'number' ? patient : patient.id;
-    const url = `${APIPATIENTSURL}/${id}`;
+    const url = `${ APIPATIENTSURL }/${ id }`;
 
     let birthday = null;
     const birthtype: Number = patient.birthType === null ? null : patient.birthType.id;
@@ -252,8 +254,10 @@ export class PatientService {
           floor: patient.floor,
           apartment: patient.apartment,
           socialSecurity1: socialSecurity1,
+          socialSecurity1Plan: patient.socialSecurity1Plan,
           socialSecurity1Number: patient.socialSecurity1Number,
           socialSecurity2: socialSecurity2,
+          socialSecurity2Plan: patient.socialSecurity2Plan,
           socialSecurity2Number: patient.socialSecurity2Number,
           birthType: birthtype,
           weightNewborn: patient.weightNewborn,
@@ -280,7 +284,7 @@ export class PatientService {
   }
 
   deletePatient(patientId: number): Observable<any> {
-    const url = `${APIPATIENTSURL}/${patientId}`;
+    const url = `${ APIPATIENTSURL }/${ patientId }`;
 
     return this.http.delete<any>(url, HTTPOPTIONS)
       .pipe(
@@ -325,7 +329,7 @@ export class PatientService {
 
   updateVisit(visit: Visit, patientId: Number): Observable<any> {
     const id = typeof visit === 'number' ? visit : visit.id;
-    const url = `${APIVISITSURL}/${id}`;
+    const url = `${ APIVISITSURL }/${ id }`;
     const data = this.visitToJson(visit, patientId);
 
     return this.http.patch<any>(url, data, HTTPOPTIONS)
@@ -337,7 +341,7 @@ export class PatientService {
 
   deleteVisit(visit: Visit | number): Observable<any> {
     const id = typeof visit === 'number' ? visit : visit.id;
-    const url = `${APIVISITSURL}/${id}`;
+    const url = `${ APIVISITSURL }/${ id }`;
 
     return this.http.delete<any>(url, HTTPOPTIONS)
       .pipe(
@@ -359,7 +363,7 @@ export class PatientService {
   }
 
   deleteFile(fileId: number): Observable<any> {
-    const url = `${APIFILESURL}/${fileId}`;
+    const url = `${ APIFILESURL }/${ fileId }`;
 
     return this.http.delete<any>(url, HTTPOPTIONS)
       .pipe(
@@ -369,7 +373,7 @@ export class PatientService {
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      console.error(`${operation} failed: ${error.message}`);
+      console.error(`${ operation } failed: ${ error.message }`);
       return of(result as T);
     };
   }

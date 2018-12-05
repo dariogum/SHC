@@ -43,7 +43,7 @@ export class LoginService {
   }
 
   verifyByEmail(data): Observable<User> {
-    const url = `${APIUSERSURL}/login`;
+    const url = `${ APIUSERSURL }/login`;
     return this.http.post<any>(url, data, HTTPOPTIONS)
       .pipe(
         map(response => this.parseUser(response.data)),
@@ -53,7 +53,7 @@ export class LoginService {
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      console.error(`${operation} failed: ${error.message}`);
+      console.error(`${ operation } failed: ${ error.message }`);
       return of(result as T);
     };
   }

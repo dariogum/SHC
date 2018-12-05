@@ -35,42 +35,19 @@
 			</mat-expansion-panel-header>
 			<form method="post" [class]="screenType" [class.bolder]="bolder" #userDataForm="ngForm">
 				<mat-form-field class="form-field">
-					<input matInput
-					type="text"
-					name="lastname"
-					[(ngModel)]="user.lastname"
-					placeholder="Apellido/s"
-					maxlength="256"
-					required
-					(blur)="updateUser($event)">
+					<input matInput type="text" name="lastname" [(ngModel)]="user.lastname" placeholder="Apellido/s" maxlength="256"
+					 required (blur)="updateUser($event)">
 				</mat-form-field>
 				<mat-form-field class="form-field">
-					<input matInput
-					type="text"
-					name="name"
-					[(ngModel)]="user.name"
-					placeholder="Nombre/s"
-					maxlength="256"
-					required
-					(blur)="updateUser($event)">
+					<input matInput type="text" name="name" [(ngModel)]="user.name" placeholder="Nombre/s" maxlength="256" required
+					 (blur)="updateUser($event)">
 				</mat-form-field>
 				<mat-form-field class="form-field">
-					<input matInput
-					type="email"
-					name="email"
-					[(ngModel)]="user.email"
-					placeholder="Email"
-					maxlength="256"
-					required
-					(blur)="updateUser($event)">
+					<input matInput type="email" name="email" [(ngModel)]="user.email" placeholder="Email" maxlength="256" required
+					 (blur)="updateUser($event)">
 				</mat-form-field>
 				<mat-form-field class="form-field">
-					<input matInput
-					type="password"
-					name="password"
-					[(ngModel)]="user.password"
-					placeholder="Password"
-					required>
+					<input matInput type="password" name="password" [(ngModel)]="user.password" placeholder="Password" required>
 				</mat-form-field>
 			</form>
 		</mat-expansion-panel>

@@ -8,8 +8,8 @@ import * as moment from 'moment';
 })
 export class HourPickerComponent {
 
-  private _hour;
-  private _minutes;
+  _hour;
+  _minutes;
 
   @Input()
   set hourAndMinutes(hourAndMinutes) {
