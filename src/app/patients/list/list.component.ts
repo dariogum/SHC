@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatSnackBar, MatBottomSheet } from '@angular/material';
 import { Observable, of, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map, filter, tap } from 'rxjs/operators';
@@ -19,12 +19,15 @@ import * as moment from 'moment';
 export class ListComponent implements OnInit {
 
   currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
-  lastPatients: Observable<Patient[]> = null;
+  lastPatients: Observable<Patient[]>;
+  loadingPatients = false;
   patient: Patient;
   patients: Observable<Patient[]>;
   searchTerms = new Subject<string>();
   today: Date = new Date();
   userRole: string;
+
+  @ViewChild('patientSearchBox') patientSearchBox: ElementRef;
 
   constructor(
     private bottomSheet: MatBottomSheet,
@@ -44,8 +47,13 @@ export class ListComponent implements OnInit {
       debounceTime(300),
       filter(term => term.length > 2),
       distinctUntilChanged(),
-      tap(_ => this.lastPatients = null),
-      switchMap((term: string) => this.patientService.searchPatients(term)),
+      tap(_ => {
+        this.loadingPatients = true;
+        this.lastPatients = null;
+      }),
+      switchMap((term: string) => this.patientService.searchPatients(term).pipe(
+        tap(_ => this.loadingPatients = false)
+      )),
     );
   }
 
@@ -68,6 +76,10 @@ export class ListComponent implements OnInit {
     this.statsService.getStats(moment().format('YYYY-MM-01'), moment().format('YYYY-MM-DD')).subscribe(stats => {
       this.bottomSheet.open(StatsComponent, { data: stats });
     });
+  }
+
+  clearPatient() {
+    this.patientSearchBox.nativeElement.value = '';
   }
 
 }

@@ -9,7 +9,9 @@ import { ConfigService } from './../../auth/config.service';
 import { Appointment } from './../../classes/appointment';
 import { AppointmentFormComponent } from './../appointment-form/appointment-form.component';
 import { Patient } from './../../classes/patient';
+import { User } from './../../classes/user';
 import { PatientService } from './../../patients/patient.service';
+import { UserService } from './../../users/user.service';
 import { Schedule } from './../../classes/schedule';
 import { SchedulesService } from './../schedules.service';
 import * as moment from 'moment';
@@ -24,12 +26,16 @@ export class GeneralViewComponent implements OnInit {
   currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
   day;
   loading = false;
+  loadingSchedules = true;
   monthName;
-  selectedPatient: Patient;
   patients: Observable<Patient[]>;
+  professionals: Observable<User[]>;
+  selectedPatient: Patient;
   screenType = 'wide';
   schedules: Schedule[];
   searchPatientsTerms = new Subject<string>();
+  searchProfessionalsTerms = new Subject<string>();
+  selectedProfessional: User;
   selectedSchedule: Schedule;
   startView = 'month';
   userRole: string;
@@ -37,6 +43,7 @@ export class GeneralViewComponent implements OnInit {
   withoutFilters = true;
 
   @ViewChild('patientSearchBox') patientSearchBox: ElementRef;
+  @ViewChild('professionalSearchBox') professionalSearchBox: ElementRef;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -44,6 +51,7 @@ export class GeneralViewComponent implements OnInit {
     private configService: ConfigService,
     private patientService: PatientService,
     private schedulesService: SchedulesService,
+    private userService: UserService,
   ) { }
 
   ngOnInit() {
@@ -87,12 +95,19 @@ export class GeneralViewComponent implements OnInit {
       distinctUntilChanged(),
       switchMap((term: string) => this.patientService.searchPatients(term)),
     );
+
+    this.professionals = this.searchProfessionalsTerms.pipe(
+      debounceTime(300),
+      filter(term => term.length > 2),
+      distinctUntilChanged(),
+      switchMap((term: string) => this.userService.searchUsers(term)),
+    );
   }
 
-  openBottomSheet(selectedSchedule, appointment): void {
+  openBottomSheet(appointment): void {
     this.bottomSheet.open(AppointmentFormComponent, {
       data: {
-        selectedSchedule: selectedSchedule,
+        selectedSchedule: this.selectedSchedule,
         appointment: appointment,
       },
     });
@@ -121,19 +136,29 @@ export class GeneralViewComponent implements OnInit {
         lastDay = this.day.clone();
         break;
     }
-    this.readScheduleDays(firstDay, lastDay);
+    if (this.selectedSchedule) {
+      this.loading = true;
+      this.readScheduleDays(firstDay, lastDay);
+    }
   }
 
   readSchedules() {
     return this.schedulesService.readSchedules().subscribe(schedules => {
       this.schedules = schedules;
+      if (this.schedules.length === 1) {
+        this.selectedSchedule = this.schedules[0];
+        this.changeView(false, false);
+      }
+      this.loadingSchedules = false;
     });
   }
 
   readScheduleDays(firstDay, lastDay) {
+    this.selectedSchedule.days = [];
     return this.schedulesService.readScheduleDays(this.selectedSchedule.id, firstDay, lastDay)
       .subscribe(days => {
         this.selectedSchedule.days = days;
+        this.loading = false;
       });
   }
 
@@ -146,16 +171,37 @@ export class GeneralViewComponent implements OnInit {
       this.withoutFilters = true;
       this.searchPatientsTerms.next(term);
     } else {
-      this.filterAppointmentsByPatient(term);
+      this.filterAppointmentsByPatient();
     }
   }
 
-  filterAppointmentsByPatient(patient) {
+  filterAppointmentsByPatient() {
     this.withoutFilters = false;
     for (const day of this.selectedSchedule.days) {
-      day.filteredAppointments = day.appointments.map(appointments => {
-        const ap = appointments.filter(appointment => appointment.patient === patient);
-        return (ap.length > 0) ? ap[0] : null;
+      day.filteredAppointments = day.appointments.filter(appointment => {
+        return (appointment.patient && appointment.patient.id === this.selectedPatient.id);
+      });
+    }
+  }
+
+  displayUserFn(professional?: User): string | undefined {
+    return professional ? professional.lastname + ' ' + professional.name : undefined;
+  }
+
+  searchProfessionals(term) {
+    if (typeof (term) === 'string') {
+      this.withoutFilters = true;
+      this.searchProfessionalsTerms.next(term);
+    } else {
+      this.filterAppointmentsByProfessionals();
+    }
+  }
+
+  filterAppointmentsByProfessionals() {
+    this.withoutFilters = false;
+    for (const day of this.selectedSchedule.days) {
+      day.filteredAppointments = day.appointments.filter(appointment => {
+        return (appointment.professional && appointment.professional.id === this.selectedProfessional.id);
       });
     }
   }
@@ -163,6 +209,11 @@ export class GeneralViewComponent implements OnInit {
   clearPatient() {
     this.withoutFilters = true;
     this.patientSearchBox.nativeElement.value = '';
+  }
+
+  clearProfessional() {
+    this.withoutFilters = true;
+    this.professionalSearchBox.nativeElement.value = '';
   }
 
 }

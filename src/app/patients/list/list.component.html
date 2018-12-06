@@ -32,11 +32,16 @@
 	<mat-card-content>
 		<form method="post">
 			<mat-form-field class="full-width">
-				<input matInput #searchInput type="text" placeholder="Buscar un paciente por apellido y/o nombre..." (keyup)="search(searchInput.value)">
-				<mat-icon class="matSuffixButton" matSuffix (click)="ngOnInit()" *ngIf="searchInput.value.length" matTooltip="Limpiar la búsqueda">clear</mat-icon>
-				<mat-hint align="start">Ingrese al menos 3 caracteres y espere</mat-hint>
+				<input matInput #patientSearchBox type="text" placeholder="Buscar un paciente por apellido y/o nombre..." (keyup)="search(patientSearchBox.value)">
+				<mat-icon class="matSuffixButton" matSuffix (click)="clearPatient()" *ngIf="patientSearchBox.value.length"
+				 matTooltip="Limpiar la búsqueda">clear</mat-icon>
+				<mat-hint align="start" *ngIf="loadingPatients">Buscando...</mat-hint>
+				<mat-hint align="start" *ngIf="!loadingPatients && patientSearchBox.value.length < 3">Ingrese al menos 3 caracteres
+					y
+					espere</mat-hint>
 			</mat-form-field>
 		</form>
+		<mat-spinner diameter="50" strokeWidth="4" *ngIf="loadingPatients"></mat-spinner>
 		<mat-nav-list>
 			<mat-list-item *ngFor="let patient of patients | async" routerLink="{{patient.id}}">
 				<mat-icon matListIcon [color]="(patient.gender && patient.gender.id == 1) ? 'primary' : 'accent'">person</mat-icon>

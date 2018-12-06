@@ -32,27 +32,39 @@
     <form method="post" [ngClass]="screenType">
       <mat-form-field class="form-field">
         <mat-select [(ngModel)]="selectedSchedule" (selectionChange)="changeView(false,false)" name="selectedSchedule"
-          placeholder="Seleccionar agenda/s">
+          placeholder="Seleccionar agenda/s" [disabled]="loadingSchedules">
           <mat-option *ngFor="let schedule of schedules" [value]="schedule">
             {{schedule.name}}
           </mat-option>
         </mat-select>
+        <mat-hint align="start" *ngIf="loadingSchedules">Cargando las agendas...</mat-hint>
       </mat-form-field>
       <mat-form-field class="form-field">
         <input matInput #patientSearchBox type="text" name="selectedPatient" [(ngModel)]="selectedPatient" placeholder="Buscar un paciente"
-          [matAutocomplete]="patientSelector" (ngModelChange)="searchPatients($event)">
+          [matAutocomplete]="patientSelector" (ngModelChange)="searchPatients($event)" [disabled]="!selectedSchedule">
         <mat-autocomplete #patientSelector="matAutocomplete" [displayWith]="displayFn">
           <mat-option *ngFor="let patient of patients | async" [value]="patient">
             {{patient.lastname}} {{patient.name}}
           </mat-option>
         </mat-autocomplete>
         <mat-icon class="matSuffixButton" matSuffix (click)="clearPatient()" *ngIf="patientSearchBox.value.length">clear</mat-icon>
-        <mat-hint align="start">Ingrese al menos 3 caracteres y seleccione un paciente del listado</mat-hint>
+        <mat-hint align="start" *ngIf="!selectedSchedule">Seleccione una agenda para habilitar este filtro</mat-hint>
+        <mat-hint align="start" *ngIf="selectedSchedule">Ingrese al menos 3 caracteres y seleccione un paciente del
+          listado</mat-hint>
       </mat-form-field>
       <mat-form-field class="form-field">
-        <input matInput #searchProffesional type="text" placeholder="Buscar un profesional">
-        <mat-icon class="matSuffixButton" matSuffix (click)="ngOnInit()" *ngIf="searchProffesional.value.length">clear</mat-icon>
-        <mat-hint align="start">Ingrese al menos 3 caracteres y seleccione un profesional del listado</mat-hint>
+        <input matInput #professionalSearchBox type="text" name="selectedProfessional" [(ngModel)]="selectedProfessional"
+          placeholder="Buscar un profesional" [matAutocomplete]="professionalSelector" (ngModelChange)="searchProfessionals($event)"
+          [disabled]="!selectedSchedule">
+        <mat-autocomplete #professionalSelector="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngFor="let professional of professionals | async" [value]="professional">
+            {{professional.lastname}} {{professional.name}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-icon class="matSuffixButton" matSuffix (click)="clearProfessional()" *ngIf="professionalSearchBox.value.length">clear</mat-icon>
+        <mat-hint align="start" *ngIf="!selectedSchedule">Seleccione una agenda para habilitar este filtro</mat-hint>
+        <mat-hint align="start" *ngIf="selectedSchedule">Ingrese al menos 3 caracteres y seleccione un profesional del
+          listado</mat-hint>
       </mat-form-field>
       <div class="view-type-group">
         <mat-button-toggle-group appearance="legacy" [(ngModel)]="view" name="view" (change)="changeView(false, false)">
@@ -76,13 +88,16 @@
       </mat-form-field>
       <span class="month-selector" *ngIf="view === 'monthly'">Mes seleccionado: {{monthName | titlecase}}</span>
     </form>
-    <mat-spinner *ngIf="loading"></mat-spinner>
+    <mat-spinner diameter="50" strokeWidth="4" *ngIf="loading"></mat-spinner>
+    <h4 class="centered" *ngIf="!selectedSchedule">Seleccione una agenda para ver sus turnos</h4>
     <div *ngIf="selectedSchedule">
+      <h4 class="centered" *ngIf="!loading && !selectedSchedule.days.length">La agenda seleccionada no tiene turnos
+        para esta fecha</h4>
       <mat-nav-list dense *ngFor="let day of selectedSchedule.days" [ngClass]="[view, screenType]">
         <h3 mat-subheader>{{ day.name | titlecase }}</h3>
         <div *ngIf="withoutFilters">
           <mat-list-item *ngFor="let appointment of day.appointments" [style.background]="selectedSchedule.color"
-            (click)="openBottomSheet(selectedSchedule, appointment)" [class.occupied]="appointment.patient">
+            (click)="openBottomSheet(appointment)" [class.occupied]="appointment.patient">
             <p>{{appointment.hour}} |
               <span *ngIf="appointment.patient">{{appointment.patient.lastname}} {{appointment.patient.name}}</span>
             </p>
@@ -90,7 +105,7 @@
         </div>
         <div *ngIf="!withoutFilters">
           <mat-list-item *ngFor="let appointment of day.filteredAppointments" [style.background]="appointment.schedule?.color"
-            (click)="openBottomSheet(selectedSchedule, appointment)" [class.occupied]="appointment.patient">
+            (click)="openBottomSheet(appointment)" [class.occupied]="appointment.patient">
             <p>{{appointment.hour}} |
               <span *ngIf="appointment.patient">{{appointment.patient.lastname}} {{appointment.patient.name}}</span>
             </p>

@@ -4,7 +4,7 @@
       <mat-icon aria-label="Listado de pacientes">arrow_back</mat-icon>
     </a>
     <span *ngIf="!schedule">Agenda</span>
-    <span *ngIf="schedule" class="header-row">
+    <span *ngIf="schedule | async" class="header-row">
       Agenda - {{schedule.name}}
     </span>
     <span class="spacer"></span>
@@ -20,8 +20,8 @@
   </mat-toolbar-row>
 </mat-toolbar>
 <mat-card class="main-card">
-  <mat-spinner *ngIf="!schedule"></mat-spinner>
-  <form method="post" [class]="screenType" #scheduleDataForm="ngForm">
+  <mat-spinner diameter="50" strokeWidth="4" *ngIf="!schedule"></mat-spinner>
+  <form method="post" [class]="screenType" #scheduleDataForm="ngForm" *ngIf="schedule | async">
     <mat-form-field class="form-field">
       <input matInput type="text" name="name" [(ngModel)]="schedule.name" placeholder="Nombre" maxlength="256" required
         (blur)="updateSchedule($event)">

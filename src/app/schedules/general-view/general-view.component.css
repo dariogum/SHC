@@ -35,6 +35,9 @@
 .month-field {
   width: 21px;
 }
+.mat-spinner {
+  margin: 32px auto 0;
+}
 .mat-grid-list {
 	height: 70vh;
 }
@@ -62,7 +65,8 @@
   text-align: right;
 }
 .tablet .view-type-group,
-.handset .view-type-group {
+.handset .view-type-group,
+.centered {
   margin: 16px 0;
   text-align: center;
 }

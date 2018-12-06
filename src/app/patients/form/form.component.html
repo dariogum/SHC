@@ -29,7 +29,7 @@
 </mat-toolbar>
 
 <div class="main-card">
-	<mat-spinner *ngIf="!patient"></mat-spinner>
+	<mat-spinner diameter="50" strokeWidth="4" *ngIf="!patient"></mat-spinner>
 	<mat-accordion [multi]="true" *ngIf="patient">
 		<mat-expansion-panel [expanded]="newPatient">
 			<mat-expansion-panel-header [class.bolder]="biggerFont">

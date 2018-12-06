@@ -71,7 +71,7 @@ export class SchedulesService {
   }
 
   readSchedules(): Observable<Schedule[]> {
-    return this.http.get<any>(`${ APISCHEDULESURL }?sort=name`)
+    return this.http.get<any>(`${ APISCHEDULESURL }?sort=name&filter=active:1`)
       .pipe(
         map(response => this.parseSchedules(response.data)),
         catchError(this.handleError<Schedule[]>('getSchedules', []))
@@ -122,7 +122,7 @@ export class SchedulesService {
     if (data.relationships && data.relationships.professionals.length) {
       professionals = this.userService.parseUsers(data.relationships.professionals);
     }
-    if (data.relationships && data.relationships.days.length) {
+    if (data.relationships && data.relationships.days && data.relationships.days.length) {
       days = this.parseDays(data.relationships.days);
     }
     const schedule: Schedule = {
@@ -163,7 +163,7 @@ export class SchedulesService {
     let date = null;
     if (data.attributes.date) {
       date = moment(data.attributes.date);
-      dayName = moment(data.attributes.date).format('ddd DD/MM/YYYY');
+      dayName = date.format('ddd DD/MM/YYYY');
     } else {
       dayName = dayNames[data.attributes.weekDay];
     }
@@ -245,7 +245,7 @@ export class SchedulesService {
         'id': appointment.id,
         'attributes': {
           'confirmed': appointment.confirmed,
-          'date': appointment.date.format('YYYY-MM-DD'),
+          'date': moment(appointment.date).format('YYYY-MM-DD'),
           'indications': appointment.indications,
           'hour': appointment.hour,
           'patient': appointment.patient.id,

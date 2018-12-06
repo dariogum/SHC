@@ -23,9 +23,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   parseUser(data): User {
-    let user: User;
-
-    user = {
+    const user: User = {
       id: data.id,
       email: data.attributes.email,
       enabled: data.attributes.enabled,
@@ -46,7 +44,7 @@ export class UserService {
   }
 
   getUsers(): Observable<User[]> {
-    return this.http.get<any>(`${APIUSERSURL}`)
+    return this.http.get<any>(`${ APIUSERSURL }`)
       .pipe(
         map(response => this.parseUsers(response.data)),
         catchError(this.handleError<User[]>('getUsers', []))
@@ -54,12 +52,12 @@ export class UserService {
   }
 
   getUser(id: number): Observable<User> {
-    const url = `${APIUSERSURL}/${id}`;
+    const url = `${ APIUSERSURL }/${ id }`;
 
     return this.http.get<any>(url)
       .pipe(
         map(response => this.parseUser(response.data)),
-        catchError(this.handleError<User>(`getUser id=${id}`))
+        catchError(this.handleError<User>(`getUser id=${ id }`))
       );
   }
 
@@ -70,7 +68,7 @@ export class UserService {
     terms = terms.toLowerCase();
     terms = encodeURI(terms);
 
-    return this.http.get<any>(`${APIUSERSURL}/search/${terms}`)
+    return this.http.get<any>(`${ APIUSERSURL }/search/${ terms }`)
       .pipe(
         map(response => this.parseUsers(response.data)),
         catchError(this.handleError<User[]>('searchusers', []))
@@ -100,7 +98,7 @@ export class UserService {
 
   updateUser(user: User): Observable<any> {
     const id = typeof user === 'number' ? user : user.id;
-    const url = `${APIUSERSURL}/${id}`;
+    const url = `${ APIUSERSURL }/${ id }`;
 
     const data = {
       'data': {
@@ -123,7 +121,7 @@ export class UserService {
   }
 
   deleteUser(userId: number): Observable<any> {
-    const url = `${APIUSERSURL}/${userId}`;
+    const url = `${ APIUSERSURL }/${ userId }`;
 
     return this.http.delete<any>(url, httpOptions)
       .pipe(
@@ -133,7 +131,7 @@ export class UserService {
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      console.error(`${operation} failed: ${error.message}`);
+      console.error(`${ operation } failed: ${ error.message }`);
       return of(result as T);
     };
   }

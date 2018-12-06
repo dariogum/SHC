@@ -1,4 +1,5 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
+import { NgForm, Validators } from '@angular/forms';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map, filter, tap } from 'rxjs/operators';
@@ -21,6 +22,7 @@ export class AppointmentFormComponent implements OnInit {
   patients: Observable<Patient[]>;
   searchPatientsTerms = new Subject<string>();
 
+  @ViewChild('appointmentDataForm') public appointmentDataForm: NgForm;
   @ViewChild('patientSearchBox') patientSearchBox: ElementRef;
 
   constructor(
@@ -39,6 +41,22 @@ export class AppointmentFormComponent implements OnInit {
     );
   }
 
+  updateAppointment(event) {
+    let controlName: string;
+    if (event.value !== undefined && event.source) {
+      controlName = event.source.ngControl.name;
+    } else if (event.value !== undefined) {
+      controlName = event.targetElement.name;
+    } else {
+      controlName = event.target.name;
+    }
+    const isDataControl = this.appointmentDataForm.controls[controlName] &&
+      !this.appointmentDataForm.controls[controlName].pristine;
+    if (isDataControl) {
+      this.schedulesService.updateAppointment(this.data.appointment).subscribe();
+    }
+  }
+
   displayFn(patient?: Patient): string | undefined {
     return patient ? patient.lastname + ' ' + patient.name : undefined;
   }
@@ -46,6 +64,8 @@ export class AppointmentFormComponent implements OnInit {
   searchPatients(term) {
     if (typeof (term) === 'string') {
       this.searchPatientsTerms.next(term);
+    } else {
+      this.updateAppointment(term);
     }
   }
 
