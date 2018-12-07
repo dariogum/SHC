@@ -1,20 +1,23 @@
-<mat-toolbar>
-	<span>Turno</span>
-	<span class="spacer"></span>
-	<button mat-icon-button matTooltip="Reprogramar">
-		<mat-icon>update</mat-icon>
-	</button>
-	<button mat-icon-button matTooltip="Imprimir">
-		<mat-icon>print</mat-icon>
-	</button>
-	<button mat-icon-button matTooltip="Enviar recordatorio">
-		<mat-icon>send</mat-icon>
-	</button>
-	<button mat-icon-button matTooltip="Cancelar">
-		<mat-icon color="warn">cancel</mat-icon>
-	</button>
-</mat-toolbar>
-<form method="post" #appointmentDataForm="ngForm">
+<form method="post" #appointmentDataForm="ngForm" (ngSubmit)="onSubmit()">
+	<mat-toolbar>
+		<span>Turno</span>
+		<span class="spacer"></span>
+		<button type="button" mat-icon-button matTooltip="Reprogramar" [disabled]="!data.appointment.id">
+			<mat-icon>update</mat-icon>
+		</button>
+		<button type="button" mat-icon-button matTooltip="Imprimir" [disabled]="!data.appointment.id">
+			<mat-icon>print</mat-icon>
+		</button>
+		<button type="button" mat-icon-button matTooltip="Enviar recordatorio" [disabled]="!data.appointment.id">
+			<mat-icon>send</mat-icon>
+		</button>
+		<button type="button" mat-icon-button color="warn" matTooltip="Cancelar" [disabled]="!data.appointment.id">
+			<mat-icon>cancel</mat-icon>
+		</button>
+		<button type="submit" mat-icon-button color="primary" matTooltip="Guardar" [disabled]="!appointmentDataForm.form.valid">
+			<mat-icon>save</mat-icon>
+		</button>
+	</mat-toolbar>
 	<mat-chip-list *ngIf="data.appointment.patient">
 		<mat-chip *ngIf="data.appointment.reprogrammed" color="accent" selected matTooltip="El turno ha sido reprogramado">Reprogramado</mat-chip>
 		<mat-chip *ngIf="!data.appointment.confirmed" color="warn" selected matTooltip="El turno no está confirmado">No
@@ -41,20 +44,19 @@
 		<input matInput type="text" placeholder="Hora" [(ngModel)]="data.appointment.hour" name="hour" maxlength="5" readonly>
 	</mat-form-field>
 	<mat-form-field class="form-field">
-		<input matInput #patientSearchBox type="text" name="patient" [(ngModel)]="data.appointment.patient" placeholder="Paciente"
-		 [matAutocomplete]="patientSelector" (ngModelChange)="searchPatients($event)" [readonly]="data.appointment.patient">
-		<mat-autocomplete #patientSelector="matAutocomplete" [displayWith]="displayFn">
+		<input matInput #appPatientSearchBox type="text" name="patient" [(ngModel)]="data.appointment.patient" placeholder="Paciente"
+		 [matAutocomplete]="appPatientSelector" (ngModelChange)="searchPatients($event)" required>
+		<mat-autocomplete #appPatientSelector="matAutocomplete" [displayWith]="displayFn">
 			<mat-option *ngFor="let patient of patients | async" [value]="patient">
 				{{patient.lastname}} {{patient.name}}
 			</mat-option>
 		</mat-autocomplete>
-		<mat-icon class="matSuffixButton" matSuffix (click)="clearPatient()" *ngIf="patientSearchBox.value.length && !data.appointment.patient">clear</mat-icon>
+		<mat-icon class="matSuffixButton" matSuffix (click)="clearPatient()" *ngIf="appPatientSearchBox.value.length && !data.appointment.patient">clear</mat-icon>
 		<mat-hint *ngIf="!data.appointment.patient" align="start">Ingrese al menos 3 caracteres y seleccione un paciente del
 			listado</mat-hint>
 	</mat-form-field>
 	<mat-form-field class="form-field">
-		<mat-select placeholder="Profesional" [(ngModel)]="data.appointment.professional" name="professional"
-		 (selectionChange)="updateAppointment($event)">
+		<mat-select placeholder="Profesional" [(ngModel)]="data.appointment.professional" name="professional" required>
 			<mat-option *ngFor="let professional of data.selectedSchedule.professionals" [value]="professional">
 				{{professional.lastname}} {{professional.name}}
 			</mat-option>
@@ -67,7 +69,7 @@
 		</mat-select>
 	</mat-form-field>
 	<mat-form-field class="form-field">
-		<input matInput type="text" placeholder="Email / Teléfono" [(ngModel)]="data.appointment.reminderData" name="reminderData">
+		<input matInput type="text" placeholder="Email / Teléfono" [(ngModel)]="data.appointment.reminderData" name="reminderData" [required]="data.appointment.reminderWay">
 	</mat-form-field>
 	<mat-form-field class="form-field">
 		<textarea matInput name="indications" [(ngModel)]="data.appointment.indications" placeholder="Indicaciones"></textarea>

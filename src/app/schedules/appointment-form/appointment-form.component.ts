@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
 import { NgForm, Validators } from '@angular/forms';
-import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material';
+import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA, MatDialog, MatSnackBar } from '@angular/material';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map, filter, tap } from 'rxjs/operators';
 
@@ -23,12 +23,14 @@ export class AppointmentFormComponent implements OnInit {
   searchPatientsTerms = new Subject<string>();
 
   @ViewChild('appointmentDataForm') public appointmentDataForm: NgForm;
-  @ViewChild('patientSearchBox') patientSearchBox: ElementRef;
+  @ViewChild('appPatientSearchBox') appPatientSearchBox: ElementRef;
 
   constructor(
     private bottomSheetRef: MatBottomSheetRef<AppointmentFormComponent>,
+    public dialog: MatDialog,
     private patientService: PatientService,
     private schedulesService: SchedulesService,
+    public snackBar: MatSnackBar,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
   ) { }
 
@@ -39,6 +41,16 @@ export class AppointmentFormComponent implements OnInit {
       distinctUntilChanged(),
       switchMap((term: string) => this.patientService.searchPatients(term)),
     );
+  }
+
+  onSubmit() {
+    this.schedulesService.createAppointment(this.data.selectedSchedule, this.data.appointment)
+      .subscribe(appointment => {
+        this.bottomSheetRef.dismiss();
+        const snackBarRef = this.snackBar.open('El turno fue asignado correctamente', 'OK', {
+          duration: 2500,
+        });
+      });
   }
 
   updateAppointment(event) {
@@ -64,13 +76,11 @@ export class AppointmentFormComponent implements OnInit {
   searchPatients(term) {
     if (typeof (term) === 'string') {
       this.searchPatientsTerms.next(term);
-    } else {
-      this.updateAppointment(term);
     }
   }
 
   clearPatient() {
-    this.patientSearchBox.nativeElement.value = '';
+    this.appPatientSearchBox.nativeElement.value = '';
   }
 
 }

@@ -194,13 +194,13 @@ export class SchedulesService {
     return hour;
   }
 
-  createAppointment(appointment): Observable<Appointment> {
+  createAppointment(schedule, appointment): Observable<Appointment> {
     const data = {
       'data': {
         'type': 'appointment',
         'attributes': {
           'confirmed': appointment.confirmed,
-          'date': appointment.date.format('YYYY-MM-DD'),
+          'date': moment(appointment.date).format('YYYY-MM-DD'),
           'indications': appointment.indications,
           'hour': appointment.hour,
           'patient': appointment.patient.id,
@@ -210,12 +210,12 @@ export class SchedulesService {
           'reminderSent': appointment.reminderSent,
           'reminderWay': appointment.reminderWay,
           'reprogrammed': appointment.reprogrammed,
-          'schedule': appointment.schedule.id,
+          'schedule': schedule.id,
         }
       }
     };
 
-    return this.http.post<any>(APISCHEDULESURL, data, HTTPOPTIONS)
+    return this.http.post<any>(APIAPPOINTMENTSURL, data, HTTPOPTIONS)
       .pipe(
         map(response => this.parseAppointment(response.data)),
         catchError(this.handleError<Appointment>('addSchedule'))

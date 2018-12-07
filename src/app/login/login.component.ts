@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   @ViewChild('loginForm') public loginForm: NgForm;
 
   handset = false;
+  loading = false;
   user: User = new User();
 
   constructor(
@@ -40,6 +41,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
+    this.loading = true;
     this.loginService.verifyByEmail(this.user)
       .subscribe(user => {
         if (user) {
@@ -47,6 +49,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('currentUser', JSON.stringify(this.user));
           this.router.navigate(['/patients']);
         } else {
+          this.loading = false;
           const snackBarRef = this.snackBar.open('Usuario y/o contraseña incorrectos', 'OK', {
             duration: 2500,
           });

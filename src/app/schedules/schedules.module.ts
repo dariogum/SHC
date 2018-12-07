@@ -20,6 +20,7 @@ import {
   MatProgressSpinnerModule,
   MatSelectModule,
   MatSlideToggleModule,
+  MatSnackBarModule,
   MatToolbarModule,
   MatTooltipModule,
 } from '@angular/material';
@@ -53,6 +54,7 @@ import { HourPickerComponent } from './../hour-picker/hour-picker.component';
     MatProgressSpinnerModule,
     MatSelectModule,
     MatSlideToggleModule,
+    MatSnackBarModule,
     MatToolbarModule,
     MatTooltipModule,
   ],
