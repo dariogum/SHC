@@ -255,7 +255,7 @@ export class SchedulesService {
           'reminderSent': appointment.reminderSent,
           'reminderWay': appointment.reminderWay,
           'reprogrammed': appointment.reprogrammed,
-          'schedule': appointment.schedule.id,
+          'schedule': appointment.schedule,
         }
       }
     };

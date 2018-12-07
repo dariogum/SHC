@@ -2,6 +2,9 @@
 	<mat-toolbar>
 		<span>Turno</span>
 		<span class="spacer"></span>
+		<button type="button" mat-icon-button color="warn" matTooltip="Cancelar" [disabled]="!data.appointment.id">
+			<mat-icon>cancel</mat-icon>
+		</button>
 		<button type="button" mat-icon-button matTooltip="Reprogramar" [disabled]="!data.appointment.id">
 			<mat-icon>update</mat-icon>
 		</button>
@@ -11,14 +14,11 @@
 		<button type="button" mat-icon-button matTooltip="Enviar recordatorio" [disabled]="!data.appointment.id">
 			<mat-icon>send</mat-icon>
 		</button>
-		<button type="button" mat-icon-button color="warn" matTooltip="Cancelar" [disabled]="!data.appointment.id">
-			<mat-icon>cancel</mat-icon>
-		</button>
 		<button type="submit" mat-icon-button color="primary" matTooltip="Guardar" [disabled]="!appointmentDataForm.form.valid">
 			<mat-icon>save</mat-icon>
 		</button>
 	</mat-toolbar>
-	<mat-chip-list *ngIf="data.appointment.patient">
+	<mat-chip-list *ngIf="data.appointment.id">
 		<mat-chip *ngIf="data.appointment.reprogrammed" color="accent" selected matTooltip="El turno ha sido reprogramado">Reprogramado</mat-chip>
 		<mat-chip *ngIf="!data.appointment.confirmed" color="warn" selected matTooltip="El turno no está confirmado">No
 			confirmado</mat-chip>
@@ -69,7 +69,8 @@
 		</mat-select>
 	</mat-form-field>
 	<mat-form-field class="form-field">
-		<input matInput type="text" placeholder="Email / Teléfono" [(ngModel)]="data.appointment.reminderData" name="reminderData" [required]="data.appointment.reminderWay">
+		<input matInput type="text" placeholder="Email / Teléfono" [(ngModel)]="data.appointment.reminderData" name="reminderData"
+		 [required]="data.appointment.reminderWay">
 	</mat-form-field>
 	<mat-form-field class="form-field">
 		<textarea matInput name="indications" [(ngModel)]="data.appointment.indications" placeholder="Indicaciones"></textarea>

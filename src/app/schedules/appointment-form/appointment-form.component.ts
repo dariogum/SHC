@@ -44,29 +44,26 @@ export class AppointmentFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.schedulesService.createAppointment(this.data.selectedSchedule, this.data.appointment)
-      .subscribe(appointment => {
-        this.bottomSheetRef.dismiss();
-        const snackBarRef = this.snackBar.open('El turno fue asignado correctamente', 'OK', {
-          duration: 2500,
+    if (!this.data.appointment.id) {
+      this.schedulesService.createAppointment(this.data.selectedSchedule, this.data.appointment)
+        .subscribe(appointment => {
+          if (appointment.id) {
+            this.snackBar.open('El turno fue asignado correctamente', 'OK', {
+              duration: 2500,
+            });
+          }
         });
-      });
-  }
-
-  updateAppointment(event) {
-    let controlName: string;
-    if (event.value !== undefined && event.source) {
-      controlName = event.source.ngControl.name;
-    } else if (event.value !== undefined) {
-      controlName = event.targetElement.name;
-    } else {
-      controlName = event.target.name;
+    } else if (this.data.appointment.id && !this.appointmentDataForm.pristine) {
+      this.schedulesService.updateAppointment(this.data.appointment)
+        .subscribe(appointment => {
+          if (appointment) {
+            this.snackBar.open('El turno fue modificado correctamente', 'OK', {
+              duration: 2500,
+            });
+          }
+        });
     }
-    const isDataControl = this.appointmentDataForm.controls[controlName] &&
-      !this.appointmentDataForm.controls[controlName].pristine;
-    if (isDataControl) {
-      this.schedulesService.updateAppointment(this.data.appointment).subscribe();
-    }
+    this.bottomSheetRef.dismiss();
   }
 
   displayFn(patient?: Patient): string | undefined {
