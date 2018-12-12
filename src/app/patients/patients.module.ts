@@ -21,6 +21,7 @@ import {
     MatSelectModule,
     MatSnackBarModule,
     MatStepperModule,
+    MatTableModule,
     MatToolbarModule,
     MatTooltipModule,
 } from '@angular/material';
@@ -34,6 +35,7 @@ import { PatientsRoutingModule } from './patients-routing.module';
 import { ConfirmationDialogComponent } from './visits/confirmation-dialog.component';
 import { ImageDialogComponent } from './visits/image-dialog.component';
 import { VisitsComponent } from './visits/visits.component';
+import { VaccinationsComponent } from './vaccinations/vaccinations.component';
 
 @NgModule({
   imports: [
@@ -59,6 +61,7 @@ import { VisitsComponent } from './visits/visits.component';
     MatStepperModule,
     MatSelectModule,
     MatSnackBarModule,
+    MatTableModule,
     MatToolbarModule,
     MatTooltipModule,
   ],
@@ -71,7 +74,8 @@ import { VisitsComponent } from './visits/visits.component';
     ImageDialogComponent,
     ListComponent,
     NewPatientDialogComponent,
-    VisitsComponent
+    VisitsComponent,
+    VaccinationsComponent
   ],
   entryComponents: [
     ConfirmationDialogComponent,

@@ -2,9 +2,9 @@
   <mat-toolbar-row>
     <span>Agendas</span>
     <span class="spacer"></span>
-    <button mat-icon-button matTooltip="Ver listado">
-      <mat-icon aria-label="Ver el listado de agendas">list</mat-icon>
-    </button>
+    <a routerLink="{{selectedSchedule.id}}" mat-icon-button matTooltip="Editar agenda" *ngIf="selectedSchedule">
+      <mat-icon aria-label="Editar la agenda seleccionada">edit</mat-icon>
+    </a>
     <button mat-icon-button routerLink="1" matTooltip="Nueva agenda">
       <mat-icon aria-label="Crear una nueva agenda">add</mat-icon>
     </button>

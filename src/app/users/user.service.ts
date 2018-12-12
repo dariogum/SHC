@@ -51,6 +51,14 @@ export class UserService {
       );
   }
 
+  getProfessionals(): Observable<User[]> {
+    return this.http.get<any>(`${ APIUSERSURL }/professionals`)
+      .pipe(
+        map(response => this.parseUsers(response.data)),
+        catchError(this.handleError<User[]>('getProfessionals', []))
+      );
+  }
+
   getUser(id: number): Observable<User> {
     const url = `${ APIUSERSURL }/${ id }`;
 

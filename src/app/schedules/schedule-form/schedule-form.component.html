@@ -4,7 +4,7 @@
       <mat-icon aria-label="Listado de pacientes">arrow_back</mat-icon>
     </a>
     <span *ngIf="!schedule">Agenda</span>
-    <span *ngIf="schedule | async" class="header-row">
+    <span *ngIf="schedule" class="header-row">
       Agenda - {{schedule.name}}
     </span>
     <span class="spacer"></span>
@@ -21,7 +21,7 @@
 </mat-toolbar>
 <mat-card class="main-card">
   <mat-spinner diameter="50" strokeWidth="4" *ngIf="!schedule"></mat-spinner>
-  <form method="post" [class]="screenType" #scheduleDataForm="ngForm" *ngIf="schedule | async">
+  <form method="post" [class]="screenType" #scheduleDataForm="ngForm" *ngIf="schedule">
     <mat-form-field class="form-field">
       <input matInput type="text" name="name" [(ngModel)]="schedule.name" placeholder="Nombre" maxlength="256" required
         (blur)="updateSchedule($event)">
@@ -29,7 +29,7 @@
     <mat-form-field class="form-field">
       <mat-select placeholder="Profesionales" [(ngModel)]="schedule.professionals" name="professionals" multiple
         required>
-        <mat-option *ngFor="let professional of professionals" [value]="professional">
+        <mat-option *ngFor="let professional of professionals | async" [value]="professional">
           {{professional.lastname}} {{professional.name}}
         </mat-option>
       </mat-select>
@@ -71,11 +71,11 @@
       <mat-card class="day-card" *ngFor="let day of WEEKDAYS; let i = index;">
         <mat-card-header>
           <mat-card-title>
-            <mat-checkbox [(ngModel)]="schedule.weekDays[i].active" name="day.id">{{day.name}}</mat-checkbox>
+            <mat-checkbox [(ngModel)]="schedule.days[i].active" name="day.id">{{day.name}}</mat-checkbox>
           </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <div class="hour-box" *ngFor="let hour of schedule.weekDays[i].hours">
+          <div class="hour-box" *ngFor="let hour of schedule.days[i].hours">
             <button mat-icon-button class="remove-hour" color="warn" (click)="removeHour(schedule.weekDays[i], hour)"
               matTooltip="Quitar este horario">
               <mat-icon aria-label="Quitar este horario">remove_circle</mat-icon>
@@ -103,7 +103,7 @@
     </div>
 
     <div *ngIf="schedule.periodicity === 2">
-      <mat-card class="day-card" *ngFor="let day of schedule.selectedDays; let i = index;">
+      <mat-card class="day-card" *ngFor="let day of schedule.days; let i = index;">
         <mat-card-header>
           <mat-card-title>
             <span class="mat-body-strong">{{day.name | titlecase}}</span>

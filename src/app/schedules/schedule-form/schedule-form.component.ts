@@ -3,10 +3,13 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { NgForm, Validators } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 import { HourPickerComponent } from './../../hour-picker/hour-picker.component';
 import { SchedulesService } from './../schedules.service';
 import { Schedule } from './../../classes/schedule';
+import { User } from './../../classes/user';
+import { UserService } from './../../users/user.service';
 import * as moment from 'moment';
 
 @Component({
@@ -18,7 +21,7 @@ export class ScheduleFormComponent implements OnInit {
 
   filteredProfessionals;
   screenType = 'wide';
-  professionals;
+  professionals: Observable<User[]>;
   schedule: Schedule;
   @ViewChild('scheduleDataForm') public scheduleDataForm: NgForm;
 
@@ -27,8 +30,9 @@ export class ScheduleFormComponent implements OnInit {
     private schedulesService: SchedulesService,
     private route: ActivatedRoute,
     private router: Router,
-    public snackBar: MatSnackBar
-  ) { }
+    public snackBar: MatSnackBar,
+    private userService: UserService,
+    ) { }
 
   ngOnInit() {
     this.breakpointObserver.observe([
@@ -69,7 +73,7 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   getProfessionals() {
-    this.professionals = this.schedulesService.readPofessionals();
+    this.professionals = this.userService.getProfessionals();
   }
 
   updateSchedule(event) {

@@ -6,14 +6,13 @@ import { Observable, of, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map, filter, tap } from 'rxjs/operators';
 
 import { ConfigService } from './../../auth/config.service';
-import { Appointment } from './../../classes/appointment';
 import { AppointmentFormComponent } from './../appointment-form/appointment-form.component';
 import { Patient } from './../../classes/patient';
-import { User } from './../../classes/user';
 import { PatientService } from './../../patients/patient.service';
-import { UserService } from './../../users/user.service';
 import { Schedule } from './../../classes/schedule';
 import { SchedulesService } from './../schedules.service';
+import { User } from './../../classes/user';
+import { UserService } from './../../users/user.service';
 import * as moment from 'moment';
 
 @Component({

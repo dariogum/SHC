@@ -158,6 +158,7 @@ export class SchedulesService {
   }
 
   parseDay(data) {
+    let appointments = [];
     const dayNames = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
     let dayName;
     let date = null;
@@ -167,9 +168,12 @@ export class SchedulesService {
     } else {
       dayName = dayNames[data.attributes.weekDay];
     }
+    if (data.relationships.appointments) {
+      appointments = this.parseAppointments(data.relationships.appointments);
+    }
     return {
       active: data.attributes.active,
-      appointments: this.parseAppointments(data.relationships.appointments),
+      appointments: appointments,
       date: date,
       id: data.id,
       name: dayName,

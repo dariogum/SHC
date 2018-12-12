@@ -10,7 +10,6 @@ import { ImageDialogComponent } from './image-dialog.component';
 import { Patient } from './../../classes/patient';
 import { PatientService } from './../patient.service';
 import { Visit } from './../../classes/visit';
-import * as moment from 'moment';
 
 const APIVERSIONURL: string = environment.url + '/v1';
 

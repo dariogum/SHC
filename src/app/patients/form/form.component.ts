@@ -1,11 +1,8 @@
-import { Component, OnInit, ViewChild, HostBinding } from '@angular/core';
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { NgForm, Validators } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatAccordion, MatDialog, MatSnackBar } from '@angular/material';
-import { Observable, of } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
 
 import { CatalogsService } from './../../catalogs/catalogs.service';
 import { ConfigService } from './../../auth/config.service';

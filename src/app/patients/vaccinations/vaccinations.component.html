@@ -1,0 +1,55 @@
+<mat-expansion-panel [expanded]="true">
+	<mat-expansion-panel-header [class.bolder]="biggerFont">
+		<mat-panel-title>
+			Vacunas
+		</mat-panel-title>
+	</mat-expansion-panel-header>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <!-- age Column -->
+    <ng-container matColumnDef="age">
+      <th mat-header-cell *matHeaderCellDef> Edad </th>
+      <td mat-cell *matCellDef="let element"> {{element.age.name}} </td>
+    </ng-container>
+
+    <!-- vaccine Column -->
+    <ng-container matColumnDef="vaccine">
+      <th mat-header-cell *matHeaderCellDef> Vacuna </th>
+      <td mat-cell *matCellDef="let element"> {{element.vaccine.name}} </td>
+    </ng-container>
+
+    <!-- date Column -->
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef> Fecha de aplicación </th>
+      <td mat-cell *matCellDef="let element">
+        <mat-form-field class="date-field">
+          <input matInput name="date" [(ngModel)]="element.date" [matDatepicker]="applicationDatePicker"
+            [max]="today" disabled>
+          <mat-datepicker-toggle matSuffix [for]="applicationDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker touchUi #applicationDatePicker calendarLabel="Fecha de aplicación" disabled="false"></mat-datepicker>
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+        (click)="selection.toggle(row)">
+    </tr>
+  </table>
+</mat-expansion-panel>
