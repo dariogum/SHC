@@ -253,6 +253,6 @@
 			</form>
 		</mat-expansion-panel>
 		<app-visits [patient]="patient"></app-visits>
-		<app-vaccinations [patient]="patient"></app-vaccinations>
+		<app-vaccinations [patient]="patient" *ngIf="userRole === 'administrator'"></app-vaccinations>
 	</mat-accordion>
 </div>

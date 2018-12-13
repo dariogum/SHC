@@ -66,6 +66,8 @@ THE SOFTWARE.
 
 @angular/material/autocomplete
 
+@angular/material/checkbox
+
 moment
 MIT
 Copyright (c) JS Foundation and other contributors
@@ -613,10 +615,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
+@angular/material/table
+
 @angular/material/progress-bar
 
 @angular/material/button-toggle
-
-@angular/material/checkbox
 
 @angular/material/chips

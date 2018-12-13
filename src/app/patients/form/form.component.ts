@@ -37,6 +37,7 @@ export class FormComponent implements OnInit {
   patient: Patient;
   socialsecurities;
   states;
+  userRole: string;
 
   @ViewChild(MatAccordion) accordion: MatAccordion;
   @ViewChild('patientBackgroundForm') public patientBackgroundForm: NgForm;
@@ -94,6 +95,7 @@ export class FormComponent implements OnInit {
     this.socialsecurities = this.catalogsService.getSocialSecurities();
     this.states = this.catalogsService.getStates(this.configService.getUserConfig(this.currentUser,
       'states'));
+    this.userRole = this.configService.getUserConfig(this.currentUser, 'role');
 
     this.getPatient();
   }

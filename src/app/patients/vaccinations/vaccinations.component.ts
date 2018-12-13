@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material';
+import { ConfigService } from './../../auth/config.service';
 import { Patient } from './../../classes/patient';
 import { VACCINATIONS, AGES, DOSES } from './../../catalogs/vaccinations';
 import * as moment from 'moment';
@@ -13,15 +14,21 @@ import * as moment from 'moment';
 export class VaccinationsComponent implements OnInit {
 
   APPLICATIONS = [];
+  biggerFont = false;
+  currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
   displayedColumns: string[] = ['select', 'age', 'vaccine', 'date'];
   dataSource = new MatTableDataSource<any>(this.APPLICATIONS);
   selection = new SelectionModel<any>(true, []);
   @Input() patient: Patient;
   today: moment.Moment;
 
-  constructor() { }
+  constructor(
+    private configService: ConfigService,
+  ) { }
 
   ngOnInit() {
+    this.biggerFont = this.configService.getUserConfig(this.currentUser, 'biggerFont');
+
     this.today = moment();
     for (const dose of DOSES) {
       const AGE = AGES.filter(age => age.id === dose.age)[0];
@@ -44,8 +51,8 @@ export class VaccinationsComponent implements OnInit {
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ?
-        this.selection.clear() :
-        this.dataSource.data.forEach(row => this.selection.select(row));
+      this.selection.clear() :
+      this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
 }
