@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular
 import { Observable, of } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 
+import { Application } from './../classes/application';
 import { BirthType } from './../classes/birthtype';
 import { BloodType } from './../classes/bloodtype';
 import { CatalogsService } from './../catalogs/catalogs.service';
@@ -18,6 +19,7 @@ import { Visit } from './../classes/visit';
 import * as moment from 'moment';
 
 const APIVERSIONURL = environment.url + '/v1';
+const APIAPPLICATIONSURL = APIVERSIONURL + '/applications';
 const APIFILESURL = APIVERSIONURL + '/files';
 const APIPATIENTSURL = APIVERSIONURL + '/patients';
 const APIVISITSURL = APIVERSIONURL + '/visits';
@@ -368,6 +370,28 @@ export class PatientService {
     return this.http.delete<any>(url, HTTPOPTIONS)
       .pipe(
         catchError(this.handleError<any>('deleteFile'))
+      );
+  }
+
+  applicationToJson(application, patientId) { }
+
+  parseApplication(data): Application {
+    const application: Application = {
+      age: data.attributes.age,
+      date: data.attributes.date,
+      vaccine: data.attributes.vaccine,
+      dose: data.attributes.dose,
+    };
+    return application;
+  }
+
+  createApplication(patientId: number, application: Application): Observable<Application> {
+    const data = this.applicationToJson(application, patientId);
+
+    return this.http.post<any>(APIAPPLICATIONSURL, data, HTTPOPTIONS)
+      .pipe(
+        map(response => this.parseApplication(response.data)),
+        catchError(this.handleError<Application>('addApplication'))
       );
   }
 

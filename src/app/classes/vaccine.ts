@@ -1,5 +1,10 @@
 export class Vaccine {
-    id: number;
-    name: string;
-    description: string;
-  }
+  id: number;
+  name: string;
+  description: string;
+}
+
+export class Age {
+  id: number;
+  name: string;
+}

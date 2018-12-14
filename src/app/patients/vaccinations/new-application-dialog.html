@@ -1,0 +1,33 @@
+<form #applicationForm="ngForm" (ngSubmit)="createApplication()">
+	<h2 mat-dialog-title>Registro de la aplicación de una vacuna</h2>
+	<mat-dialog-content>
+		<mat-form-field class="form-field">
+			<mat-select name="age" [(ngModel)]="application.age" placeholder="Edad" (selectionChange)="filterDoseByAge()"
+			 required>
+				<mat-option *ngFor="let age of ages" [value]="age">
+					{{age.name}}
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
+		<mat-form-field class="form-field">
+			<mat-select name="vaccine" [(ngModel)]="application.vaccine" placeholder="Vacuna" (selectionChange)="filterDoseByVaccine()"
+			 [disabled]="!application.age" required>
+				<mat-option *ngFor="let vaccine of filteredVaccinations" [value]="vaccine">
+					{{vaccine.name}}
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
+		<mat-form-field class="form-field">
+			<mat-select name="dose" [(ngModel)]="application.dose" placeholder="Dosis" [disabled]="!application.vaccine"
+			 required>
+				<mat-option *ngFor="let dose of filteredDoses" [value]="dose">
+					{{dose.name}}
+				</mat-option>
+			</mat-select>
+		</mat-form-field>
+	</mat-dialog-content>
+	<mat-dialog-actions>
+		<button type="submit" mat-raised-button color="primary" [disabled]="!applicationForm.form.valid">Guardar</button>
+		<button type="reset" mat-raised-button color="accent" mat-dialog-close>Cancelar</button>
+	</mat-dialog-actions>
+</form>

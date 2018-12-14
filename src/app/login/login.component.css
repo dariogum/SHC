@@ -8,9 +8,6 @@
   background-image: url('../../assets/favicon/favicon-96x96.png');
   background-size: cover;
 }
-.mat-form-field {
-	margin: 6px 8px;
-}
 .full-width {
 	width: calc(100% - 16px);
 }
@@ -20,9 +17,4 @@
 .mat-card-image {
 	width: auto;
 	margin: 16px 0;
-}
-
-@keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
 }

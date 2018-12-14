@@ -1,11 +1,67 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-
+html, body {
+  height: 100%;
+}
 body { margin: 0; font-family: 'Roboto', sans-serif; }
-html { 
-  background: url(assets/background1.png) no-repeat center center fixed; 
+html {
+  background: url(assets/background1.png) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+}
+.header-row {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.spacer {
+  flex: 1 1 auto;
+}
+.main-card {
+  animation-name: fadeIn;
+  animation-duration: .25s;
+  margin: 16px;
+}
+.full-width {
+	width: 100%;
+}
+.mat-expansion-panel-header-title,
+.mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+.mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+.mat-form-field {
+  margin: 6px 8px;
+}
+.wide .form-field {
+  width: calc(25% - 16px);
+}
+.tablet .form-field {
+  width: calc(50% - 16px);
+}
+.handset .form-field {
+  width: calc(100% - 16px);
+}
+.mat-spinner {
+  margin: 32px auto 0;
+}
+.bolder .mat-form-field,
+.mat-expansion-panel-header.bolder {
+  font-weight: bold;
+  font-size: 18px;
+}
+.mat-input-element:disabled {
+  color: currentColor;
+}
+.matSuffixButton {
+  cursor: pointer;
+}
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
 }

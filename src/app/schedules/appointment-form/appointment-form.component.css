@@ -1,12 +1,5 @@
-.spacer {
-  flex: 1 1 auto;
-}
-.mat-form-field,
 .mat-chip-list {
   margin: 6px 8px;
-}
-.form-field {
-  width: calc(100% - 16px);
 }
 .date-field {
 	width: calc(75% - 16px);

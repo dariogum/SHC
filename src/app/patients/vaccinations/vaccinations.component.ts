@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SelectionModel } from '@angular/cdk/collections';
-import { MatTableDataSource } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { ConfigService } from './../../auth/config.service';
 import { Patient } from './../../classes/patient';
+import { Application } from './../../classes/application';
 import { VACCINATIONS, AGES, DOSES } from './../../catalogs/vaccinations';
+import { NewApplicationDialogComponent } from './new-application-dialog.component';
 import * as moment from 'moment';
 
 @Component({
@@ -13,17 +14,16 @@ import * as moment from 'moment';
 })
 export class VaccinationsComponent implements OnInit {
 
-  APPLICATIONS = [];
+  APPLICATIONS: Application[] = [];
   biggerFont = false;
   currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
-  displayedColumns: string[] = ['select', 'age', 'vaccine', 'date'];
-  dataSource = new MatTableDataSource<any>(this.APPLICATIONS);
-  selection = new SelectionModel<any>(true, []);
   @Input() patient: Patient;
   today: moment.Moment;
 
   constructor(
     private configService: ConfigService,
+    public dialog: MatDialog,
+    public snackBar: MatSnackBar,
   ) { }
 
   ngOnInit() {
@@ -36,23 +36,20 @@ export class VaccinationsComponent implements OnInit {
       this.APPLICATIONS.push({
         'age': AGE,
         'vaccine': VACCINE,
-        'date': null,
+        'date': this.today,
+        'dose': dose,
       });
     }
   }
 
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+  newApplication() {
+    const dialogRef = this.dialog.open(NewApplicationDialogComponent, {
+      width: '320px'
+    });
   }
 
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+  deleteApplication(application: Application) {
+    this.APPLICATIONS = this.APPLICATIONS.filter(app => app !== application);
   }
 
 }
