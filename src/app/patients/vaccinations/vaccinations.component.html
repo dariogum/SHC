@@ -4,13 +4,13 @@
       Vacunas
     </mat-panel-title>
   </mat-expansion-panel-header>
-  <mat-list>
-    <mat-list-item *ngFor="let application of APPLICATIONS" matTooltip="{{application.vaccine.description}}">
+  <mat-list dense>
+    <mat-list-item *ngFor="let application of applications | async" matTooltip="{{application.vaccine.description}}">
       <mat-icon color="primary" matListIcon>colorize</mat-icon>
       <h3 matLine><b>{{application.vaccine.name}}</b> - {{ application.dose.name }}</h3>
       <p matLine><b>Fecha de aplicación</b>: {{application.date | date:'dd/MM/yyyy'}} - <b>Edad</b>: {{
         application.date | ageUp:patient.birthday}}</p>
-      <button mat-icon-button color="primary" matTooltip="Cambiar la fecha de aplicación">
+      <button mat-icon-button color="primary" (click)="changeApplicationDate(application)" matTooltip="Cambiar la fecha de aplicación">
         <mat-icon>calendar_today</mat-icon>
       </button>
       <button mat-icon-button color="warn" (click)="deleteApplication(application)" matTooltip="Eliminar la vacuna">

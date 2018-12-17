@@ -1,7 +1,14 @@
-<form #applicationForm="ngForm" (ngSubmit)="createApplication()">
-	<h2 mat-dialog-title>Registro de la aplicación de una vacuna</h2>
+<form #applicationForm="ngForm" [class]="screenType" (ngSubmit)="saveApplication()">
+	<h2 mat-dialog-title *ngIf="!data.application">Aplicación de una vacuna</h2>
+	<h2 mat-dialog-title *ngIf="data.application">Cambiar la fecha de aplicación</h2>
 	<mat-dialog-content>
 		<mat-form-field class="form-field">
+			<input matInput name="date" [(ngModel)]="application.date" placeholder="Fecha" [matDatepicker]="datepicker" [max]="today"
+			 [min]="data.patient.birthday" required disabled>
+			<mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+			<mat-datepicker touchUi #datepicker calendarLabel="Fecha" disabled="false"></mat-datepicker>
+		</mat-form-field>
+		<mat-form-field class="form-field" *ngIf="!data.application">
 			<mat-select name="age" [(ngModel)]="application.age" placeholder="Edad" (selectionChange)="filterDoseByAge()"
 			 required>
 				<mat-option *ngFor="let age of ages" [value]="age">
@@ -9,7 +16,7 @@
 				</mat-option>
 			</mat-select>
 		</mat-form-field>
-		<mat-form-field class="form-field">
+		<mat-form-field class="form-field" *ngIf="!data.application">
 			<mat-select name="vaccine" [(ngModel)]="application.vaccine" placeholder="Vacuna" (selectionChange)="filterDoseByVaccine()"
 			 [disabled]="!application.age" required>
 				<mat-option *ngFor="let vaccine of filteredVaccinations" [value]="vaccine">
@@ -17,7 +24,7 @@
 				</mat-option>
 			</mat-select>
 		</mat-form-field>
-		<mat-form-field class="form-field">
+		<mat-form-field class="form-field" *ngIf="!data.application">
 			<mat-select name="dose" [(ngModel)]="application.dose" placeholder="Dosis" [disabled]="!application.vaccine"
 			 required>
 				<mat-option *ngFor="let dose of filteredDoses" [value]="dose">

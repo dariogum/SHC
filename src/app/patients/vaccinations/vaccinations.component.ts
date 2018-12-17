@@ -3,9 +3,9 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { ConfigService } from './../../auth/config.service';
 import { Patient } from './../../classes/patient';
 import { Application } from './../../classes/application';
-import { VACCINATIONS, AGES, DOSES } from './../../catalogs/vaccinations';
 import { NewApplicationDialogComponent } from './new-application-dialog.component';
-import * as moment from 'moment';
+import { VaccineService } from './vaccine.service';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-vaccinations',
@@ -14,42 +14,58 @@ import * as moment from 'moment';
 })
 export class VaccinationsComponent implements OnInit {
 
-  APPLICATIONS: Application[] = [];
+  applications: Observable<Application[]>;
   biggerFont = false;
   currentUser = JSON.parse(localStorage.getItem('currentUser')).id;
   @Input() patient: Patient;
-  today: moment.Moment;
+  today = new Date();
 
   constructor(
     private configService: ConfigService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
+    private vaccineService: VaccineService,
   ) { }
 
   ngOnInit() {
     this.biggerFont = this.configService.getUserConfig(this.currentUser, 'biggerFont');
 
-    this.today = moment();
-    for (const dose of DOSES) {
-      const AGE = AGES.filter(age => age.id === dose.age)[0];
-      const VACCINE = VACCINATIONS.filter(vaccine => vaccine.id === dose.vaccine)[0];
-      this.APPLICATIONS.push({
-        'age': AGE,
-        'vaccine': VACCINE,
-        'date': this.today,
-        'dose': dose,
-      });
-    }
+    this.vaccineService.readApplications(this.patient.id)
+      .subscribe(applications => this.applications = of(applications));
   }
 
   newApplication() {
     const dialogRef = this.dialog.open(NewApplicationDialogComponent, {
-      width: '320px'
+      width: '320px',
+      data: {
+        patient: this.patient
+      }
+    });
+  }
+
+  changeApplicationDate(application) {
+    const dialogRef = this.dialog.open(NewApplicationDialogComponent, {
+      width: '320px',
+      data: {
+        patient: this.patient,
+        application: application,
+      }
     });
   }
 
   deleteApplication(application: Application) {
-    this.APPLICATIONS = this.APPLICATIONS.filter(app => app !== application);
+    this.vaccineService.deleteApplication(application)
+      .subscribe(result => {
+        if (result) {
+          const index = this.patient.applications.indexOf(application);
+          if (index > -1) {
+            this.patient.applications.splice(index, 1);
+          }
+          const snackBarRef = this.snackBar.open('La aplicación fue eliminada correctamente', 'OK', {
+            duration: 2500,
+          });
+        }
+      });
   }
 
 }

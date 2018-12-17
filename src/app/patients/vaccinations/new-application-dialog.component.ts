@@ -1,33 +1,49 @@
-import { Component, Input } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
-
+import { MAT_DIALOG_DATA } from '@angular/material';
 import { Application } from './../../classes/application';
 import { Patient } from './../../classes/patient';
-import { PatientService } from './../patient.service';
+import { VaccineService } from './vaccine.service';
 import { VACCINATIONS, AGES, DOSES } from './../../catalogs/vaccinations';
 
 @Component({
   selector: 'app-new-application-dialog',
   templateUrl: 'new-application-dialog.html',
+  styleUrls: ['./vaccinations.component.css']
 })
 export class NewApplicationDialogComponent {
 
   application: Application = new Application();
-  @Input() patient: Patient;
   ages = AGES;
   filteredVaccinations = [];
   filteredDoses = [];
+  screenType = 'handset';
+  today = new Date();
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<NewApplicationDialogComponent>,
-    private patientService: PatientService,
-  ) { }
+    private vaccineService: VaccineService,
+  ) {
+    if (data.application) {
+      this.application = data.application;
+    } else {
+      this.application.date = this.today;
+    }
+  }
 
-  createApplication() {
-    this.patientService.createApplication(this.patient.id, this.application)
-      .subscribe(application => {
-        this.dialogRef.close();
-      });
+  saveApplication() {
+    if (this.application.id) {
+      this.vaccineService.updateApplication(this.application, this.data.patient.id)
+        .subscribe(application => {
+          this.dialogRef.close();
+        });
+    } else {
+      this.vaccineService.createApplication(this.application, this.data.patient.id)
+        .subscribe(application => {
+          this.dialogRef.close();
+        });
+    }
   }
 
   filterDoseByAge() {
