@@ -10,6 +10,8 @@
 			<i *ngIf="patient.oldId">- Legajo: {{patient.oldId}}</i>
 		</span>
 		<span class="spacer"></span>
+		<button *ngIf="patient && !patient.visitDebtor" mat-button (click)="patient.visitDebtor=true;updatePatientVisitDebtor($event)">Marcar como deudor</button>
+		<button *ngIf="patient && patient.visitDebtor" mat-button (click)="patient.visitDebtor=false;updatePatientVisitDebtor($event)">Ya pagó</button>
 		<button mat-icon-button (click)="toggleAccordion()" *ngIf="!folded">
 			<mat-icon aria-label="Cerrar todos los paneles" matTooltip="Cerrar todos los paneles">unfold_less</mat-icon>
 		</button>
@@ -37,7 +39,10 @@
 					Información Personal
 				</mat-panel-title>
 				<mat-panel-description>
-					{{ today | ageUp:patient.birthday }}
+					<mat-chip-list>
+						<mat-chip>{{ today | ageUp:patient.birthday }}</mat-chip>
+						<mat-chip *ngIf="patient.visitDebtor" color="warn" selected>¡DEBE VISITA!</mat-chip>
+					</mat-chip-list>
 				</mat-panel-description>
 			</mat-expansion-panel-header>
 			<form method="post" [class]="screenType" [class.bolder]="biggerFont" #patientDataForm="ngForm">

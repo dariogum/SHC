@@ -44,4 +44,5 @@ export class Patient {
   brothers: string;
   others: string;
   visits: Visit[];
+  visitDebtor: boolean;
 }

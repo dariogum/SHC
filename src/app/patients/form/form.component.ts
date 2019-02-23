@@ -150,6 +150,7 @@ export class FormComponent implements OnInit {
   }
 
   updatePatient(event) {
+    console.log(event);
     let controlName: string;
     if (event.value !== undefined && event.source) {
       controlName = event.source.ngControl.name;
@@ -165,6 +166,10 @@ export class FormComponent implements OnInit {
     if (isBackgroundControl || isDataControl) {
       this.patientService.updatePatient(this.patient).subscribe();
     }
+  }
+
+  updatePatientVisitDebtor() {
+    this.patientService.updatePatient(this.patient).subscribe();
   }
 
   deletePatient() {

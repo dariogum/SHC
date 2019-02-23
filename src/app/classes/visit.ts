@@ -10,5 +10,6 @@ export class Visit {
   diagnosis: string;
   treatment: string;
   studiesResults: string;
+  visitReason: string;
   files: any;
 }

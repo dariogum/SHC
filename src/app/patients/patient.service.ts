@@ -61,6 +61,7 @@ export class PatientService {
       studiesResults: data.attributes.studiesResults,
       treatment: data.attributes.treatment,
       weight: data.attributes.weight,
+      visitReason: data.attributes.visitReason,
     };
 
     return visit;
@@ -148,7 +149,8 @@ export class PatientService {
       mother: data.attributes.mother,
       brothers: data.attributes.brothers,
       others: data.attributes.others,
-      visits: visits
+      visits: visits,
+      visitDebtor: data.attributes.visitDebtor,
     };
 
     return patient;
@@ -271,6 +273,7 @@ export class PatientService {
           mother: patient.mother,
           brothers: patient.brothers,
           others: patient.others,
+          visitDebtor: patient.visitDebtor,
           modifiedBy: JSON.parse(localStorage.getItem('currentUser')).id
         }
       }
@@ -310,6 +313,7 @@ export class PatientService {
           'diagnosis': visit.diagnosis,
           'treatment': visit.treatment,
           'studiesResults': visit.studiesResults,
+          'visitReason': visit.visitReason,
         }
       }
     };

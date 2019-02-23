@@ -9,6 +9,7 @@
 			<mat-icon color="primary" matListIcon>event</mat-icon>
 			<h3 matLine>{{visit.date | date:'dd/MM/yyyy'}} - <b>Edad</b>: {{ visit.date | ageUp:patient.birthday}}</h3>
 			<p matLine><b>Peso</b>: {{visit.weight}} kg | <b>Talla</b>: {{visit.height}} cm | <b>Perímetro encefálico</b>: {{visit.perimeter}} cm | <b>T.A.</b>: {{visit.bloodPressure}}</p>
+			<p matLine><b>Motivo de consulta</b>: {{visit.visitReason}}</p>
 			<p matLine><b>Diagnóstico</b>: {{visit.diagnosis}}</p>
 			<p matLine><b>Tratamiento</b>: {{visit.treatment}}</p>
 			<button mat-icon-button color="primary" (click)="visitInForm = visit; visitFormOpen = true" matTooltip="Editar la visita">
@@ -98,6 +99,14 @@
 					<mat-hint align="start">Ej: 119/79</mat-hint>
 				</mat-form-field>
 			</div>
+			<mat-form-field class="comment-field">
+				<textarea matInput
+				name="visitReason"
+				[(ngModel)]="visitInForm.visitReason"
+				placeholder="Motivo de visita"
+				required
+				(blur)="updateVisit($event)"></textarea>
+			</mat-form-field>
 			<mat-form-field class="comment-field">
 				<textarea matInput
 				name="diagnosis"

@@ -3,3 +3,7 @@ export class Vaccine {
     name: string;
     description: string;
   }
+
+export class Age {
+  id: number;
+}

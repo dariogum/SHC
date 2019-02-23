@@ -6,6 +6,7 @@ import {
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
+    MatChipsModule,
     MatDatepickerModule,
     MatDialogModule,
     MatDividerModule,
@@ -36,6 +37,7 @@ import { ConfirmationDialogComponent } from './visits/confirmation-dialog.compon
 import { ImageDialogComponent } from './visits/image-dialog.component';
 import { VisitsComponent } from './visits/visits.component';
 import { VaccinationsComponent } from './vaccinations/vaccinations.component';
+import { NewApplicationDialogComponent } from './vaccinations/new-application-dialog.component';
 
 @NgModule({
   imports: [
@@ -46,6 +48,7 @@ import { VaccinationsComponent } from './vaccinations/vaccinations.component';
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
+    MatChipsModule,
     MatDatepickerModule,
     MatDialogModule,
     MatDividerModule,
@@ -75,13 +78,15 @@ import { VaccinationsComponent } from './vaccinations/vaccinations.component';
     ListComponent,
     NewPatientDialogComponent,
     VisitsComponent,
-    VaccinationsComponent
+    VaccinationsComponent,
+    NewApplicationDialogComponent
   ],
   entryComponents: [
     ConfirmationDialogComponent,
     ConfirmationPatientDialogComponent,
     ImageDialogComponent,
     NewPatientDialogComponent,
+    NewApplicationDialogComponent,
   ]
 })
 export class PatientsModule { }
