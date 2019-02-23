@@ -1,0 +1,22 @@
+.spacer {
+  flex: 1 1 auto;
+}
+.main-card {
+	animation-name: fadeIn;
+  animation-duration: .25s;
+  margin: 16px;
+}
+.full-width {
+  width: 100%;
+}
+.matSuffixButton {
+  cursor: pointer;
+}
+.mat-spinner {
+  margin: 32px auto 0;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}

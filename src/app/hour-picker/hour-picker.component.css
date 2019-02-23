@@ -2,9 +2,11 @@
 .minutes-picker {
   width: 40px;
 }
+
 .hour-picker {
   text-align: right;
 }
+
 .separator {
   margin: 0 2px;
 }

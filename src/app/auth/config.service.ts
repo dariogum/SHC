@@ -42,6 +42,7 @@ const PERMISSIONS = [
   providedIn: 'root'
 })
 export class ConfigService {
+
   constructor() { }
 
   getUserConfig(userId, attribute?) {

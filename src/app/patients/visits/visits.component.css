@@ -1,7 +1,18 @@
+.mat-form-field {
+  margin: 6px 8px;
+}
+.wide .visit-form-field {
+  width: calc(20% - 16px );
+}
+.wide .form-field {
+  width: calc(25% - 16px);
+}
 .wide .comment-field,
+.tablet .form-field,
 .tablet .visit-form-field {
   width: calc(50% - 16px);
 }
+.handset .form-field,
 .handset .comment-field,
 .tablet .comment-field,
 .handset .visit-form-field {
@@ -29,7 +40,7 @@
 }
 .image-container {
   display: inline-block;
-  margin: 8px;
+  margin: 8px; 
   position: relative;
 }
 .image-container img {
@@ -48,4 +59,9 @@
 }
 .handset .image-container {
   max-width: calc(100% - 16px);
+}
+.bolder .mat-form-field,
+.mat-expansion-panel-header.bolder {
+  font-weight: bold;
+  font-size: 18px;
 }

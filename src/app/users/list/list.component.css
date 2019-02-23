@@ -1,0 +1,9 @@
+.spacer {
+	flex: 1 1 auto;
+}
+.main-card {
+	margin: 16px;
+}
+.full-width {
+	width: 100%;
+}

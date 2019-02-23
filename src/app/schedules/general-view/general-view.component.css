@@ -1,21 +1,42 @@
+.spacer {
+  flex: 1 1 auto;
+}
+.main-card {
+	animation-name: fadeIn;
+  animation-duration: .25s;
+  margin: 16px;
+}
+.mat-card-content form {
+  margin-bottom: 16px;
+}
+.mat-form-field,
 .mat-slide-toggle,
 .month-selector {
   margin: 6px 8px;
 }
+.wide .form-field,
 .wide .mat-slide-toggle,
 .wide .view-type-group {
   width: calc(25% - 16px);
 }
+.tablet .form-field,
 .tablet .mat-slide-toggle,
 .tablet .view-type-group {
   width: calc(50% - 16px);
 }
+.handset .form-field,
 .handset .mat-slide-toggle,
 .handset .view-type-group {
   width: calc(100% - 16px);
 }
+.matSuffixButton {
+  cursor: pointer;
+}
 .month-field {
   width: 21px;
+}
+.mat-spinner {
+  margin: 32px auto 0;
 }
 .mat-grid-list {
 	height: 70vh;

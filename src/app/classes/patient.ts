@@ -1,4 +1,3 @@
-import { Application } from './application';
 import { Gender } from './gender';
 import { Country } from './country';
 import { State } from './state';
@@ -45,5 +44,4 @@ export class Patient {
   brothers: string;
   others: string;
   visits: Visit[];
-  applications: Application[];
 }

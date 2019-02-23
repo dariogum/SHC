@@ -1,0 +1,116 @@
+.header-row {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.spacer {
+	flex: 1 1 auto;
+}
+.main-card {
+	margin: 16px;
+}
+.mat-form-field {
+	margin: 6px 8px;
+}
+
+.wide .apgar-field {
+	width: calc(12.5% - 16px);
+}
+
+.wide .visit-form-field {
+	width: calc(20% - 16px );
+}
+
+.wide .form-field,
+.tablet .apgar-field {
+	width: calc(25% - 16px);
+}
+
+.handset .apgar-field,
+.wide .comment-field,
+.tablet .form-field,
+.tablet .visit-form-field {
+	width: calc(50% - 16px);
+}
+
+.handset .form-field,
+.handset .comment-field,
+.tablet .comment-field,
+.handset .visit-form-field {
+	width: calc(100% - 16px);
+}
+
+.mat-stepper-vertical p {
+	-webkit-margin-before: 0em;
+	-webkit-margin-after: 0em;
+	margin-bottom: 4px;
+	word-wrap: break-word;
+}
+
+.visit-form-button {
+	margin-right: 8px;
+}
+
+.files {
+	margin-bottom: 16px;
+}
+
+.files-container {
+	border: 1px dashed #ccc;
+	display: block;
+	padding: 8px;
+	text-align: center;
+}
+
+.files-container .mat-icon {
+	display: block;
+	margin: 0 auto 4px;
+}
+
+.files-container [type=file] {
+	display: none;
+	width: 100%;
+}
+
+.image-container {
+	display: inline-block;
+	margin: 8px; 
+	position: relative;
+}
+
+.image-container img {
+	max-width: 100%;
+}
+
+.image-container .mat-icon-button {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+}
+
+.wide .image-container {
+	max-width: calc(25% - 16px);
+}
+
+.tablet .image-container {
+	max-width: calc(50% - 16px);
+}
+
+.handset .image-container {
+	max-width: calc(100% - 16px);
+}
+
+.mat-spinner {
+	margin: 32px auto 0;
+}
+
+.valign-bottom {
+  color: #ff4081;
+  vertical-align: bottom;
+}
+
+.bolder .mat-form-field,
+.mat-expansion-panel-header.bolder {
+	font-weight: bold;
+	font-size: 18px;
+}

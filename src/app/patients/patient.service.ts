@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 
 import { BirthType } from './../classes/birthtype';
 import { BloodType } from './../classes/bloodtype';
 import { CatalogsService } from './../catalogs/catalogs.service';
 import { City } from './../classes/city';
+import { ConfigService } from './../auth/config.service';
 import { Country } from './../classes/country';
 import { environment } from './../../environments/environment';
 import { Gender } from './../classes/gender';
@@ -34,6 +35,7 @@ export class PatientService {
 
   constructor(
     private catalogsService: CatalogsService,
+    private configService: ConfigService,
     private http: HttpClient,
   ) { }
 
@@ -146,8 +148,7 @@ export class PatientService {
       mother: data.attributes.mother,
       brothers: data.attributes.brothers,
       others: data.attributes.others,
-      visits: visits,
-      applications: [],
+      visits: visits
     };
 
     return patient;
@@ -163,7 +164,7 @@ export class PatientService {
   }
 
   getPatients(): Observable<Patient[]> {
-    return this.http.get<any>(`${APIPATIENTSURL}?sort=-modifiedAt&page=first`)
+    return this.http.get<any>(`${ APIPATIENTSURL }?sort=-modifiedAt&page=first`)
       .pipe(
         map(response => this.parsePatients(response.data)),
         catchError(this.handleError<Patient[]>('getPatients', []))
@@ -171,12 +172,12 @@ export class PatientService {
   }
 
   getPatient(id: number): Observable<Patient> {
-    const url = `${APIPATIENTSURL}/${id}`;
+    const url = `${ APIPATIENTSURL }/${ id }`;
 
     return this.http.get<any>(url)
       .pipe(
         map(response => this.parsePatient(response.data)),
-        catchError(this.handleError<Patient>(`getPatient id=${id}`))
+        catchError(this.handleError<Patient>(`getPatient id=${ id }`))
       );
   }
 
@@ -187,7 +188,7 @@ export class PatientService {
     terms = terms.toLowerCase();
     terms = encodeURI(terms);
 
-    return this.http.get<any>(`${APIPATIENTSURL}/search/${terms}`)
+    return this.http.get<any>(`${ APIPATIENTSURL }/search/${ terms }`)
       .pipe(
         map(response => this.parsePatients(response.data)),
         catchError(this.handleError<Patient[]>('searchpatients', []))
@@ -216,7 +217,7 @@ export class PatientService {
 
   updatePatient(patient: Patient): Observable<any> {
     const id = typeof patient === 'number' ? patient : patient.id;
-    const url = `${APIPATIENTSURL}/${id}`;
+    const url = `${ APIPATIENTSURL }/${ id }`;
 
     let birthday = null;
     const birthtype: Number = patient.birthType === null ? null : patient.birthType.id;
@@ -283,7 +284,7 @@ export class PatientService {
   }
 
   deletePatient(patientId: number): Observable<any> {
-    const url = `${APIPATIENTSURL}/${patientId}`;
+    const url = `${ APIPATIENTSURL }/${ patientId }`;
 
     return this.http.delete<any>(url, HTTPOPTIONS)
       .pipe(
@@ -328,7 +329,7 @@ export class PatientService {
 
   updateVisit(visit: Visit, patientId: Number): Observable<any> {
     const id = typeof visit === 'number' ? visit : visit.id;
-    const url = `${APIVISITSURL}/${id}`;
+    const url = `${ APIVISITSURL }/${ id }`;
     const data = this.visitToJson(visit, patientId);
 
     return this.http.patch<any>(url, data, HTTPOPTIONS)
@@ -340,7 +341,7 @@ export class PatientService {
 
   deleteVisit(visit: Visit | number): Observable<any> {
     const id = typeof visit === 'number' ? visit : visit.id;
-    const url = `${APIVISITSURL}/${id}`;
+    const url = `${ APIVISITSURL }/${ id }`;
 
     return this.http.delete<any>(url, HTTPOPTIONS)
       .pipe(
@@ -362,7 +363,7 @@ export class PatientService {
   }
 
   deleteFile(fileId: number): Observable<any> {
-    const url = `${APIFILESURL}/${fileId}`;
+    const url = `${ APIFILESURL }/${ fileId }`;
 
     return this.http.delete<any>(url, HTTPOPTIONS)
       .pipe(
@@ -372,7 +373,7 @@ export class PatientService {
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      console.error(`${operation} failed: ${error.message}`);
+      console.error(`${ operation } failed: ${ error.message }`);
       return of(result as T);
     };
   }
