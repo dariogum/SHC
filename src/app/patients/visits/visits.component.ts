@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ElementRef } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { NgForm } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
@@ -31,6 +31,7 @@ export class VisitsComponent implements OnInit {
   visitInForm: Visit = undefined;
 
   @ViewChild('visitForm') public visitForm: NgForm;
+  @ViewChild('weightInput') public weightInput: ElementRef;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -69,6 +70,12 @@ export class VisitsComponent implements OnInit {
     });
 
     this.biggerFont = this.configService.getUserConfig(this.currentUser, 'biggerFont');
+  }
+
+  onEditVisitClick(visit) {
+    this.visitInForm = visit;
+    this.visitFormOpen = true;
+    console.log(this.weightInput);
   }
 
   onVisitSubmit() {

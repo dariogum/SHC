@@ -12,7 +12,7 @@
 			<p matLine><b>Motivo de consulta</b>: {{visit.visitReason}}</p>
 			<p matLine><b>Diagnóstico</b>: {{visit.diagnosis}}</p>
 			<p matLine><b>Tratamiento</b>: {{visit.treatment}}</p>
-			<button mat-icon-button color="primary" (click)="visitInForm = visit; visitFormOpen = true" matTooltip="Editar la visita">
+			<button mat-icon-button color="primary" (click)="onEditVisitClick(visit)" matTooltip="Editar la visita">
 				<mat-icon>edit</mat-icon>
 			</button>
 			<button mat-icon-button color="warn" (click)="openConfirmationDialog(visit)" matTooltip="Eliminar la visita">
@@ -27,15 +27,15 @@
   </mat-action-row>
 </mat-expansion-panel>
 <mat-expansion-panel [expanded]="visitFormOpen" [hideToggle]="true" [disabled]="true">
-	<mat-expansion-panel-header collapsedHeight="64px">
+	<mat-expansion-panel-header collapsedHeight="48px" [class.bolder]="biggerFont">
 		<mat-panel-title *ngIf="!visitFormOpen">
 			Presione el botón "Agregar una nueva visita"
 		</mat-panel-title>
 		<mat-panel-title *ngIf="visitFormOpen && !visitInForm.id">
-			Ingrese los datos de la visita y presione Guardar
+			Edad: {{ visitInForm.date | ageUp:patient.birthday}}
 		</mat-panel-title>
 		<mat-panel-title *ngIf="visitFormOpen && visitInForm.id">
-			Ingrese los datos, los cambios se guardarán automáticamente
+			Edad: {{ visitInForm.date | ageUp:patient.birthday}}
 		</mat-panel-title>
 	</mat-expansion-panel-header>
 	<div class="visit-form" *ngIf="visitInForm">
@@ -57,6 +57,7 @@
 				</mat-form-field>
 				<mat-form-field class="visit-form-field">
 					<input matInput
+					#weightInput
 					type="number"
 					name="weight"
 					[(ngModel)]="visitInForm.weight"
